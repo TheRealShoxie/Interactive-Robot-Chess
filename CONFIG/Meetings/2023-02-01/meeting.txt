@@ -3,7 +3,7 @@ Meeting: Weekly Project Meeting
 People present: Omar Ibrahim and Maxim Buzdalov
 Circulation list: All project members
 Author: Omar Ibrahim
-Version: 1.0
+Version: 1.1
 
 
 Matters arising:
@@ -78,6 +78,7 @@ Depending on what robot arm will be chosen for the project.
 
 Actions:
 =============
+For Omar:
 1. Start working on Project-outline documents
 2. Start research on some topics mentioned above.
 3. Github repository
@@ -88,4 +89,7 @@ Actions:
     - Create repository layout
     - Add datasheet and documents which were supplied by patricia
 4. Start reviewing robot arm documentations and have a look at their
-   github repositories. 
+   github repositories.
+
+For Maxim:
+1. Setup a date for the next meeting
