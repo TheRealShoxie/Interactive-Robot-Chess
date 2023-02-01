@@ -3,7 +3,7 @@
 *This ReadMe file keeps track of the organizational part of all the Folders. And useful information about the Project.*
 
 ### About this Project
-This project is a major project at the university of aberystwyth. For an outlined project overview please refer to the *Add reference to file* file.
+This project is a major project at the university of aberystwyth. For an outlined project overview please refer to the "Add reference to file" file.
 
 ### Members of the Major Project
 Following you will see the group members of the project and their currently assigned roles:
@@ -17,7 +17,9 @@ Maxim Buzdalov | mab168@aber.ac.uk | Project Supervisor
 Down below you can find the folder hirarchy.
 
 * CONFIG						- involves config-refs
+    * Configuration References  - Holds configuration references in pdf and docx
 	* Meetings					- Holds all meeting related docs
 * DEV							- Used for experimental work
 * DOCS                          - Holds all documents
+    * Manipulator_Documents     - Holds all documents for the manipulators
 * SRC                           - Holds source code that is approved
