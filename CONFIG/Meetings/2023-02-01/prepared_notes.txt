@@ -1,0 +1,111 @@
+This file is a brainstorm of ideas how to tackle the project from a first point of view
+
+Interface:
+	-> Android/IPhone
+		-> Select between playing bot or online player
+			-> Playing online using the interface for 
+			   internet communication to offload from robot controller
+			   to exclude required internet connection for manipulator
+		-> Shows the chess board
+		-> Gives crucial information to user
+			-> Errors that might occur
+			-> How to interact with the manipulator
+			-> Match history?
+			-> Other information that might be important or needed
+		-> Connected using bluetooth to the robot controller?
+		-> Language modular?
+			-> English
+			-> German language
+			-> Polish
+			-> Russian 
+
+
+Variant 1:
+	-> Robot movement
+		-> 3D navigation
+			-> Maybe A* or similar movement techniques
+			-> Maybe use a learner for optimization
+		-> Callibration if manipulator can reach all of the board
+			-> If not using interface to give feedback
+	-> Chess Engine
+		-> Already existing ones
+			-> Do some research and comparison
+		-> Used to figure out next move
+	-> Depth camera attached to the maniupulator
+		-> To pick up the desired piece
+		-> unrelated to the camera
+	-> Camera
+		-> Placed to the side or above the board
+		-> Using Computer Vision to tell player inteference,
+		   when its not their turn for safety
+			-> Intereference from player activates hard stop for
+			   manipulator
+		-> Overall game state
+			-> e.g. what has been moved and where
+			-> Looks at empty squares instead of figures
+			   to find out where each piece is as start is statict
+			   and thus everything should be predictable
+		-> Connected to robot controller using wire?
+		-> Possible to use phone camera? And sending information using wifi
+		   or similar?
+		
+		
+Variant 2:
+	-> Most same as above except camera
+	-> Depth camera attached to the maniupulator
+		-> To figure out game state
+		-> Foreign objects that interfere with movement
+		-> Needs to be placed in a strategic position
+		-> Same functions as camera above just attached to manipulator
+
+
+General:
+
+	Computer Vision:
+		-> Using excisting techniques to figure out objects and surfaces?
+			-> Modularity
+				-> generalize board detection
+				-> Make figure/pieces/board information detection modular
+				   to enable different code for different games?
+		-> Or build own one but there is a need to make it flexible?
+		-> Maybe figuring out where each piece is higher rate of failure
+		   compared to finding empty squares and using previous knowledge
+		   as assumption to tell where each piece is?
+			-> If empty cells change means a move has been made. Then an algorithm would
+			   be needed to tell which piece has been moved an how?
+			   -> Computational more expensive but less likelyhood of missclassifying
+				  chess pieces and most likely no need to use some kind of NN or SVM 
+				  for shape detection.
+			  
+	Chess Engine:
+		-> Interface used to communicate moves and instance board state(needed?)
+	
+	Software Design Approach:
+		-> Modularity
+			-> To be able to use different manipulators but same approach
+			-> Plug and play different chess engines
+			-> Plug and play different cameras
+			-> Configuration file 
+				-> Specifies cameera port if needed
+				-> Communication device/which type of interface
+				-> Maybe which server such that the interface doesn't need
+				   to save that information? Bad idea most likely
+				-> Other stuff that might need to be made preconfigured
+			-> To play different kind of games
+				-> On the robot controller make the chess engine part modular
+				-> same for interface
+	
+	Programming Language:
+		-> C++/C for robot controller
+		-> Kotlin for Android
+		-> C#/Java for Windows interface?
+		-> Java for Linux interface?
+		-> What Iphone uses 
+	
+	
+	Interface:
+		-> Different connections for different interfaces?
+			-> Bluetooth for phones and tablets
+			-> Wired for computer devices?
+				-> Such as laptops
+				-> normal PCs 
