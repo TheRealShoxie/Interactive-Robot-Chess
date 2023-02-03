@@ -9,7 +9,7 @@
 \usepackage{lastpage} %for footer page numbers
 \usepackage{fancyhdr} %header and footer package
 \usepackage{mmpv2}
-%\usepackage{url}
+\usepackage{url}
 \usepackage{hyperref}
 
 % the following packages are used for citations - You only need to include one.
@@ -24,8 +24,8 @@
 
 \name{Omar Ibrahim}
 \userid{ibo1}
-\projecttitle{Your project title: Which can be longer when it is displayed on the front page of the document}
-\projecttitlememoir{Your project title (shorter form, if necessary)} %same as the project title or abridged version for page header
+\projecttitle{Interactive Robot Chess}
+\projecttitlememoir{Interactive Robot Chess} %same as the project title or abridged version for page header
 \reporttitle{Project Outline}
 \version{1.0}
 \docstatus{Draft} % change to Release when you are ready to submit your document
@@ -39,51 +39,132 @@
 %\documentdate{8th February 2022}
 \mmp
 
-%\setcounter{tocdepth}{3} %set required number of level in table of contents
+\setcounter{tocdepth}{4} %set required number of level in table of contents
 
 
 %==============================================================================
 \section{Project description}
 %==============================================================================
+The Interactive Robot Chess project will develop a robotic and desktop based application, to enable users to 
+play chess with a robotic arm.\newline
 
+\noindent This project will develop a desktop application to allow users and developers to interact and obtain 
+information from the robotic system. There will be a desktop-based interface, developed in Kotlin\cite{kotlin}, for users 
+and developers. This should have two different layouts, one for users and the other for developers. To determine   
+which interface will be accessed an authentification process will be used.\newline
+
+\noindent The user interface should show the current board state to allow users to correct the system if the board 
+state varies from the physical board state. Further it should allow the user to choose a bot the user should be able 
+to choose from a variety of difficulties. Moreover the user interface should include a visual and textual guide on 
+how to setup the environment(callibration process) of the system to play a game of chess.\newline
+
+\noindent The developer interface should have the same functionality as the user interface. It should further expand 
+on that interface by adding access to backend information and the ability to change values or states of the robotic 
+application.\newline
+
+\noindent The robotic application adds functionality to the robot arm and the overall system. This system will be 
+developed in the ROS middleware environment\cite{ros}. The robotic application will consist of a physical robot arm for chess
+movements, object detection and safety features; a simulation environment to test the functionality and safety of the 
+system; a chess engine to enable the user to play a bot; an overhead camera to see the physical board state and safety 
+features; and a communication protocol to enable communication to the desktop application.\newline 
+
+\noindent The safety features of the overall system will need to take into account physical objects, eg. user arm,
+to insure neither the robotic arm nor the user will be hurt or damaged. To accomplish this the overhead camera and 
+the robot arm sensors and camera will be used to enforce a stop of the robot arm.\newline
+
+\noindent This system can be used as a ground system to expand it to not only play chess, but also playing other 
+kinds of board games. Further introducing the option to let other users, through an internet connection, do the 
+movements instead of an engine will make it possible to interact and fill up empty players by actual users.\newline
 
 %==============================================================================
 \section{Proposed tasks}
 %==============================================================================
+The following tasks will be performed on this project:
+\begin{itemize}
+    \item \textbf{Investigation of the robotic arm and build process.} This task will explore the options
+                  of robotic arms and how to implement them in the ROS middleware. Further it will be necessary 
+                  to consider the connection to external devices for communication. Reasearch into how to move 
+                  chess pieces will be looked into.\newline
+                  There will be a meeting with the Robotic group of the Computer Science department to 
+                  determine which robotic arm will be used for this project based on its availablity and the 
+                  investigation done.\newpage
+
+    \item \textbf{Investigation of the chess engine and safety measures.} After confirming the robotic arm there 
+                  will be a need to investigate which chess engine to use, an example for such a chess engine would 
+                  be stockfish \cite{stockfish}. This investigation also includes the need to discover the method of interacting with 
+                  the chess engines.\newline
+                  The safety measures will need to be determined based on law and above mentioned safety features. 
+                  Further there is a need to research how to implement these safety measures based on the available 
+                  equipment.
+
+    \item \textbf{Investagion of object detecion.} Here research to detect objects using cameras, such as 
+                  the chess pieces, chess board and the users arm, will be accomplished. The detection will be 
+                  realized by using libraries such as OpenCV.
+                  
+    \item \textbf{Development.} The development will consist of two main subtasks:
+          \begin{itemize}
+            \item \textbf{Robotic application.} The first part of the development will form the foundation of the 
+                         project. It will construct the underlying data for the board. Arm movements to pick up and 
+                         place chess pieces and getting to a resting position will be produced. This will also 
+                         include the callibration and detection of above mentioned objects, to interact and gain 
+                         information. Further the communication module and its corresponding protocol will generate 
+                         the possibility to make internal information available to external devices. Safety measures 
+                         are going to be implemented in the movement of the arm.
+                         
+            \item  \textbf{Desktop application.} The second part of the development will introduce the interface for 
+                          the user and the developer. The interface is written in Kotlin to make it available to 
+                          different desktop environments. It will include all above mentioned functionality. 
+                          Further the communication to the robotic arm will be realized utilizing the communication 
+                          protocol.
+          \end{itemize}
+    
+    \item \textbf{Project Meetings and Project Workflow.} The project will involve weekly supervisor meetings. A 
+                  project workflow will be setup up to ease the process of project management and realization of 
+                  needed tasks. This will asisst in the reports at the meetings and the writing of the project 
+                  report.
+
+    \item \textbf{Preparation for demonstrations.} There is a need to prepare for the Mid-Project and End-Project 
+                  demonstration, using notes and creating a presentation.
+                  
+\end{itemize}
 
 
 %==============================================================================
 \section{Project deliverables}
 %==============================================================================
+The following project deliverables are expected.
 
-%
-% Start to comment out / remove the following lines. They are only provided for instruction for this example template.  You don't need the following section title, because it will be added as part of the bibliography section.
-%
-%==============================================================================
-\section*{Your Bibliography - REMOVE this title and text for final version}
-%==============================================================================
-%
-You need to include an annotated bibliography. This should list all relevant web pages, books, journals etc. that you have consulted in researching your project. Each reference should include an annotation.
+\begin{itemize}
+    \item \textbf{Mid-Project Demonstration Notes} - A set of project notes will be produced 
+                  for the demonstration. This will be included as an appendix in the final 
+                  report.
 
-The purpose of the section is to understand what sources you are looking at.  A correctly formatted list of items and annotations is sufficient. You might go further and make use of bibliographic tools, e.g. BibTeX in a LaTeX document, could be used to provide citations, for example \cite{NumericalRecipes} \cite{MarksPaper} \cite[99-101]{FailBlog} \cite{kittenpic_ref}.  The bibliographic tools are not a requirement, but you are welcome to use them.
+    \item \textbf{Desktop application} - The desktop application as an executable file and 
+                  possible installation manual. A version of this with its source code will be 
+                  submitted for assessment. The corresponding source code will be available on a version 
+                  control system.  
 
-You can remove the above {\em Your Bibliography} section heading because it will be added in by the renewcommand which is part of the bibliography. The correct annotated bibliography information is provided below.
-%
-% End of comment out / remove the lines. They are only provided for instruction for this example template.
-%
+    \item \textbf{ROS Software} - The robotic application code will include necessary files and 
+                  third party scripts to run the application. An installation manual may also be 
+                  added. A version of these files will be submitted for assessment and they 
+                  will also be available on a version control system.
 
+    \item \textbf{Final Report} - This document will be the report and associated appendices. 
+                  This document will also include all relevant acknowledgements for libraries, 
+                  frameworks and tools used in this project.
 
-\nocite{*} % include everything from the bibliography, irrespective of whether it has been referenced.
+    \item \textbf{Final Demonstration} - Should include some prepared notes and a possible 
+                  presentation.
+\end{itemize}
 
-% the following line is included so that the bibliography is also shown in the table of contents. There is the possibility that this is added to the previous page for the bibliography. To address this, a newline is added so that it appears on the first page for the bibliography.
-\newpage
+\nocite{*} 
+
 \addcontentsline{toc}{section}{Initial Annotated Bibliography}
 
-%
 % example of including an annotated bibliography. The current style is an author date one. If you want to change, comment out the line and uncomment the subsequent line. You should also modify the packages included at the top (see the notes earlier in the file) and then trash your aux files and re-run.
 %\bibliographystyle{authordate2annot}
 \bibliographystyle{IEEEannotU}
 \renewcommand{\refname}{Annotated Bibliography}  % if you put text into the final {} on this line, you will get an extra title, e.g. References. This isn't necessary for the outline project specification.
-\bibliography{mmp} % References file
+\bibliography{References} % References file
 
 \end{document}
