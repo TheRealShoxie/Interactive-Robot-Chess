@@ -21,5 +21,7 @@ Down below you can find the folder hierarchy.
 	* Meetings					- Holds all meeting related docs
 * DEV							- Used for experimental work
 * DOCS                          - Holds all documents
+    * Important_Links		- Holds all important links for the project
     * Manipulator_Documents     - Holds all documents for the manipulators
+    * Project_Outline		- Holds all relevant files for the Project Outline
 * SRC                           - Holds source code that is approved
