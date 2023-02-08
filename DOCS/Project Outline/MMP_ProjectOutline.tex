@@ -27,8 +27,8 @@
 \projecttitle{Interactive Robot Chess}
 \projecttitlememoir{Interactive Robot Chess} %same as the project title or abridged version for page header
 \reporttitle{Project Outline}
-\version{1.1}
-\docstatus{Draft} % change to Release when you are ready to submit your document
+\version{1.2}
+\docstatus{Release} % change to Release when you are ready to submit your document
 \modulecode{CS39440}
 \degreeschemecode{G400}
 \degreeschemename{Computer Science}
@@ -46,34 +46,28 @@
 \section{Project description}
 %==============================================================================
 The Interactive Robot Chess project will develop a robotic and desktop based application, to enable users to 
-play chess with a robotic arm.\newline
+play chess with a robotic arm. The chess engine that will be utilized for this project will be a 3rd party library. 
+These libraries will have the capability to be used, using a plug and play system, where you can add a different one 
+with minor changes to the system.\newline
 
 \noindent This project will develop a desktop application to allow users and developers to interact and obtain 
 information from a robotic system. There will be a desktop-based interface, developed in Kotlin\cite{kotlin}, for users 
-and developers. This should have two different layouts, one for users and the other for developers. To determine   
-which interface will be accessed, an authentication process will be used.\newline
+and developers. Utilizing Kotlin enables the usage of the interface in different desktop environments. 
+This should have two different layouts, one for users and the other for developers. To determine which interface will be 
+accessed, an authentication process will be used.\newline
 
 \noindent The user interface should show the current board state to allow users to correct the system if the board 
 state varies from the physical board state. Further, it should allow the user to choose from a variety of difficulties. 
-Moreover, the user interface should include a visual and textual guide on how to setup the environment(callibration process) 
-of the system to play a game of chess.\newline
-
-\noindent The developer interface should have the same functionality as the user interface. It should further expand 
-on that interface by adding access to backend information and the ability to change values or states of the robotic 
-application.\newline
+Moreover, the user interface should include a visual and textual guide on how to setup the environment(calibration process) 
+of the system to play a game of chess. The developer interface will be supporting the same functionality in addition to 
+showing additional backend information and the ability to change values within the system.\newline
 
 \noindent The robotic application adds functionality to the robot arm and the overall system. This system will be 
 developed in the ROS middleware environment\cite{ros}. The robotic application will consist of a physical robot arm for chess
 movements, object detection and safety features; a simulation environment to test the functionality and safety of the 
-system; a chess engine to enable the user to play a bot; an overhead camera to see the physical board state and safety 
-features; and a communication protocol to enable communication to the desktop application.\newline 
-
-\noindent The safety features of the overall system will need to take into account physical objects, eg. user arm,
-to insure neither the robotic arm nor the user will be hurt or damaged. To accomplish this the overhead camera and 
-the robot arm sensors and camera will be used to enforce a stop of the robot arm.\newline
-
-\noindent The system can be expanded into other kinds of board games due to its modularity. It would also be possible to 
-use this system in a competitive environment if a competitor would not be able attent. \newline
+system; a chess engine to enable the user to play a bot; an overhead camera to see the physical board state and enable us to implement
+safety features; and a communication protocol to enable communication to the desktop application. The safety features will need to take 
+physical objects, eg. human arm, into account. This ensures neither the robotic arm nor the user will be damaged or hurt.\newline 
 
 %==============================================================================
 \section{Proposed tasks}
@@ -86,19 +80,19 @@ The following tasks will be performed on this project:
                   chess pieces will be looked into.\newline
                   There will be a meeting with the Robotic group of the Computer Science department to 
                   determine which robotic arm will be used for this project based on its availability and the 
-                  investigation done.\newpage
+                  investigation done.\newline
 
     \item \textbf{Investigation of the chess engine and safety measures.} After confirming the robotic arm there 
                   will be a need to investigate which chess engine to use, an example for such a chess engine would 
-                  be stockfish \cite{stockfish}. This investigation also includes the need to discover the method of interacting with 
+                  be Stockfish \cite{stockfish}. This investigation also includes the need to discover the method of interacting with 
                   the chess engines.\newline
                   The safety measures will need to be determined based on law and above mentioned safety features. 
                   Further there is a need to research how to implement these safety measures based on the available 
                   equipment.
 
-    \item \textbf{Investagion of object detection.} Here research to detect objects using cameras, such as 
+    \item \textbf{Investigation of object detection.} Here research to detect objects using cameras, such as 
                   the chess pieces, chess board and the users arm, will be accomplished. The detection will be 
-                  realized by using libraries such as OpenCV.
+                  realized by using libraries such as OpenCV \cite{openCV}.
                   
     \item \textbf{Development.} The development will consist of two main subtasks:
           \begin{itemize}
@@ -138,21 +132,25 @@ The following project deliverables are expected.
                   for the demonstration. This will be included as an appendix in the final 
                   report.
 
-    \item \textbf{Desktop application} - The desktop application as an executable file and 
+    \item \textbf{Desktop application} -- The desktop application as an executable file and 
                   possible installation manual. A version of this with its source code will be 
                   submitted for assessment. The corresponding source code will be available on a version 
                   control system.  
 
-    \item \textbf{ROS Software} - The robotic application code will include necessary files and 
+    \item \textbf{ROS Software} -- The robotic application code will include necessary files and 
                   third party scripts to run the application. An installation manual may also be 
                   added. A version of these files will be submitted for assessment and they 
                   will also be available on a version control system.
 
-    \item \textbf{Final Report} - This document will be the report and associated appendices. 
+    \item \textbf{Test Results} -- This document will be a overview of test and experiment results. 
+                  This is used to show all functionalities and safety features have been tested and 
+                  achieved.
+
+    \item \textbf{Final Report} -- This document will be the report and associated appendices. 
                   This document will also include all relevant acknowledgements for libraries, 
                   frameworks and tools used in this project.
 
-    \item \textbf{Final Demonstration} - Should include some prepared notes and a possible 
+    \item \textbf{Final Demonstration} -- Should include some prepared notes and a possible 
                   presentation.
 \end{itemize}
 
