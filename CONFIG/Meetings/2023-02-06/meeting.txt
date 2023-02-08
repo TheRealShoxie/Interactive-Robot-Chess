@@ -1,0 +1,62 @@
+Project: Major Project
+Meeting: Weekly Project Meeting
+People present: Omar Ibrahim and Maxim Buzdalov
+Circulation list: All project members
+Author: Omar Ibrahim
+Version: 1.1
+
+
+Matters arising:
+=============
+1. General
+
+
+2. Project Outline
+A review of the project outline draft was held and following feedback was given:
+
+Project deliverables:
+  - a deliverable for experiments/protocols/testing
+  - using double dash -- instead of single one after deliverable name
+
+Project description:
+  - summarize user interface; merge paragraph 3 and 4. Maybe get rid of a few sentences
+  - Merge safety and robotics; split if necessary
+  - First paragraph contains what the project is and what it is not about.
+    Including not using a self built chess engine.
+
+Project Tasks:
+  - Check for typos
+
+References:
+  - add OpenCV References
+
+Writing Style:
+  - No support for what I mention. Work on structure for content and make it more compactly packed.
+  - General writing style info:
+      - Try to remove repeating content.
+      - When writing be conscious of the audience you want to research
+      - In big documents, remind of terms instead of referring back to them,
+        especially if a section purely talks about a certain term
+
+
+3. Chess engine
+Initial research done into chess engine. Different types of notations. There is a universal chess interface (UCI),
+which might be useful to make the chess engine plug and play. Instead of using notation to save board state internally,
+use a 2d array. Look into a implementation for the chess engines.
+
+4. Chess pieces
+Instead of initially calibrating them, a general approach might be better.
+
+
+New business:
+=============
+1. Tasks this week which are new 
+  - Setting up ROS manipulator environment
+  - Set up development cycle
+
+Actions:
+=============
+1. Finish Project Outline Draft and change it into release
+2. Create a software development cycle
+3. Setup ROS manipulator environment with its dependencies and packages.
+4. Prototype chess engine implementation
