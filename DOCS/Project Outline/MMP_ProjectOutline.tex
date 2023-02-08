@@ -27,7 +27,7 @@
 \projecttitle{Interactive Robot Chess}
 \projecttitlememoir{Interactive Robot Chess} %same as the project title or abridged version for page header
 \reporttitle{Project Outline}
-\version{1.0}
+\version{1.1}
 \docstatus{Draft} % change to Release when you are ready to submit your document
 \modulecode{CS39440}
 \degreeschemecode{G400}
@@ -49,14 +49,14 @@ The Interactive Robot Chess project will develop a robotic and desktop based app
 play chess with a robotic arm.\newline
 
 \noindent This project will develop a desktop application to allow users and developers to interact and obtain 
-information from the robotic system. There will be a desktop-based interface, developed in Kotlin\cite{kotlin}, for users 
+information from a robotic system. There will be a desktop-based interface, developed in Kotlin\cite{kotlin}, for users 
 and developers. This should have two different layouts, one for users and the other for developers. To determine   
-which interface will be accessed an authentification process will be used.\newline
+which interface will be accessed, an authentication process will be used.\newline
 
 \noindent The user interface should show the current board state to allow users to correct the system if the board 
-state varies from the physical board state. Further it should allow the user to choose a bot the user should be able 
-to choose from a variety of difficulties. Moreover the user interface should include a visual and textual guide on 
-how to setup the environment(callibration process) of the system to play a game of chess.\newline
+state varies from the physical board state. Further, it should allow the user to choose from a variety of difficulties. 
+Moreover, the user interface should include a visual and textual guide on how to setup the environment(callibration process) 
+of the system to play a game of chess.\newline
 
 \noindent The developer interface should have the same functionality as the user interface. It should further expand 
 on that interface by adding access to backend information and the ability to change values or states of the robotic 
@@ -72,9 +72,8 @@ features; and a communication protocol to enable communication to the desktop ap
 to insure neither the robotic arm nor the user will be hurt or damaged. To accomplish this the overhead camera and 
 the robot arm sensors and camera will be used to enforce a stop of the robot arm.\newline
 
-\noindent This system can be used as a ground system to expand it to not only play chess, but also playing other 
-kinds of board games. Further introducing the option to let other users, through an internet connection, do the 
-movements instead of an engine will make it possible to interact and fill up empty players by actual users.\newline
+\noindent The system can be expanded into other kinds of board games due to its modularity. It would also be possible to 
+use this system in a competitive environment if a competitor would not be able attent. \newline
 
 %==============================================================================
 \section{Proposed tasks}
@@ -83,10 +82,10 @@ The following tasks will be performed on this project:
 \begin{itemize}
     \item \textbf{Investigation of the robotic arm and build process.} This task will explore the options
                   of robotic arms and how to implement them in the ROS middleware. Further it will be necessary 
-                  to consider the connection to external devices for communication. Reasearch into how to move 
+                  to consider the connection to external devices for communication. Research into how to move 
                   chess pieces will be looked into.\newline
                   There will be a meeting with the Robotic group of the Computer Science department to 
-                  determine which robotic arm will be used for this project based on its availablity and the 
+                  determine which robotic arm will be used for this project based on its availability and the 
                   investigation done.\newpage
 
     \item \textbf{Investigation of the chess engine and safety measures.} After confirming the robotic arm there 
@@ -97,7 +96,7 @@ The following tasks will be performed on this project:
                   Further there is a need to research how to implement these safety measures based on the available 
                   equipment.
 
-    \item \textbf{Investagion of object detecion.} Here research to detect objects using cameras, such as 
+    \item \textbf{Investagion of object detection.} Here research to detect objects using cameras, such as 
                   the chess pieces, chess board and the users arm, will be accomplished. The detection will be 
                   realized by using libraries such as OpenCV.
                   
@@ -106,7 +105,7 @@ The following tasks will be performed on this project:
             \item \textbf{Robotic application.} The first part of the development will form the foundation of the 
                          project. It will construct the underlying data for the board. Arm movements to pick up and 
                          place chess pieces and getting to a resting position will be produced. This will also 
-                         include the callibration and detection of above mentioned objects, to interact and gain 
+                         include the calibration and detection of above mentioned objects, to interact and gain 
                          information. Further the communication module and its corresponding protocol will generate 
                          the possibility to make internal information available to external devices. Safety measures 
                          are going to be implemented in the movement of the arm.
@@ -120,7 +119,7 @@ The following tasks will be performed on this project:
     
     \item \textbf{Project Meetings and Project Workflow.} The project will involve weekly supervisor meetings. A 
                   project workflow will be setup up to ease the process of project management and realization of 
-                  needed tasks. This will asisst in the reports at the meetings and the writing of the project 
+                  needed tasks. This will assist in the reports at the meetings and the writing of the project 
                   report.
 
     \item \textbf{Preparation for demonstrations.} There is a need to prepare for the Mid-Project and End-Project 
