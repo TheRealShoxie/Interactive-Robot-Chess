@@ -1,4 +1,4 @@
-# Major Project
+# Interactive Robot Chess
 
 *This ReadMe file keeps track of the organizational part of all the Folders. And useful information about the Project.*
 
