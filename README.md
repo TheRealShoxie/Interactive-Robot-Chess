@@ -3,7 +3,7 @@
 *This ReadMe file keeps track of the organizational part of all the Folders. And useful information about the Project.*
 
 ### About this Project
-This project is a major project at the university of Aberystwyth. For an outlined project overview please refer to the [Project Outline](DOCS/Project%20Outline/MMP_ProjectOutline.pdf) file.
+This project is a major project at the university of Aberystwyth. For an outlined project overview please refer to the [Project Outline](DOCS/Project_Outline/MMP_ProjectOutline.pdf) file.
 
 ### Members of the Major Project
 Following you will see the group members of the project and their currently assigned roles:
