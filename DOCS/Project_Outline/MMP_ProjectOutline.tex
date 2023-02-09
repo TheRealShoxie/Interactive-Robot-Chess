@@ -46,9 +46,8 @@
 \section{Project description}
 %==============================================================================
 The Interactive Robot Chess project will develop a robotic and desktop based application, to enable users to 
-play chess with a robotic arm. The chess engine that will be utilized for this project will be a 3rd party library. 
-These libraries will have the capability to be used, using a plug and play system, where you can add a different one 
-with minor changes to the system.\newline
+play chess with a robotic arm. The chess engines that will be utilized for this project will be a 3rd party library. 
+These libraries will used within a wrapper class, which enables a plug and play system for different chess engines.\newline
 
 \noindent This project will develop a desktop application to allow users and developers to interact and obtain 
 information from a robotic system. There will be a desktop-based interface, developed in Kotlin\cite{kotlin}, for users 
@@ -56,11 +55,11 @@ and developers. Utilizing Kotlin enables the usage of the interface in different
 This should have two different layouts, one for users and the other for developers. To determine which interface will be 
 accessed, an authentication process will be used.\newline
 
-\noindent The user interface should show the current board state to allow users to correct the system if the board 
+\noindent The user interface should display the current board state to allow users to correct the system if the board 
 state varies from the physical board state. Further, it should allow the user to choose from a variety of difficulties. 
 Moreover, the user interface should include a visual and textual guide on how to setup the environment(calibration process) 
 of the system to play a game of chess. The developer interface will be supporting the same functionality in addition to 
-showing additional backend information and the ability to change values within the system.\newline
+displaying additional backend information and the ability to change values within the system.\newline
 
 \noindent The robotic application adds functionality to the robot arm and the overall system. This system will be 
 developed in the ROS middleware environment\cite{ros}. The robotic application will consist of a physical robot arm for chess
@@ -143,7 +142,7 @@ The following project deliverables are expected.
                   will also be available on a version control system.
 
     \item \textbf{Test Results} -- This document will be a overview of test and experiment results. 
-                  This is used to show all functionalities and safety features have been tested and 
+                  This is used to display all functionalities and safety features have been tested and 
                   achieved.
 
     \item \textbf{Final Report} -- This document will be the report and associated appendices. 
