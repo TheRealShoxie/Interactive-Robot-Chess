@@ -1,0 +1,64 @@
+%%Written by Omar Ibrahim
+
+
+\documentclass[11pt, a4paper]{report}
+
+
+
+\usepackage{StylesAndReferences/documentsv1}
+\usepackage{cite}
+
+
+
+%Defining colors for title and sections
+\definecolor{documentTitle}{RGB}{10,85,145}
+\definecolor{documentSection}{RGB}{10,85,155}
+\definecolor{documentSubsection}{RGB}{79,129,189}
+
+%Setting colors to their respective title or section
+\chapterfont{\color{documentTitle}}
+\sectionfont{\color{documentSection}}
+\subsectionfont{\color{documentSubsection}}
+\subsubsectionfont{\color{documentSubsection}}
+
+\begin{document}
+
+
+%TC:ignore
+
+\raggedright
+\pagenumbering{roman}
+\include{FrontMatter/cover}
+
+
+\tableofcontents
+
+\pagenumbering{arabic}
+\pagestyle{fancy}
+\fancyhead{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0 pt}
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+
+
+\setchapterheaderfooter
+
+%TC: endignore
+
+\include{Chapters/Introduction}
+\include{Chapters/Definition}
+\include{Chapters/DevelopmentProcess}
+\include{Chapters/Implementation}
+
+%TC: ignore
+\setemptyheader
+
+\nocite{*}
+
+\addcontentsline{toc}{chapter}{References}
+\bibliographystyle{StylesAndReferences/IEEEannotU}
+\renewcommand{\bibname}{References}
+\bibliography{StylesAndReferences/references}
+
+%TC: endignore
+\end{document}
