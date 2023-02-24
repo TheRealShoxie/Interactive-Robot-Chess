@@ -67,6 +67,10 @@
   \newcommand{\showmodulecode}{#1}
 }
 
+\newcommand{\configref}[1]{
+  \newcommand{\showconfigref}{#1}
+}
+
 \newcommand{\helv}{ 
 	%bold, 18point, 21point line spacing
 	\fontfamily{phv}\fontseries{b}\fontsize{18}{21}\selectfont
@@ -98,7 +102,8 @@
  Degree Scheme &  \showdegreeschemecode \hspace*{0.05in}(\showdegreeschemename)\\
  \\
  Date & \mmpdocdate\\
- Revision & \showversion\\
+ Config Ref & \showconfigref\\
+ Version & \showversion\\
  Status & \showdocstatus\\
  \\
  \hline
