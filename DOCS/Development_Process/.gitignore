@@ -11,3 +11,5 @@
 *.gz
 *.toc
 *.lof
+*.ver
+*.hst
