@@ -18,7 +18,7 @@ Down below you can find the folder hierarchy.
 
 * CONFIG						- involves config-refs
     * Configuration References  - Holds configuration references in pdf and docx
-	* Meetings					- Holds all meeting related docs
+	* Journal					- Holds all meetings and journal notes for work
 * DEV							- Used for experimental work
 * DOCS                          - Holds all documents
     * Important_Links		- Holds all important links for the project
