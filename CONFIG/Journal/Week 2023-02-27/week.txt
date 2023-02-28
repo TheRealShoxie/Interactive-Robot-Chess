@@ -1,0 +1,24 @@
+Monday:
+    - Integrated User Stories into github
+    - Created Product Backlog Board within project
+    - Created Sprint Backlog 1
+        - Using user stories #1,#2 and #3 as they should be a good foundation start for the project
+        - Creating my tasks and spikes for each of the stories.
+
+Tuesday:
+    - Creating Journal within GitHub and changing away from formal meeting notes
+        - too much work to do it formally easier to just write it down informally
+    - Starting on research which language to use UI
+        - Looking at Java vs kotlin
+            - I am more comfortable with Java compared to kotlin
+            - Java libraries can be used for android and because it runs in a JVM
+              it can be multi-platform(https://www.sciencedirect.com/topics/computer-science/multiple-platform). 
+        - Looking at Java vs Python
+            - Was thinking if I want to do python, but I would rather work in Java
+              as I have more understanding on how to create the UI using javaFX(https://openjfx.io/)
+              and using JUnit(https://junit.org/junit5/). Whereas with Python I do not know how to do
+              testing or how to create a user interface. This could be done with some research but as I 
+              see no actual upside to using Java based on my understanding of the project so far(https://www.guru99.com/java-vs-python.html).
+              Java has more of an Object orientated approach which I prefer and thus will be choosing Java.
+              Based on that article java is used on more platforms. My UI should not be really intensive on algorithm thus the slower run time
+              due to JIT compiler shouldnt be a big problem.

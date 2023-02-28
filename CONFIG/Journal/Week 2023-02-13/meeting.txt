@@ -1,0 +1,4 @@
+Meeting with Maxim:
+    - Talking about ideas nothing noteworthy to write down.
+    - Talked about how I will create the development process specification and how I will deal with development processes
+    - Decided to remove object detection as the project will be too big otherwise(most likely)

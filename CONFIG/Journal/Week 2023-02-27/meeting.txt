@@ -1,0 +1,19 @@
+Meeting:
+    - Talk about why Scrum
+    - Change Format
+        - Merge Chapter 3 and 4, so that we have definition and my implementation
+        - Remove Chapter 2 as it makes no sense to have this here.
+        - For referencing agile manifest write along lines of:
+            - ..following 3 features from Agile Manifesto[Reference number]
+        - Referencing paragraphs or certain sections in bigger documents use [#referenceNumber, "Title"] in latex \cite{reference}["Section or paragraph"]
+        - delegated instead of deligated for Scrum master in implementation
+    - remove pdf from repository as it completely overwrites the pdf and hard to follow changes
+    - revision from newest to oldest in that order
+    - good idea on architecture draft.
+    - good starting point on user stories
+    - testing can be done after I have written code too
+    - No big documents need to be created
+    - Mentioned I would like to use Java for UI
+    - Mentioned I will use C++ for ROS and will need to learn it from scratch
+    - Referencing code from official document should be done even if it might not be needed.(Better reference than not even if it is basics that are normal understanding)
+    - Normally you reference import stuff only but as mentioned at the point above it might be a good idea to do it anyway.

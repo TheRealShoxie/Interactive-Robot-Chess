@@ -1,0 +1,26 @@
+Wednesday:
+    - Research into scrum
+    - Setting up latex to use for the document
+    - Used Gitlab Project template for latex and refactor into my need.
+
+Friday:
+    - Research into Scrum 
+    - Decision not to use waterfall as too many documents need to be produced.
+    - Using Scrum as agile because I want to decide how I want to do certain processes but will follow overall structure generally
+    - Wrote document first draft
+
+Saturday:
+    - Continued writing document
+    - Spell checking and updating a few things here and there
+    - Changed name into guideline as it is a guideline and not a specification. I want to follow it approximately but dont want to follow everything
+      written within to a 100%.
+
+Sunday:
+    - Brainstorming User Stories (Can be found on figma)
+    - Architecture draft 
+        - Can be found on figma
+        - Wanted to create libraries so that it can use any kind of user interface on top of it instead of my specifically created one
+        - Wanted to create ROS package so it can be used for any type of robot approximately
+            - This might make things difficult but will be taken care of or changed along the lines of development
+        - Created a draft to have a approximate idea on how I want it to be.
+        - A few blocks will created on the bases on what i think will be needed.
