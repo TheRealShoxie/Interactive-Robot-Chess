@@ -20,6 +20,8 @@ Down below you can find the folder hierarchy.
     * Configuration References  - Holds configuration references in pdf and docx
 	* Journal					- Holds all meetings and journal notes for work
 * DEV							- Used for experimental work
+    * User Interface            - Holds all development software for the User Interface
+    * ROS                       - Holds all development software for ROS
 * DOCS                          - Holds all documents
     * Development_Process	- Holds all relevant files for the Development Process Document
     * Important_Links		- Holds all important links for the project
