@@ -22,10 +22,19 @@ Tuesday:
               Java has more of an Object orientated approach which I prefer and thus will be choosing Java.
               Based on that article java is used on more platforms. My UI should not be really intensive on algorithm thus the slower run time
               due to JIT compiler shouldn't be a big problem.
+        - Java version
+            - Based on javafx 17 has LTS(https://gluonhq.com/products/javafx/) support till 2026.
+            - Will be using OpenJDK as it is under GNU General Public License and is becoming better (https://www.openlogic.com/blog/java-experts-openjdk-vs-oracle-jdk)
+            - Installing Java OpenJDK 17 which also has LTS
+            - we are using gradle as per (https://gradle.org/maven-vs-gradle/)
     - Starting Research for Folder Hierarchy Development 
         - Decided to split into UI and ROS and will be further split into its library and packages if needed.
     - Some research into branching
         - https://docs.github.com/en/desktop/contributing-and-collaborating-using-github-desktop/making-changes-in-a-branch/managing-branches
         - Will be creating a branch per Sprint, maybe create sub branches for each user story or task unsure.
         - Created "sprint1 branch". This will be where all the code will be written before it will be merged into main branch.
+    - Research UI library creation
+        - Creation of a jar or java binary can be used (https://stackoverflow.com/questions/3612567/how-to-create-my-own-java-libraryapi)
+    - Research TCP Protocol UI library
+        - 
         
