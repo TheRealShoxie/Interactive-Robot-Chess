@@ -48,11 +48,11 @@ Following points have been mentioned and discussed more in depth:
                       to compare it to previous sets, to go avoid a full
                       recallibration
     Chess engine:
-        - board state should be made accessable to outside the engine
+        - board state should be made accessible to outside the engine
         - wrappers most likely needed for different kinds of chess engines,
           this needs to be researched
     Cameras:
-        - knowledge between camre and manipulator base needed
+        - knowledge between camera and manipulator base needed
     Connection:
         - depends on manipulator if we go wireless or wired,
           research manipulators
