@@ -27,6 +27,8 @@ Tuesday:
             - Will be using OpenJDK as it is under GNU General Public License and is becoming better (https://www.openlogic.com/blog/java-experts-openjdk-vs-oracle-jdk)
             - Installing Java OpenJDK 17 which also has LTS
             - we are using gradle as per (https://gradle.org/maven-vs-gradle/)
+            - JUnit jupiter 5.8.1 will be used(https://junit.org/junit5/docs/current/user-guide/).
+            - IntelliJ will be used for Java Development
     - Starting Research for Folder Hierarchy Development 
         - Decided to split into UI and ROS and will be further split into its library and packages if needed.
     - Some research into branching
@@ -36,5 +38,16 @@ Tuesday:
     - Research UI library creation
         - Creation of a jar or java binary can be used (https://stackoverflow.com/questions/3612567/how-to-create-my-own-java-libraryapi)
     - Research TCP Protocol UI library
-        - 
-        
+        - took that as inspiration: https://www.codejava.net/java-se/networking/java-socket-client-examples-tcp-ip
+    - Research TCP Protocol in ROS package
+        - Online source works partially
+
+    - Review Wednesday morning.
+
+Wednesday:
+    - Review:
+        - Yesterday client was setup and works so far. Server side reads wrong port. Will try to hard code it to see what happens.
+          Need to check if the input stream on Java client side needs to be flushed? Flushing is the usage of removing unwanted characters
+          from the input so that they wont be a problem(https://stackoverflow.com/questions/69337937/what-does-it-mean-to-flush-the-input-buffer).
+        - Otherwise decent progress. Idea for today is making the communication work. After that writing Test classes already maybe?.
+        - Think about what kind of protocol i will create.
