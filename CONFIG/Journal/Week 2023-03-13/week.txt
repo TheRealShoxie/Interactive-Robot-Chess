@@ -2,5 +2,10 @@ Thursday:
     - Due to illness last week and up till now no work has been done.
     - Created a Java project for the UI
     - Rewrote code and how it will work the connection.
-    - Initiating javaFX
-    
+    - Implementing the base for javaFX
+    - Initial Connection has been setup. No alerts when it fails so far only debugging
+    - Alert Dialog for exceptions have been added.
+    - Revision:
+        - need to work on user login tomorrow.
+        
+
