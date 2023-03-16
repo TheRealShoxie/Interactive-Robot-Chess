@@ -51,3 +51,33 @@ Wednesday:
           from the input so that they wont be a problem(https://stackoverflow.com/questions/69337937/what-does-it-mean-to-flush-the-input-buffer).
         - Otherwise decent progress. Idea for today is making the communication work. After that writing Test classes already maybe?.
         - Think about what kind of protocol i will create.
+    - Implementation ROS C++ Server:
+        - Based on https://lenngro.github.io/how-to/2021/01/05/Simple-TCPIP-Server-Cpp/
+        - Java Stream read crashes so need to use is ready, it should read -1 if stream ended but it doesn't
+        - Rewriting code into a class but stuck on including .h files.
+        - Found out by adding the .cpp for the header as a second input when doing cmake it will also compile,
+        - so far would only work if receiverBuffer and sendBuffer are implemented within header because of template.
+          thus need to look for a workaround?
+        - got the communication working. Need to start implementing protocol.
+
+    - communication
+        - For now ignore ssh because it is out of scope.
+
+Thursday:
+    - Review:
+        - Not much happened yesterday. I was fighting with C++ a lot and didn't know how to do it or what to do. Looked better at the end so should be able to
+          implement the basic protocol today and start creating user interface hopefully.
+
+    - Implemented connection and works.
+    - Started implementing sending a String but still in the works.
+        - If that works the basic idea for the protocol works algorithmically
+
+Friday:
+    - Review
+        - Yesterday not a lot has been documented. A lot of testing trying out seeing how to do things. 
+        - Will start working on finishing sending a string and seeing how the programm will react and how it works.
+
+    - A few things didnt work:
+        - Had to make vector for receiving a pointer otherwise I wouldnt have the result outside.
+        
+
