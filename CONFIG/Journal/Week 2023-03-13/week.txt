@@ -7,5 +7,3 @@ Thursday:
     - Alert Dialog for exceptions have been added.
     - Revision:
         - need to work on user login tomorrow.
-        
-
