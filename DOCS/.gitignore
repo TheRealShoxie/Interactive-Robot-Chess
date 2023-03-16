@@ -1,0 +1,14 @@
+*.out
+*.log
+*.ind
+*.ilg
+*.idx
+*.fls
+*.fdb_latexmk
+*.blg
+*.bbl
+*.aux
+*.gz
+*.pdf
+!Manipulator_Documents/Kinova_GEN3/*.pdf
+!Manipulator_Documents/Universal_Robots_UR3e/*.pdf
