@@ -1,0 +1,15 @@
+.root{
+    -fx-background-color: #4f5b66;
+    -fx-font-size: 1.5em;
+    -fx-pref-width: 1244;
+    -fx-pref-height: 700;
+}
+
+.label{
+    -fx-alignment: center;
+    -fx-text-fill: "white";
+}
+
+#labelWelcome{
+    -fx-font-size: 2em;
+}
