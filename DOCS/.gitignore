@@ -10,5 +10,8 @@
 *.aux
 *.gz
 *.pdf
+*.toc
+*.ver
+*.hst
 !Manipulator_Documents/Kinova_GEN3/*.pdf
 !Manipulator_Documents/Universal_Robots_UR3e/*.pdf

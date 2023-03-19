@@ -1,44 +1,54 @@
 #include <ros/ros.h>
-#include <std_msgs/String.h>
 
 #include "ibo1_IRC_API/IRCServer.h"
+#include "ibo1_IRC_API/User.h"
+#include "ibo1_IRC_API/Users.h"
+#include <std_msgs/String.h>
 
 
-
+    // ////////// //
+    // Constants. //
+    // ////////// //
+static string usersFilePathName = "src/ibo1_IRC_API/src/Data/users.txt";
+Users users;
 
 
 void communicationLogic(int bufferSizeData, IRCServer *server){
-    std::vector<BYTE> returnData;
+    std::vector<BYTE> receivedData;
     std::vector<BYTE> answer;
 
-    
-    if(bufferSizeData > 0) returnData = server->getData(bufferSizeData);
+    if(bufferSizeData == -1){
+        server->setClientCommand(ERROR_CONNECT);
+    }
+    else if(bufferSizeData > 0 && bufferSizeData < 1000){
+        receivedData = server->getData(bufferSizeData);
 
-
-
-    if(!returnData.empty()){
-        std::cout << "CLIENT COMMAND is:" << server->getClientCommand() << std::endl;
-        std::cout << "Following Data has been receieved: ";
+        cout << "Client connected: " << to_string(server->getClientConnected()) << endl;
+        cout << "CLIENT COMMAND is:" << server->getClientCommand() << endl;
+        /*cout << "Size of return Data: " << to_string(returnData.size()) << endl; 
+        cout << "Following Data has been received: " << endl;
         for(BYTE data : returnData){
             std::cout << data << "-";
-        }
+        }*/
 
         switch (server->getClientCommand())
         {
             case CMD_CONNECT:
                 break;
 
-            case CMD_STRING: {
-                std::cout << "Sending string back!" <<std::endl;
-                std::string returnString = "Acknowledge!";
-                std::copy(returnString.begin(), returnString.end(), std::back_inserter(answer));
-
-                break;  
-            }
-
             case CMD_LOGIN: {
+                User user = User(receivedData);
+                try{
+                    User foundUser = users.findUser(user);
+                    cout << "User: \n" << foundUser.toString() << endl;
+                    cout << foundUser.isAdmin() << endl;
+                    if(foundUser.isAdmin()) answer.push_back(0x01);
+                    else answer.push_back(0x00);
+                }catch(runtime_error er){
+                    cout << "User was not found!" << endl;
+                    server->setClientCommand(ERROR_CMD_USERDOESNTEXIST);
+                }
 
-                
                 break;
             }
                 
@@ -48,9 +58,8 @@ void communicationLogic(int bufferSizeData, IRCServer *server){
         }
 
     }
-    
 
-    server->commandAnswer(answer);
+    server->sendAnswer(answer);
 
 }
 
@@ -65,10 +74,16 @@ int main (int argc, char **argv){
     ros::NodeHandle nh;
 
     ros::Publisher server_pub = nh.advertise<std_msgs::String>("/server_messages", 10);
+    users = Users(usersFilePathName);
+
+
+
+    //TODO: REMOVE RETURN HERE!
+    //return 0;
 
     IRCServer server = IRCServer(54001);
     server.initiateServerSocket();
-    std::cout << server.getClientSocket() << std::endl;
+    cout << "Client Socket: " << server.getClientSocket() << endl;
 
     int bufferSizeData = 0;
 
@@ -78,7 +93,7 @@ int main (int argc, char **argv){
 
         bufferSizeData = server.commandExtraction();
 
-        std::cout << "Size of to come Data: " << bufferSizeData << std::endl;
+        cout << "Size of to come Data: " << bufferSizeData << endl;
         communicationLogic(bufferSizeData, &server);
 
         rate.sleep();

@@ -1,3 +1,10 @@
+<!---
+ @(#) Protocol Document 0.1 2023/03/17
+ 
+ Copyright (c) Omar Ibrahim
+ All rights reserved.
+ -->
+
 # Protocol
 
 This document consists of the definition for the protocol and the type of data that is being sent.
@@ -26,11 +33,14 @@ Further the reply will always consist of the command sent to check for the corre
 
 |   Command |   Size of data    |   data            |   Reply Command   |   Size of data    |   data    |   Description
 |   :-----: |   :----------:    |   :--:            |   :-----------:   |   :----------:    |   :--:    |   :---------
-|   0x00    |   0               |   none            |   0x00            |   0               |   none    |   connecting command to verify connection established.Should be first command sent
-|   0x01    |   n               |   UTF-8 encoding  |   0x01            |   1byte           |   boolean |   Logging in command. Data consists of Username1C(AssiFileSeperator)Password
+|   0xFF    |   0               |   none            |   0xff            |   0               |   none    |   close command to tell the server to close the current connection.
+|   0x00    |   0               |   none            |   0x00            |   0               |   none    |   connecting command to verify connection established. Should be first command sent
+|   0x01    |   n               |   UTF-16 encoding |   0x01            |   1byte           |   boolean |   Logging in command. Data consists of Username1F(Ascii Unit Seperator)Password, returns true for
 
 
 ## Error Codes
 |   Value   |   Description
 |   :---:   |   :----------
-|   0xFE    |   Client not yet connected.
+|   0xFE    |   Command doesn't exist
+|   0xFD    |   Client not yet connected.
+|   0xFC    |   User does not exist.

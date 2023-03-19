@@ -9,10 +9,8 @@ package Protocol;
 import Client.IRCClient;
 
 /**
- * DataInterface - Interface on what classes Data objects which can be sent and received need to consist of
+ *
  * <p>
- * This abstract class handles checking data, and throwing an exception if data is invalid or incorrectly formatted.
- * If data is invalid it throws an exception.
  * @author Omar Ibrahim
  * @version 0.1 ( Initial development ).
  **/
@@ -30,9 +28,7 @@ public interface APIObjectInterface<T> {
     // Class methods. //
     // ////////////// //
 
-    private byte[] parseToByteArray() {
-        return new byte[0];
-    }
+    public byte[] parseToByteArray();
 
     // /////////////////// //
     // Instance variables. //

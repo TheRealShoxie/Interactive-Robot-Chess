@@ -1,0 +1,5 @@
+Friday:
+    - Disregard Interface for now create more objects.
+    - gradle not being able to run because javaFX dependency not found should be an easier fix by just editing the run configuration
+    - Advice against UI testing
+    - Use ASCII Null operator

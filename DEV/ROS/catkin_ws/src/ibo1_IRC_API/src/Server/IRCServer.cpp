@@ -1,4 +1,3 @@
-
 #include "ibo1_IRC_API/IRCServer.h"
 
 
@@ -6,6 +5,7 @@
     // Constructors. //
     // ///////////// //
 
+// Constructor for IRCServer
 IRCServer::IRCServer(unsigned int setPort) : clientSocket(-1){
     clientCommand = CMD_CONNECT;
     port = setPort;
@@ -40,6 +40,7 @@ int IRCServer::receiveBuffer(std::vector<BYTE>& receivingBuffer){
 }
 
 
+// Converts vector Byte to integer
 // https://stackoverflow.com/questions/34943835/convert-four-bytes-to-integer-using-c
 int IRCServer::convertBufferDataSizeToInt(std::vector<BYTE> buffer){
 
@@ -49,6 +50,7 @@ int IRCServer::convertBufferDataSizeToInt(std::vector<BYTE> buffer){
                 (buffer[4]));
 }
 
+// Converts Int to a vector Byte
 std::vector<BYTE> IRCServer::convertIntToBufferDataSize(int dataSize){
     std::vector<BYTE> intAsBytes;
 
@@ -60,10 +62,24 @@ std::vector<BYTE> IRCServer::convertIntToBufferDataSize(int dataSize){
     return intAsBytes;
 }
 
-
     // ////////////////////// //
     // Read/Write properties. //
     // ////////////////////// //
+
+void IRCServer::setClientCommand(BYTE setClientCommand){
+    clientCommand = setClientCommand;
+}
+
+BYTE IRCServer::getClientCommand(){
+    return clientCommand;
+}
+
+
+
+
+    // ///////////////////// //
+    // Read-only properties. //
+    // ///////////////////// //
 
 
 unsigned int IRCServer::getPort(){
@@ -74,8 +90,8 @@ int IRCServer::getClientSocket(){
     return clientSocket;
 }
 
-BYTE IRCServer::getClientCommand(){
-    return clientCommand;
+bool IRCServer::getClientConnected(){
+    return clientConnected;
 }
 
 
@@ -88,9 +104,9 @@ BYTE IRCServer::getClientCommand(){
 void IRCServer::initiateServerSocket(){
     // Creating server socket
     int listeningSocket = socket(AF_INET, SOCK_STREAM, 0);
-    if (listeningSocket == -1) throw std::runtime_error("Couldn't initialize socket!");
+    if (listeningSocket == -1) throw runtime_error("Couldn't initialize socket!");
 
-    std::cout << "Starting...." << std::endl;
+    cout << "Starting...." << endl;
 
     // Binding the socket to a IP Address and port
     sockaddr_in hint;
@@ -101,11 +117,11 @@ void IRCServer::initiateServerSocket(){
     // We use "0.0.0.0" for any address
     inet_pton(AF_INET, "0.0.0.0", &hint.sin_addr);
 
-    if(bind(listeningSocket, (sockaddr *)&hint, sizeof(hint)) == -1) throw std::runtime_error("Couldn't bin Socket to IP Address or Port!");
+    if(bind(listeningSocket, (sockaddr *)&hint, sizeof(hint)) == -1) throw runtime_error("Couldn't bin Socket to IP Address or Port!");
 
 
     // Marking the socket for listening in
-    if(listen(listeningSocket, SOMAXCONN) == -1) throw std::runtime_error("Cannot listen!");
+    if(listen(listeningSocket, SOMAXCONN) == -1) throw runtime_error("Cannot listen!");
 
 
     // Accepting a client
@@ -119,10 +135,10 @@ void IRCServer::initiateServerSocket(){
                           (sockaddr *)&client,
                           &clientSize);
             
-    if (clientSocket == -1) throw std::runtime_error("Problem with client connecting!");
+    if (clientSocket == -1) throw runtime_error("Problem with client connecting!");
 }
 
-
+// Gets the data from the input buffer as a vector and returns that.
 std::vector<BYTE> IRCServer::getData(int bufferSize){
     std::vector<BYTE> dataBuffer;
     dataBuffer.resize(bufferSize);
@@ -132,6 +148,7 @@ std::vector<BYTE> IRCServer::getData(int bufferSize){
 }
 
 
+// Extracts the command and returns the size of the data 
 int IRCServer::commandExtraction(){
 
 
@@ -151,7 +168,7 @@ int IRCServer::commandExtraction(){
 
 
     if(clientConnected == false){
-        if(cmdBuffer[0] != 0x00) return 0;
+        if(cmdBuffer[0] != CMD_CONNECT) return -1;
         else connectClient();
     }
 
@@ -162,12 +179,12 @@ int IRCServer::commandExtraction(){
             clientCommand = CMD_CONNECT;
             break;
 
-        case CMD_STRING:
-            clientCommand = CMD_STRING;
+        case CMD_LOGIN:
+            clientCommand = CMD_LOGIN;
             break;
 
 
-        // Checking if commad is to disconnect.
+        // Checking if command is to disconnect.
         case CMD_DISCONNECT:
 
             clientCommand = CMD_DISCONNECT;
@@ -176,6 +193,8 @@ int IRCServer::commandExtraction(){
             break;
 
         default:
+            clientCommand = ERROR_CMD_UNRECOGNIZABLE;
+            return -3;
             break;
     }
 
@@ -190,7 +209,8 @@ int IRCServer::commandExtraction(){
 }
 
 
-int IRCServer::commandAnswer(std::vector<BYTE> replyData){
+// Used to send an answer to the client.
+int IRCServer::sendAnswer(std::vector<BYTE> replyData){
 
     BYTE replyCmd = 0x00;
     int replyDataSize = 0;
@@ -205,12 +225,24 @@ int IRCServer::commandAnswer(std::vector<BYTE> replyData){
     switch (clientCommand)
     {
         case CMD_CONNECT:
-            if(clientConnected) replyCmd = CMD_CONNECT;
-            else replyCmd = 0xFE;
+            replyCmd = CMD_CONNECT;
             break;
 
-        case CMD_STRING:
-            replyCmd = CMD_STRING;
+        case CMD_LOGIN:
+            replyCmd = CMD_LOGIN;
+            break;
+
+        case ERROR_CMD_UNRECOGNIZABLE:
+            replyCmd = ERROR_CMD_UNRECOGNIZABLE;
+            break;
+
+        case ERROR_CONNECT:
+            replyCmd = ERROR_CONNECT;
+            break;
+
+        case ERROR_CMD_USERDOESNTEXIST:
+            replyCmd = ERROR_CMD_USERDOESNTEXIST;
+            break;
         
         default:
             break;

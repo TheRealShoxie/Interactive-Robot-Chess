@@ -1,0 +1,4 @@
+<Users>
+    <username=admin;password=admin;isAdmin=1>
+    <username=Omar;password=test;isAdmin=0>
+<Users>

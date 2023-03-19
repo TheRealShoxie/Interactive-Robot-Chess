@@ -7,3 +7,15 @@ Thursday:
     - Alert Dialog for exceptions have been added.
     - Revision:
         - need to work on user login tomorrow.
+
+Friday:
+    - Started on User login
+    - able to send user data
+    - now need to read and write to a file. This needs to be worked on tomorrow.
+    
+Saturday:
+    - Worked on writing and reading Users to a file used: https://www.w3schools.com/cpp/cpp_files.asp
+    - Found out that \t is not the same in code when reading from the file thus 4 spaces have been used for now
+    - User login works, now just need to write integration and unit test cases
+    - Further need to comment the C++ code Java code should be completely commented by now.
+    - Started working on chess engine for presentation on monday.

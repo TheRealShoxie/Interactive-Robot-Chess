@@ -1,5 +1,5 @@
 /*
- *@(#) Utility.DataChecker.java 0.1 2023/02/28
+ *@(#) Utility.DataChecker.java 0.1 2023/03/17
  *
  * Copyright (c) Omar Ibrahim
  * All rights reserved.
@@ -37,7 +37,6 @@ public class IRCClient {
     private Socket clientSocket;
     private OutputStream out;
     private InputStream in;
-
 
     // ////////////// //
     // Class methods. //
@@ -140,6 +139,7 @@ public class IRCClient {
 
     /**
      * Sends data to the clientSocket as a byte array.
+     *
      * @param sendData Protocol Object to be sent.
      * @throws IOException thrown by OutputStream write
      */

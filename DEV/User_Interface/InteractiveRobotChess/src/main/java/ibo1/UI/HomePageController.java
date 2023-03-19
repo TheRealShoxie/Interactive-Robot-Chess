@@ -1,5 +1,5 @@
 /*
- *@(#) Utility.DataChecker.java 0.1 2023/02/28
+ *@(#) Utility.DataChecker.java 0.1 2023/03/17
  *
  * Copyright (c) Omar Ibrahim
  * All rights reserved.
@@ -7,6 +7,7 @@
 package ibo1.UI;
 
 
+import Client.IRCClient;
 import CustomException.InvalidDataException;
 import ibo1.Application.Main;
 import ibo1.Utility.AlertMessage;
@@ -43,6 +44,7 @@ public class HomePageController {
 
     private static final String labelWelcomeText = "Welcome to the Interactive Robot Chess User Interface!";
     private static Main mainApp;
+    private static IRCClient ircClient;
 
     // ////////////// //
     // Class methods. //
@@ -56,41 +58,37 @@ public class HomePageController {
      */
     @FXML
     private void connectToServer( javafx.event.ActionEvent event ) throws IOException{
-        boolean finishedConnecting = false;
+
 
         //Tries to set IP address and connect to the server
         try {
-            mainApp.getIrcClient().setIpAddress(textFieldIPAddress.getText());
-            mainApp.getIrcClient().openConnection();
-            finishedConnecting = true;
+            ircClient.setIpAddress(textFieldIPAddress.getText());
+            ircClient.openConnection();
 
             //Exception if IP Address is invalid
         } catch (InvalidDataException e) {
             AlertMessage.showAlert("InvalidDataException", "INVALID IP ADDRESS!",
                     "The entered IP address is invalid. Please refer to documentation on what format " +
                             "a IP address is made of.", Alert.AlertType.ERROR);
-            finishedConnecting = false;
+            return;
 
             //Exception if Connection not possible or refused.
         } catch(IOException e ){
             AlertMessage.showAlert("IOException", "CONNECTION REFUSED!",
                     "The connection to the server could not be made. Please ensure it is connected " +
-                            "correctly and can be called. Also double check the supplied IP Address",
+                            "correctly and can be called. Also double check the supplied IP Address.",
                     Alert.AlertType.ERROR);
-            finishedConnecting = false;
+            return;
         }
 
         //If connection to the server is successful then switch to the login scene.
-        if(finishedConnecting){
-            Parent loginSceneLayout = FXMLLoader.load(getClass().getResource("Login.fxml"));
+        Parent loginSceneLayout = FXMLLoader.load(getClass().getResource("Login.fxml"));
 
-            Scene loginScene = new Scene(loginSceneLayout);
+        Scene loginScene = new Scene(loginSceneLayout);
 
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(loginScene);
-            stage.show();
-        }
-
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(loginScene);
+        stage.show();
     }
 
     // /////////////////// //
@@ -114,6 +112,7 @@ public class HomePageController {
     @FXML
     public void initialize(){
         mainApp = new Main();
+        ircClient = mainApp.getIrcClient();
         labelWelcome.setText(labelWelcomeText);
     }
 

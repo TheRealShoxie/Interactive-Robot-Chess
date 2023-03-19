@@ -6,7 +6,6 @@
  */
 package Utility;
 
-import Client.IRCClient;
 import CustomException.InvalidDataException;
 
 import java.util.regex.Matcher;
@@ -19,6 +18,8 @@ import java.util.regex.Pattern;
  * If data is invalid it throws an exception.
  * @author Omar Ibrahim
  * @version 0.1 ( Initial development ).
+ *
+ * @see InvalidDataException
  **/
 public abstract class DataChecker {
     // ////////// //

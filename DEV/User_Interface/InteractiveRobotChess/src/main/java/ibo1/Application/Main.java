@@ -1,5 +1,5 @@
 /*
- *@(#) Utility.DataChecker.java 0.1 2023/02/28
+ *@(#) Utility.DataChecker.java 0.1 2023/03/17
  *
  * Copyright (c) Omar Ibrahim
  * All rights reserved.
@@ -7,6 +7,7 @@
 package ibo1.Application;
 
 import Client.IRCClient;
+import Protocol.APIObjectInterface;
 import Protocol.User;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -32,6 +33,10 @@ public class Main extends Application {
     //     Constants.   //
     // //////////////// //
 
+    // ///////////// //
+    // Constructors. //
+    // ///////////// //
+
     // //////////////// //
     // Class variables. //
     // //////////////// //
@@ -50,6 +55,8 @@ public class Main extends Application {
 
         // Try loading the home page fxml file, and returning it is not null
         try {
+            ircClient = new IRCClient();
+
             FXMLLoader loader = new FXMLLoader( getClass( ).getResource("../UI/HomePage.fxml") );
             Parent mainLayout = loader.load( );
             return new Scene(mainLayout);
@@ -75,21 +82,20 @@ public class Main extends Application {
     // Instance variables. //
     // /////////////////// //
 
-    private IRCClient ircClient;
-    private User user;
-
-    // ///////////// //
-    // Constructors. //
-    // ///////////// //
-
-    public Main(){
-        ircClient = new IRCClient();
-    }
+    private static IRCClient ircClient;
+    private static User user;
 
     // ////////////////////// //
     // Read/Write properties. //
     // ////////////////////// //
 
+    /**
+     *
+     * @param user The user to use
+     */
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     /**
      * @return returns the IRCClient
@@ -106,13 +112,7 @@ public class Main extends Application {
         return user;
     }
 
-    /**
-     *
-     * @param user The user to use
-     */
-    public void setUser(User user) {
-        this.user = user;
-    }
+
 
     // ///////////////////// //
     // Read-only properties. //

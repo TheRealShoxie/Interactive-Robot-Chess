@@ -1,22 +1,20 @@
 /*
- *@(#) CustomException.InvalidDataException.java 0.1 2023/02/28
+ *@(#) Utility.DataChecker.java 0.1 2023/03/17
  *
  * Copyright (c) Omar Ibrahim
  * All rights reserved.
  */
 package CustomException;
 
-import Utility.DataChecker;
-
 /**
- * InvalidDataException - Exception for invalid data
+ * ClassName - ClassDescription initial
  * <p>
- * This class enables to throw InvalidDataException for the Utility.DataChecker.
+ * What it does
  * @author Omar Ibrahim
  * @version 0.1 ( Initial development ).
  * @see Exception
  */
-public class InvalidDataException extends Exception {
+public class ProtocolException extends Exception {
     // ////////// //
     // Constants. //
     // ////////// //
@@ -50,11 +48,11 @@ public class InvalidDataException extends Exception {
     // //////// //
 
     /**
-     * Custom exception for invalid Data
+     * Custom Exception for Protocol Exceptions
      *
      * @param message used for the exception
      */
-    public InvalidDataException(String message){
+    public ProtocolException(String message){
         super(message);
     }
 }
