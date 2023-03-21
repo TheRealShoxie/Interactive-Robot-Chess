@@ -74,14 +74,14 @@ public class LoginController {
                     Alert.AlertType.ERROR);
             return;
         } catch (ProtocolException e) {
-            if(e.getMessage() == ProtocolErrors.User_DOES_NOTEXIST.toString()){
+            if(e.getMessage().equals(ProtocolErrors.User_DOES_NOTEXIST.toString())){
                 AlertMessage.showAlert("ProtocolError", "USER DOES NOT EXIST!",
                         "The connection to the server could not be made. Please ensure it is connected " +
                                 "correctly and can be called. Also double check the supplied IP Address",
                         Alert.AlertType.ERROR);
                 return;
             }
-            else if(e.getMessage() == ProtocolErrors.UNEXPECTED_RETURN_CMD.toString()){
+            else if(e.getMessage().equals(ProtocolErrors.UNEXPECTED_RETURN_CMD.toString())){
                 AlertMessage.showAlert("ProtocolError", "UNEXPECTED RETURN CMD",
                         "The returned cmdbyte of the protocol was not expected",
                         Alert.AlertType.ERROR);

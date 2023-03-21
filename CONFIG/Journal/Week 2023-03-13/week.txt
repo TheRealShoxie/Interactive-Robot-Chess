@@ -19,3 +19,14 @@ Saturday:
     - User login works, now just need to write integration and unit test cases
     - Further need to comment the C++ code Java code should be completely commented by now.
     - Started working on chess engine for presentation on monday.
+    
+    
+
+
+Sunday:
+    - Started prep for Sprint 2.
+    - Might be of interest https://gist.github.com/aliostad/f4470274f39d29b788c1b09519e67372. This is about using the stockfish interface
+    - How to initiate stockfish from binaries https://www.reddit.com/r/ComputerChess/comments/b6rdez/commandline_options_for_stockfish/
+    - for interacting with the stockfish command line: https://gist.github.com/konstantint/d49ab683b978b3d74172
+    - need to do more research on the point above.
+    - Tried to implement piping couldnt find out a lot

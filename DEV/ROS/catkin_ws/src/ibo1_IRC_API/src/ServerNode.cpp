@@ -9,7 +9,7 @@
     // ////////// //
     // Constants. //
     // ////////// //
-static string usersFilePathName = "src/ibo1_IRC_API/src/Data/users.txt";
+static string usersFilePathName = "src/ibo1_IRC_API/data/users.txt";
 Users users;
 
 
@@ -48,7 +48,6 @@ void communicationLogic(int bufferSizeData, IRCServer *server){
                     cout << "User was not found!" << endl;
                     server->setClientCommand(ERROR_CMD_USERDOESNTEXIST);
                 }
-
                 break;
             }
                 
@@ -76,10 +75,6 @@ int main (int argc, char **argv){
     ros::Publisher server_pub = nh.advertise<std_msgs::String>("/server_messages", 10);
     users = Users(usersFilePathName);
 
-
-
-    //TODO: REMOVE RETURN HERE!
-    //return 0;
 
     IRCServer server = IRCServer(54001);
     server.initiateServerSocket();

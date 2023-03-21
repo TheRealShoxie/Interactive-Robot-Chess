@@ -71,7 +71,7 @@
         string outPutString = "<Users>\n";
 
         for(User user : users){
-            outPutString += user.save() +"\n";
+            outPutString += "    " +user.toString() +"\n";
         }
 
         outPutString += "<Users>";

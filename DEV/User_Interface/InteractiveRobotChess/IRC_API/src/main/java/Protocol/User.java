@@ -29,9 +29,9 @@ public class User{
     // Constants. //
     // ////////// //
 
-    final byte cmdByte = (byte)0x01;
-    final byte userDoesNotExist = (byte)0xFC;
-    final byte unrecognizableCmd = (byte)0xFE;
+    final static byte cmdByte = (byte)0x01;
+    final static byte userDoesNotExist = (byte)0xFC;
+    final static byte unrecognizableCmd = (byte)0xFE;
 
     // //////////////// //
     // Class variables. //
