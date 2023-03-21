@@ -1,0 +1,11 @@
+Monday:
+    - Talked about the demo and that it went well
+    - got explained piping in linux. 
+    - Talked about how I am using 3rd party code with MIT license to deal with the talking to the chess engine.
+    - Discussed how sprint1 went:
+        - Took longer than expected because a lot had to be learned. 
+        - No Unit Testing done yet but otherwise went well. Unit testing and testing will be written later on to focus on getting functionality.
+        - Do testing on more complex stuff though!
+    - Discussed what will be done in sprint2:
+        - Chess engine and wrapper implementation on ros side and user interface side
+        - Should be done within a week

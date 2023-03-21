@@ -121,9 +121,17 @@ include_directories(
 )
 
 ## Declare a C++ library
-#add_library(${PROJECT_NAME}
-  #src/${PROJECT_NAME}/Server/IRCServer.cpp
-#)
+add_library(ibo1_serverNodeLibrary
+  src/Server/IRCServer.cpp
+  src/DataObjects/User.cpp
+  src/DataObjects/Users.cpp
+  src/Utility/FileHandler.cpp
+)
+add_library(ibo1_chessNodeLibrary
+  src/Utility/SubProcessHandler.cpp
+  src/Chess/Chess.cpp
+  src/Utility/UCIHandler.cpp
+)
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
@@ -134,7 +142,8 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/ibo1_IRC_API_node.cpp)
-add_executable(ircServer src/ServerNode.cpp src/Server/IRCServer.cpp src/DataObjects/User.cpp src/DataObjects/Users.cpp src/Utility/FileHandler.cpp)
+add_executable(ircServer src/Server/ServerNode.cpp)
+add_executable(ircChess src/Chess/ChessWrapperNode.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -150,7 +159,8 @@ add_executable(ircServer src/ServerNode.cpp src/Server/IRCServer.cpp src/DataObj
 # target_link_libraries(${PROJECT_NAME}_node
 #   ${catkin_LIBRARIES}
 # )
-target_link_libraries(ircServer ${catkin_LIBRARIES})
+target_link_libraries(ircServer ibo1_serverNodeLibrary ${catkin_LIBRARIES})
+target_link_libraries(ircChess ibo1_chessNodeLibrary ${catkin_LIBRARIES})
 
 #############
 ## Install ##

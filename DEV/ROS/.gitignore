@@ -57,3 +57,6 @@ CATKIN_IGNORE
 
 #Catkin workspace
 .catkin_workspace
+
+#Ignoring all chess engine data
+catkin_ws/src/ibo1_IRC_API/data/Chess

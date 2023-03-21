@@ -9,7 +9,7 @@
     // ////////// //
     // Constants. //
     // ////////// //
-static string usersFilePathName = "src/ibo1_IRC_API/data/users.txt";
+static string usersFilePathName = "src/ibo1_IRC_API/data/Users/users.txt";
 Users users;
 
 
@@ -69,10 +69,10 @@ void communicationLogic(int bufferSizeData, IRCServer *server){
 
 
 int main (int argc, char **argv){
-    ros::init(argc, argv, "publish_Server");
+    ros::init(argc, argv, "ircServer");
     ros::NodeHandle nh;
 
-    ros::Publisher server_pub = nh.advertise<std_msgs::String>("/server_messages", 10);
+    ros::Publisher server_pub = nh.advertise<std_msgs::String>("/ircServer_messages", 10);
     users = Users(usersFilePathName);
 
 
@@ -82,7 +82,7 @@ int main (int argc, char **argv){
 
     int bufferSizeData = 0;
 
-    ros::Rate rate(1);
+    ros::Rate rate(10);
     while(ros::ok()){
 
 

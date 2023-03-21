@@ -1,0 +1,8 @@
+Monday:
+    - Mid-demo
+    - Weekly meeting
+    - Working initial chess engine:
+        - Using https://gist.github.com/konstantint/d49ab683b978b3d74172 for piping to the chess engines. MIT license used.
+        - Creating a SubProcessHandler that includes above mentioned code. Then creating UCI handle to deal with all the talking of the Chess Engine.
+        - Creating the ChessWrapper class which deals with all the necessary commands and so on
+        - Fen string explanation: https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation
