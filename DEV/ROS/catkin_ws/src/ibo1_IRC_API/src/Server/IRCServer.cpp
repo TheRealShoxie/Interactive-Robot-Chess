@@ -6,11 +6,9 @@
     // ///////////// //
 
 // Constructor for IRCServer
-IRCServer::IRCServer(unsigned int setPort) : clientSocket(-1){
-    clientCommand = CMD_CONNECT;
-    port = setPort;
+IRCServer::IRCServer(unsigned int setPort)
+    : clientSocket(-1), clientCommand(CMD_CONNECT), port(setPort){
 }
-
 
     // ////////////// //
     // Class methods. //

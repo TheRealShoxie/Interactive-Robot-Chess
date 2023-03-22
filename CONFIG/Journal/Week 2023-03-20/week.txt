@@ -6,3 +6,13 @@ Monday:
         - Creating a SubProcessHandler that includes above mentioned code. Then creating UCI handle to deal with all the talking of the Chess Engine.
         - Creating the ChessWrapper class which deals with all the necessary commands and so on
         - Fen string explanation: https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation
+
+Tuesday:
+    - Started working on an UCIHandler.
+    - Which deals with the logic of sending movement command
+
+Wednesday:
+    - Finished creating first stage of all UCIHandler commands
+    - tested option extracted which works
+    - testing fen string (seems to work for now)
+    - started working on CHess.cpp implementation

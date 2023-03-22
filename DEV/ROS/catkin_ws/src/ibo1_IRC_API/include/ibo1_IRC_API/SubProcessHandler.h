@@ -3,11 +3,13 @@
 
 #include <ext/stdio_filebuf.h> // NB: Specific to libstdc++
 #include <sys/wait.h>
+#include <string.h>
 #include <unistd.h>
 #include <iostream>
 #include <memory>
 #include <exception>
 #include <istream>
+#include <vector>
 
 using namespace std;
 
@@ -42,8 +44,9 @@ public:
     std::istream stdout;
 
     SubProcess(): stdin(NULL), stdout(NULL){}
-    
-    SubProcess(const char* const argv[], bool with_path = false, const char* const envp[] = 0): stdin(NULL), stdout(NULL){
+
+    // Contribution from maxim line 58-62
+    SubProcess(std::vector<std::string> const &argvSource, bool with_path = false, const char* const envp[] = 0): stdin(NULL), stdout(NULL){
         child_pid = fork();
         if (child_pid == -1) throw std::runtime_error("Failed to start child process"); 
         if (child_pid == 0) {   // In child process
@@ -51,6 +54,13 @@ public:
             dup2(read_pipe.write_fd(), STDOUT_FILENO);
             write_pipe.close(); read_pipe.close();
             int result;
+
+            char ** argv = new char*[argvSource.size() + 1];
+            for (size_t i = 0; i < argvSource.size(); ++i) {
+                argv[i] = strdupa(argvSource[i].c_str());
+            }
+            argv[argvSource.size()] = NULL;
+
             if (with_path) {
                 if (envp != 0) result = execvpe(argv[0], const_cast<char* const*>(argv), const_cast<char* const*>(envp));
                 else result = execvp(argv[0], const_cast<char* const*>(argv));
@@ -61,7 +71,7 @@ public:
             }
             if (result == -1) {
                // Note: no point writing to stdout here, it has been redirected
-               std::cerr << "Error: Failed to launch program" << std::endl;
+               cerr << "Error: Failed to launch program" << endl;
                exit(1);
             }
         }
@@ -102,14 +112,14 @@ class SubProcessHandler{
         // ///////////// //
 
         SubProcessHandler();
-        SubProcessHandler(string processFilePathName);
+        SubProcessHandler(string const &processFilePathName);
 
         // //////// //
         // Methods. //
         // //////// //
 
-        string getLine();
-        void write(string message);
+        void getLine(string &returnedLine);
+        void write(string const &message);
         void closeSubProcess();
 
         // ////////////////////// //

@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0.2)
 project(ibo1_IRC_API)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
-# add_compile_options(-std=c++11)
+add_compile_options(-std=c++11)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -131,6 +131,7 @@ add_library(ibo1_chessNodeLibrary
   src/Utility/SubProcessHandler.cpp
   src/Chess/Chess.cpp
   src/Utility/UCIHandler.cpp
+  src/Utility/DataManipulation.cpp
 )
 
 ## Add cmake target dependencies of the library
@@ -209,10 +210,11 @@ target_link_libraries(ircChess ibo1_chessNodeLibrary ${catkin_LIBRARIES})
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_ibo1_IRC_API.cpp)
-# if(TARGET ${PROJECT_NAME}-test)
-#   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
-# endif()
+catkin_add_gtest(${PROJECT_NAME}-test tests/Utility/uTestUCIHandler.cpp)
+if(TARGET ${PROJECT_NAME}-test)
+  target_link_libraries(${PROJECT_NAME}-test ${catkin_LIBRARIES} ibo1_chessNodeLibrary)
+endif()
+
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)

@@ -10,10 +10,9 @@
     // Constants. //
     // ////////// //
 static string usersFilePathName = "src/ibo1_IRC_API/data/Users/users.txt";
-Users users;
 
 
-void communicationLogic(int bufferSizeData, IRCServer *server){
+void communicationLogic(int bufferSizeData, IRCServer *server, Users *users){
     std::vector<BYTE> receivedData;
     std::vector<BYTE> answer;
 
@@ -39,7 +38,7 @@ void communicationLogic(int bufferSizeData, IRCServer *server){
             case CMD_LOGIN: {
                 User user = User(receivedData);
                 try{
-                    User foundUser = users.findUser(user);
+                    User foundUser = users->findUser(user);
                     cout << "User: \n" << foundUser.toString() << endl;
                     cout << foundUser.isAdmin() << endl;
                     if(foundUser.isAdmin()) answer.push_back(0x01);
@@ -73,8 +72,7 @@ int main (int argc, char **argv){
     ros::NodeHandle nh;
 
     ros::Publisher server_pub = nh.advertise<std_msgs::String>("/ircServer_messages", 10);
-    users = Users(usersFilePathName);
-
+    Users users(usersFilePathName);
 
     IRCServer server = IRCServer(54001);
     server.initiateServerSocket();
@@ -89,7 +87,7 @@ int main (int argc, char **argv){
         bufferSizeData = server.commandExtraction();
 
         cout << "Size of to come Data: " << bufferSizeData << endl;
-        communicationLogic(bufferSizeData, &server);
+        communicationLogic(bufferSizeData, &server, &users);
 
         rate.sleep();
     }
