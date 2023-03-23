@@ -1,59 +1,54 @@
-#ifndef TEMPLATECLASS_H
-#define TEMPLATECLASS_H
+#ifndef USERS_H
+#define USERS_H
+   
+#include "ibo1_IRC_API/User/User.h"
+#include "ibo1_IRC_API/Utility/FileHandler.h"
 
-#include <iostream>
-#include <vector>
+#include <algorithm>
+// Used for throwing exceptions
+#include <stdexcept>
 
-
-using namespace std;
     // ////////// //
     // Constants. //
     // ////////// //
 
-// Datatype
-typedef std::uint8_t BYTE;
+class Users{
 
-class User{
     public:
 
         // ///////////// //
         // Constructors. //
         // ///////////// //
-        User();
-        User(string setUsername, string setPassword);
-        User(string setUsername, string setPassword, bool setAdmin);
-        User(vector<BYTE> protocolData);
-        User(string loadString);
+        Users();
+        Users(string filePathName);
+
         // //////// //
         // Methods. //
         // //////// //
-        string save();
+        void read(string filePathName);
+        void save(string filePathName);
+        User findUser(User userToBeFound);
         string toString();
-        bool operator==(const User& usr) const;
 
         // ////////////////////// //
         // Read/Write properties. //
         // ////////////////////// //
 
-        void setUsername(string setUsername);
-        void setPassword(string setPassword);
-        void setAdmin(bool setAdmin);
-        string getUsername();
-        string getPassword();
-        bool isAdmin();
+        void addUser(User addUser);
+        void setCurrentUser(User currentlyUsedUser);
+        User getCurrentUser();
 
         // ///////////////////// //
         // Read-only properties. //
         // ///////////////////// //
-        
-        
 
     private:
+    
 
         // ////////////// //
         // Class methods. //
         // ////////////// //
-
+        
         // //////////////// //
         // Class variables. //
         // //////////////// //
@@ -61,9 +56,9 @@ class User{
         // /////////////////// //
         // Instance variables. //
         // /////////////////// //
-        string username;
-        string password;
-        bool admin;
-        
+        std::vector<User> users;
+        User currentUser;
+
+    
 };
-#endif //TEMPLATECLASS_H
+#endif //USERS_H

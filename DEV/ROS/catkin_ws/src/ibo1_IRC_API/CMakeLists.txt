@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   roscpp
   std_msgs
+  # roslaunch
 )
 
 ## System dependencies are found with CMake's conventions
@@ -121,18 +122,33 @@ include_directories(
 )
 
 ## Declare a C++ library
-add_library(ibo1_serverNodeLibrary
+# add_library(ibo1_sharedNodeLibrary
+#   src/Utility/FileHandler.cpp
+#   src/Utility/DataManipulation.cpp
+#   src/User/User.cpp
+# )
+# add_library(ibo1_serverNodeLibrary
+#   src/Server/IRCServer.cpp
+#   src/User/Users.cpp
+# )
+
+add_library(ibo1_nodeLibrary
   src/Server/IRCServer.cpp
-  src/DataObjects/User.cpp
-  src/DataObjects/Users.cpp
-  src/Utility/FileHandler.cpp
-)
-add_library(ibo1_chessNodeLibrary
+  src/User/Users.cpp
+  src/User/User.cpp
+
   src/Utility/SubProcessHandler.cpp
   src/Chess/ChessEngine.cpp
   src/Utility/UCIHandler.cpp
+  src/Utility/DataChecker.cpp
+  src/Utility/DataCreator.cpp
+
+  src/Utility/FileHandler.cpp
   src/Utility/DataManipulation.cpp
 )
+
+
+
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
@@ -143,8 +159,8 @@ add_library(ibo1_chessNodeLibrary
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/ibo1_IRC_API_node.cpp)
-add_executable(ircServer src/Server/ServerNode.cpp)
-add_executable(ircChess src/Chess/ChessWrapperNode.cpp)
+add_executable(ircServer src/Nodes/ServerNode.cpp)
+add_executable(ircChess src/Nodes/ChessWrapperNode.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -160,8 +176,16 @@ add_executable(ircChess src/Chess/ChessWrapperNode.cpp)
 # target_link_libraries(${PROJECT_NAME}_node
 #   ${catkin_LIBRARIES}
 # )
-target_link_libraries(ircServer ibo1_serverNodeLibrary ${catkin_LIBRARIES})
-target_link_libraries(ircChess ibo1_chessNodeLibrary ${catkin_LIBRARIES})
+target_link_libraries(ircServer ibo1_nodeLibrary ${catkin_LIBRARIES})
+target_link_libraries(ircChess  ibo1_nodeLibrary ${catkin_LIBRARIES})
+
+# Add roslaunch checking
+
+# roslaunch_add_file_check(launch)
+# if(CATKIN_ENABLE_TESTING)
+#   find_package(roslaunch REQUIRED)
+#   roslaunch_add_file_check(launch)
+# endif()
 
 #############
 ## Install ##

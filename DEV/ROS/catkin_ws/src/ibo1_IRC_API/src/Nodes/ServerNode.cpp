@@ -1,8 +1,8 @@
 #include <ros/ros.h>
 
 #include "ibo1_IRC_API/Server/IRCServer.h"
-#include "ibo1_IRC_API/DataObjects/User.h"
-#include "ibo1_IRC_API/DataObjects/Users.h"
+#include "ibo1_IRC_API/User/User.h"
+#include "ibo1_IRC_API/User/Users.h"
 #include <std_msgs/String.h>
 
 
@@ -10,6 +10,7 @@
     // Constants. //
     // ////////// //
 static string usersFilePathName = "src/ibo1_IRC_API/data/Users/users.txt";
+static string chessEnginesFilePathName = "src/ibo1_IRC_API/data/Chess/chessEngines.txt";
 
 
 void communicationLogic(int bufferSizeData, IRCServer *server, Users *users){
@@ -23,12 +24,7 @@ void communicationLogic(int bufferSizeData, IRCServer *server, Users *users){
         receivedData = server->getData(bufferSizeData);
 
         cout << "Client connected: " << to_string(server->getClientConnected()) << endl;
-        cout << "CLIENT COMMAND is:" << server->getClientCommand() << endl;
-        /*cout << "Size of return Data: " << to_string(returnData.size()) << endl; 
-        cout << "Following Data has been received: " << endl;
-        for(BYTE data : returnData){
-            std::cout << data << "-";
-        }*/
+        cout << "CLIENT COMMAND is:" << (int)(server->getClientCommand()) << endl;
 
         switch (server->getClientCommand())
         {
@@ -74,6 +70,13 @@ int main (int argc, char **argv){
     ros::Publisher server_pub = nh.advertise<std_msgs::String>("/ircServer_messages", 10);
     Users users(usersFilePathName);
 
+    vector<ChessEngineDefinitionStruct> chessEngines = FileHandler::readChessEngines(chessEnginesFilePathName);
+
+    for(ChessEngineDefinitionStruct ceds : chessEngines){
+        cout << ceds.name << endl;
+        cout << ceds.filePathName << endl;
+    }
+
     IRCServer server = IRCServer(54001);
     server.initiateServerSocket();
     cout << "Client Socket: " << server.getClientSocket() << endl;
@@ -86,13 +89,19 @@ int main (int argc, char **argv){
 
         bufferSizeData = server.commandExtraction();
 
+        // If we disconnected break out of loop
+        if(bufferSizeData == -2){
+            cout << "Was told to disconnect!" << endl;
+            break;
+        }
+        
         cout << "Size of to come Data: " << bufferSizeData << endl;
         communicationLogic(bufferSizeData, &server, &users);
 
         rate.sleep();
     }
 
-    delete(&server);
+    cout << "exiting" << endl;
 
     return 0;
 }

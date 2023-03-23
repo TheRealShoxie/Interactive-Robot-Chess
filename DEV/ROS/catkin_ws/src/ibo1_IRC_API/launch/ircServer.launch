@@ -1,0 +1,5 @@
+<launch>
+<!-- Starting the ircServer_node -->
+<node pkg="ibo1_IRC_API" type="ircServer" name="ircServer" output="screen" />
+
+</launch>

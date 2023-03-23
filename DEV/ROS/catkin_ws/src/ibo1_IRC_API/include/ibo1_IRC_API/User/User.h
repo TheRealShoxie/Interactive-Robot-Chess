@@ -1,41 +1,58 @@
-#ifndef DATAMANIPULATION_H
-#define DATAMANIPULATION_H
+#ifndef TEMPLATECLASS_H
+#define TEMPLATECLASS_H
 
-#include <string>
+#include <iostream>
+#include <vector>
+
 
 using namespace std;
-   
     // ////////// //
     // Constants. //
     // ////////// //
 
-class DataManipulation{
+// Datatype
+typedef std::uint8_t BYTE;
 
+class User{
     public:
 
         // ///////////// //
         // Constructors. //
         // ///////////// //
-
+        User();
+        User(string setUsername, string setPassword);
+        User(string setUsername, string setPassword, bool setAdmin);
+        User(vector<BYTE> protocolData);
         // //////// //
         // Methods. //
         // //////// //
-        static string subString(string &stringToExtract, string splitter);
+        string save();
+        string toString();
+        bool operator==(const User& usr) const;
 
         // ////////////////////// //
         // Read/Write properties. //
         // ////////////////////// //
 
+        void setUsername(string setUsername);
+        void setPassword(string setPassword);
+        void setAdmin(bool setAdmin);
+        string getUsername();
+        string getPassword();
+        bool isAdmin();
+
         // ///////////////////// //
         // Read-only properties. //
         // ///////////////////// //
+        
+        
 
     private:
 
         // ////////////// //
         // Class methods. //
         // ////////////// //
-        
+
         // //////////////// //
         // Class variables. //
         // //////////////// //
@@ -43,7 +60,9 @@ class DataManipulation{
         // /////////////////// //
         // Instance variables. //
         // /////////////////// //
-
-    
+        string username;
+        string password;
+        bool admin;
+        
 };
-#endif //DATAMANIPULATION_H
+#endif //TEMPLATECLASS_H

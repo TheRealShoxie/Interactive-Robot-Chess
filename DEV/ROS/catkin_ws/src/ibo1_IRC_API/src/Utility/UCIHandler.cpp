@@ -18,67 +18,6 @@
     // Class methods. //
     // ////////////// //
 
-    EngineOption UCIHandler::createEngineOption(string &returnedLine){
-
-        string startOfData = "option name ";
-        string typeSplit = " type ";
-        string defaultSplit = " default";
-        string minSplit = " min ";
-        string maxSplit = " max ";
-        int end = 0;
-            
-        EngineOption engineOption;
-
-        // Deleting start of the option String
-        returnedLine.erase(returnedLine.begin(), returnedLine.begin() + startOfData.size());
-
-        // Getting the name of the option
-        engineOption.name = dm.subString(returnedLine, typeSplit);
-
-        
-        end = returnedLine.find(defaultSplit);
-
-        //Check if default exists otherwise assign typeOfValue and return
-        if(end == -1){
-            engineOption.typeOfValue = returnedLine;
-            return engineOption;
-        }
-
-        //Extracting the typeOfValue
-        engineOption.typeOfValue = dm.subString(returnedLine, defaultSplit);
-
-        // Checking if there is content after the default
-        if(returnedLine.size() > 0){
-
-            // Deleting the white space that is left over and find the next white space splitter
-            returnedLine.erase(returnedLine.begin(), returnedLine.begin() + 1);
-            end = returnedLine.find(" ");
-
-            // Checking if we have more content after the default value, if not then default options is the rest
-            if(end == -1){
-                engineOption.defaultValue = returnedLine;
-            } else{
-                engineOption.defaultValue = returnedLine.substr(0, end);
-
-                end = returnedLine.find(minSplit);
-                // Checking if the rest of the split is by min thus also by max
-                if(end == -1){
-                    engineOption.restValues = returnedLine;
-                } else{
-                    returnedLine.erase(returnedLine.begin(), returnedLine.begin() + end + minSplit.size());
-
-                    engineOption.minValue = dm.subString(returnedLine, maxSplit);
-
-                    engineOption.maxValue = returnedLine;
-                }
-
-            }
-                        
-        }
-
-        return engineOption;
-    }
-
     // ////////////////////// //
     // Read/Write properties. //
     // ////////////////////// //
@@ -93,9 +32,12 @@
 
     bool UCIHandler::isEngineReady(){
         string returnedLine = "";
+
+        subProcessHandler.write("isready");
+
         subProcessHandler.getLine(returnedLine);
 
-        return returnedLine.compare("readyok");
+        return (returnedLine.compare("readyok") == 0);
 
     }
 
@@ -123,7 +65,7 @@
 
             // Checking if there is an option, if yes create engineOption and add to the vector. 
             if(returnedLine.rfind("option", 0) == 0){
-                engineOption = createEngineOption(returnedLine);
+                engineOption = DataCreator::createEngineOption(returnedLine);
 
                 if(engineOption.name.size() > 0){
                     engineOptions.push_back(engineOption);
@@ -151,9 +93,8 @@
         while(!isFinished){
             subProcessHandler.getLine(returnedLine);
             if(returnedLine.rfind("bestmove ", 0) == 0){
-
                 returnedLine.erase(returnedLine.begin(), returnedLine.begin() + startOfData.size());
-                chessEngineMove = dm.subString(returnedLine, " ");
+                chessEngineMove = DataManipulation::subString(returnedLine, " ");
                 isFinished = true;
             }
         }

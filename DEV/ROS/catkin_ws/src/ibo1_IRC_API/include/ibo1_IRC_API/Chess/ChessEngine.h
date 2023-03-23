@@ -10,6 +10,14 @@
     // ////////// //
     // Structs.   //
     // ////////// //
+    struct ChessEngineDefinitionStruct{
+        string name = "";
+        string filePathName = "";
+
+        inline bool operator==(const ChessEngineDefinitionStruct& e) const{
+            return (name.compare(e.name) == 0 && filePathName.compare(e.filePathName) == 0);
+        }
+    };
 
 
     // ////////// //
@@ -22,7 +30,6 @@ class ChessEngine{
         // ///////////// //
         // Constructors. //
         // ///////////// //
-        ChessEngine();
         ChessEngine(string const &processFilePathName);
 
         // //////// //
@@ -87,6 +94,7 @@ class ChessEngine{
         };
         // Capital letters = white, small = black, move color = w/b, KQkq = can castle, last number how many full moves
         string currentFENPosition;
+        // number of moves so far
         int wholeMoves;
         char colorTurn;
         /*
@@ -104,7 +112,6 @@ class ChessEngine{
 
         string searchOptions;
         vector<EngineOption> engineOptions;
-        
 
 };
 #endif //CHESSENGINE_H

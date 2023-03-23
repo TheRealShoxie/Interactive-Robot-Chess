@@ -1,0 +1,5 @@
+<launch>
+<!-- Starting the ircChess_node -->
+<node pkg="ibo1_IRC_API" type="ircChess" name="ircChess" output="screen" />
+
+</launch>

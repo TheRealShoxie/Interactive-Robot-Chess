@@ -33,14 +33,18 @@ Further the reply will always consist of the command sent to check for the corre
 
 |   Command |   Size of data    |   data            |   Reply Command   |   Size of data    |   data    |   Description
 |   :-----: |   :----------:    |   :--:            |   :-----------:   |   :----------:    |   :--:    |   :---------
-|   0xFF    |   0               |   none            |   0xff            |   0               |   none    |   close command to tell the server to close the current connection.
-|   0x00    |   0               |   none            |   0x00            |   0               |   none    |   connecting command to verify connection established. Should be first command sent
-|   0x01    |   n               |   UTF-8 encoding  |   0x01            |   1byte           |   boolean |   Logging in command. Data consists of Username1F(Ascii Unit Seperator)Password, returns true for
+|   0x00    |   0               |   none            |   none            |   none               |   none    |   disconnect command to tell the server to close the current connection.
+|   0x01    |   0               |   none            |   0x00            |   0               |   none    |   connecting command to verify connection established. Should be first command sent
+|   0x02    |   n               |   UTF-8 encoding  |   0x01            |   1byte           |   boolean |   Logging in command. Data consists of Username1F(Ascii Unit Seperator)Password, returns true/false for isAdmin
+|   0x03    |   n               |   UTF-8 encoding  |   0x01            |   1byte           |   boolean |   creating User in command. Data consists of Username1F(Ascii Unit Seperator)Password, returns true/false for isAdmin
+|   0x04    |   n               |   UTF-8 encoding  |   0x01            |   1byte           |   boolean |   creating User in command. Data consists of Username1F(Ascii Unit Seperator)Password, returns true/false for isAdmin
 
 
 ## Error Codes
 |   Value   |   Description
 |   :---:   |   :----------
-|   0xFE    |   Command doesn't exist
-|   0xFD    |   Client not yet connected.
-|   0xFC    |   User does not exist.
+|   0xFF    |   Command doesn't exist
+|   0xFE    |   Client not yet connected.
+|   0xFD    |   User does not exist.
+|   0xFC    |   User name already exists.
+|   0xFB    |   User couldn't be created.

@@ -71,6 +71,7 @@ public:
             }
             if (result == -1) {
                // Note: no point writing to stdout here, it has been redirected
+               throw runtime_error("Failed to launch program");
                cerr << "Error: Failed to launch program" << endl;
                exit(1);
             }

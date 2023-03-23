@@ -178,8 +178,23 @@ public class IRCClient {
         out = clientSocket.getOutputStream();
         in = clientSocket.getInputStream();
 
+        //TODO: Remove this again
+        ProtocolObject sendTest = new ProtocolObject();
+        sendTest.setCmdByte((byte) 0x02);
+        sendTest.setDataSize(0);
+
+        // Sending connecting command to server
+        send(sendTest);
+
+        // Receiving answer from the server
+        ProtocolObject receivingDataTest = receive();
+
+        // Printing received message
+        System.out.println(receivingDataTest);
+
+
         ProtocolObject sendOpenConnection = new ProtocolObject();
-        sendOpenConnection.setCmdByte((byte) 0x00);
+        sendOpenConnection.setCmdByte((byte) 0x01);
         sendOpenConnection.setDataSize(0);
 
         // Sending connecting command to server
@@ -198,18 +213,12 @@ public class IRCClient {
      * @throws java.io.IOException throws an IOException
      */
     public void closeConnection() throws java.io.IOException{
-
-        //TODO: Needs to be rewritten! Both on C++ side and on Java side.
-
         ProtocolObject sendCloseConnection = new ProtocolObject();
-        sendCloseConnection.setCmdByte((byte) 0xFF);
+        sendCloseConnection.setCmdByte((byte) 0x00);
         sendCloseConnection.setDataSize(0);
 
         send(sendCloseConnection);
 
-        ProtocolObject receivingData = receive();
-
-        System.out.println(receivingData);
 
         in.close();
         out.close();

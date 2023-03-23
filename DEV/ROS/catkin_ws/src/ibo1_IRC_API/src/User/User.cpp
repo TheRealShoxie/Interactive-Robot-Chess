@@ -1,4 +1,4 @@
-#include "ibo1_IRC_API/DataObjects/User.h"
+#include "ibo1_IRC_API/User/User.h"
 
     // ///////////// //
     // Constructors. //
@@ -35,35 +35,6 @@
         admin = false;
     }
 
-    User::User(string loadString){
-        string startOfData = "    <username=";
-        string dataSplitter = ";";
-        string dataStart = "=";
-        string dataEnd = ">";
-        string adminString = "";
-        int end = 0;
-
-        // Deleting start of the loadedString
-        loadString.erase(loadString.begin(), loadString.begin() + startOfData.size());
-
-        // Getting the username and then deleting it plus its separator
-        end = loadString.find(dataSplitter);
-        username = loadString.substr(0, end);
-        end = loadString.find(dataStart);
-        loadString.erase(loadString.begin(), loadString.begin() + end + dataStart.size());
-
-        // Getting the password and then deleting it plus its separator
-        end = loadString.find(dataSplitter);
-        password = loadString.substr(0, end);
-        end = loadString.find(dataStart);
-        loadString.erase(loadString.begin(), loadString.begin() + end + dataStart.size());
-
-        // Getting the admin
-        end = loadString.find(dataEnd);
-        adminString = loadString.substr(0, end);
-        if(adminString == "1") admin = true;
-        else admin = false;
-    }
 
     // ////////////// //
     // Class methods. //

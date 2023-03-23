@@ -4,7 +4,6 @@
     // Constructors. //
     // ///////////// //
 
-    ChessEngine::ChessEngine(){}
     ChessEngine::ChessEngine(string const &processFilePathName)
         :uciHandler(processFilePathName), searchOptions("depth 10"), wholeMoves(0), colorTurn('w'),
         currentFENPosition("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"),
@@ -260,4 +259,9 @@
 
     void ChessEngine::startNewGame(){
         if(!(uciHandler.startNewGame())) throw runtime_error("Couldn't start a fresh game!");
+        wholeMoves = 0;
+        castleRights[0][0] = true;
+        castleRights[0][1] = true;
+        castleRights[1][0] = true;
+        castleRights[1][1] = true;
     }

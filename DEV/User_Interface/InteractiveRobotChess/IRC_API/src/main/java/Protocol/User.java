@@ -29,9 +29,9 @@ public class User{
     // Constants. //
     // ////////// //
 
-    final static byte cmdByte = (byte)0x01;
-    final static byte userDoesNotExist = (byte)0xFC;
-    final static byte unrecognizableCmd = (byte)0xFE;
+    final static byte cmdByteLogin = (byte)0x02;
+    final static byte userDoesNotExist = (byte)0xFD;
+    final static byte unrecognizableCmd = (byte)0xFF;
 
     // //////////////// //
     // Class variables. //
@@ -50,7 +50,7 @@ public class User{
         String dataString = username + "\u241f" +password;//"\u2400" +password;
 
         ProtocolObject protocolObject = new ProtocolObject();
-        protocolObject.setCmdByte(cmdByte);
+        protocolObject.setCmdByte(cmdByteLogin);
 
         // Try to convert to UTF-16 encoding
         try {
@@ -159,7 +159,7 @@ public class User{
         byte receivedCommandByte = receivedProtocol.getCmdByte();
 
         // Setting admin
-        if(receivedCommandByte == cmdByte) setAdmin(byteToBoolean(receivedProtocol.getData()[0]));
+        if(receivedCommandByte == cmdByteLogin) setAdmin(byteToBoolean(receivedProtocol.getData()[0]));
         // Checking if we received User does not exist error
         else if(receivedCommandByte == userDoesNotExist) throw new ProtocolException(ProtocolErrors.User_DOES_NOTEXIST.toString());
         // Command was not recognizable

@@ -155,7 +155,7 @@ public class ProtocolObject {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Command Byte: ");
-        sb.append(cmdByte);
+        sb.append(String.format("%02X", cmdByte));
         sb.append("\nData Size: ");
         sb.append(dataSize);
         sb.append("\nData: ");

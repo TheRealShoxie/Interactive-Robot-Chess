@@ -1,10 +1,8 @@
-#include "ibo1_IRC_API/Utility/DataChecker.h"
+#include "ibo1_IRC_API/Chess/ChessEngines.h"
 
     // ///////////// //
     // Constructors. //
     // ///////////// //
-
-    DataChecker::DataChecker(){}
 
     // ////////////// //
     // Class methods. //
@@ -21,10 +19,3 @@
     // //////// //
     // Methods. //
     // //////// //
-
-    bool DataChecker::isCorrectMove(string const& moveString){
-        regex r("[1-8][a-h][1-8][a-h]");
-        smatch match;
-        if(regex_search(moveString,match, r)) return true;
-        return false;
-    }

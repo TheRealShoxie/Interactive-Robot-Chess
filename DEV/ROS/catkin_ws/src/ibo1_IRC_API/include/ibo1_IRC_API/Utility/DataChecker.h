@@ -17,6 +17,7 @@ class DataChecker{
         // ///////////// //
         // Constructors. //
         // ///////////// //
+        DataChecker();
 
         // //////// //
         // Methods. //

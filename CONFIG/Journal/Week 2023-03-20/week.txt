@@ -17,4 +17,10 @@ Wednesday:
     - testing fen string (seems to work for now)
     - started working on ChessEngine.cpp implementation
     - Main implementation of ChessEngine.cpp is finished.
-    - Algorithms and logic still need to be tested which will be done tomorrow.
+    - Algorithms and logic still need to be tested which will be done tomorrow
+
+Thursday:
+    - Time constraint wise testing for logic will be on hold for now.
+    - Creating a way to use different chess engines
+    - 2nd chess engine used is Komodo https://komodochess.com/
+    - non commercial open source

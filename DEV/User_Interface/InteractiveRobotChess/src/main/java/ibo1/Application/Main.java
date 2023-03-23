@@ -16,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * Main - Is the starting point of the program. It is the connection point between the backend
@@ -122,8 +123,28 @@ public class Main extends Application {
     // Methods. //
     // //////// //
 
+
     /**
-     * JavaFX function to start the program
+     * This is called when the JavaFX window closes.
+     * It sends a close command to the ROS system.
+     * Further deals with some exception handling.
+     */
+    @Override
+    public void stop(){
+        try{
+            System.out.println("Closing connection!");
+            ircClient.closeConnection();
+        } catch(NullPointerException npe){
+            System.err.println("Input or Output stream weren't initialized. This could have happened due to no connection: "
+            + npe.getMessage());
+        } catch(IOException ioe){
+            System.err.println(ioe.getMessage());
+        }
+
+    }
+
+    /**
+     * JavaFX function to start the UserInterface
      *
      * @param primaryStage  The Primary Stage
      */

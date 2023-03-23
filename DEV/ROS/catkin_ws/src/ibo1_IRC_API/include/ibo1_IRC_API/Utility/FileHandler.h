@@ -4,7 +4,8 @@
 #include <iostream>
 #include <fstream>
 
-#include "ibo1_IRC_API/DataObjects/User.h"
+#include "ibo1_IRC_API/User/User.h"
+#include "ibo1_IRC_API/Chess/ChessEngine.h"
 
   
     // ////////// //
@@ -23,9 +24,10 @@ class FileHandler{
         // Methods. //
         // //////// //
 
-        void writeFile(string filepathName, string dataToBeWritten);
-        string readFile(string filepathName);
-        vector<User> readUsers(string filepathName);
+        static void writeFile(string const &filepathName, string const &dataToBeWritten);
+        static string readFile(string const &filepathName);
+        static vector<User> readUsers(string const &filepathName);
+        static vector<ChessEngineDefinitionStruct> readChessEngines(string const &filePathName);
 
         // ////////////////////// //
         // Read/Write properties. //

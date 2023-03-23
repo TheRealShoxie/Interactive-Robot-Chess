@@ -146,23 +146,29 @@ std::vector<BYTE> IRCServer::getData(int bufferSize){
 }
 
 
-// Extracts the command and returns the size of the data 
+// Extracts the command and returns the size of the data
+/*
+    * returns number of bytes to read
+    * returns -1 when client not yet connected!
+    * returns -2 if told to disconnect
+    * returns -3 if cmd doesnt exist
+    * returns -4 if bytes rescv arent length of proctocol(5)
+*/
 int IRCServer::commandExtraction(){
 
 
-    std::vector<BYTE> cmdBuffer;
+    vector<BYTE> cmdBuffer;
     cmdBuffer.resize(5);
     
-    std::cout << "Waiting for message!" << std::endl;
+    cout << "Waiting for message!" << endl;
 
     int bytesRecv = receiveBuffer(cmdBuffer);
+    cout << "Received Bytes: " << bytesRecv << endl;
+    cout << "Cmd Byte: " << (int)cmdBuffer[0] << endl;
 
-    /*
-        TODO:
-        Check if bytes received are 5!
-    */
-
-    std::cout << "Received Bytes: " << bytesRecv << std::endl;
+    if(bytesRecv != 5){
+        return -4;
+    }
 
 
     if(clientConnected == false){
@@ -196,12 +202,6 @@ int IRCServer::commandExtraction(){
             break;
     }
 
-    std::cout << "What is in the cmdBuffer: " << std::endl;
-    for(BYTE item : cmdBuffer){
-        std::cout << (int)item << std::endl;
-    }
-    
-
     return convertBufferDataSizeToInt(cmdBuffer);
 
 }
@@ -220,31 +220,33 @@ int IRCServer::sendAnswer(std::vector<BYTE> replyData){
     std::vector<BYTE> dataSizeAsBytes = convertIntToBufferDataSize(replyDataSize);
     replyData.insert(replyData.begin(), dataSizeAsBytes.begin(), dataSizeAsBytes.end());
 
-    switch (clientCommand)
-    {
-        case CMD_CONNECT:
-            replyCmd = CMD_CONNECT;
-            break;
+    replyCmd = clientCommand;
 
-        case CMD_LOGIN:
-            replyCmd = CMD_LOGIN;
-            break;
+    // switch (clientCommand)
+    // {
+    //     case CMD_CONNECT:
+    //         replyCmd = CMD_CONNECT;
+    //         break;
 
-        case ERROR_CMD_UNRECOGNIZABLE:
-            replyCmd = ERROR_CMD_UNRECOGNIZABLE;
-            break;
+    //     case CMD_LOGIN:
+    //         replyCmd = CMD_LOGIN;
+    //         break;
 
-        case ERROR_CONNECT:
-            replyCmd = ERROR_CONNECT;
-            break;
+    //     case ERROR_CMD_UNRECOGNIZABLE:
+    //         replyCmd = ERROR_CMD_UNRECOGNIZABLE;
+    //         break;
 
-        case ERROR_CMD_USERDOESNTEXIST:
-            replyCmd = ERROR_CMD_USERDOESNTEXIST;
-            break;
+    //     case ERROR_CONNECT:
+    //         replyCmd = ERROR_CONNECT;
+    //         break;
+
+    //     case ERROR_CMD_USERDOESNTEXIST:
+    //         replyCmd = ERROR_CMD_USERDOESNTEXIST;
+    //         break;
         
-        default:
-            break;
-    }
+    //     default:
+    //         break;
+    // }
 
     replyData.insert(replyData.begin(), replyCmd);
 

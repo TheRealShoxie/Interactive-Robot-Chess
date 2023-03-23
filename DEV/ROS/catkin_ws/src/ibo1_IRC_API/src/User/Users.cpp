@@ -1,4 +1,4 @@
-#include "ibo1_IRC_API/DataObjects/Users.h"
+#include "ibo1_IRC_API/User/Users.h"
 
     // ///////////// //
     // Constructors. //
@@ -40,9 +40,8 @@
 
     // Reads in all users from a file.
     void Users::read(string filePathName){
-        FileHandler fh;
 
-        for(User user : fh.readUsers(filePathName)){
+        for(User user : FileHandler::readUsers(filePathName)){
             users.push_back(user);
         }
 
@@ -51,9 +50,8 @@
     // Saves all users from a file
     // Written using https://www.w3schools.com/cpp/cpp_files.asp
     void Users::save(string filePathName){
-        FileHandler fh;
 
-        fh.writeFile(filePathName, toString());
+        FileHandler::writeFile(filePathName, toString());
     }
 
     User Users::findUser(User userToBeFound){
