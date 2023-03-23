@@ -15,4 +15,6 @@ Wednesday:
     - Finished creating first stage of all UCIHandler commands
     - tested option extracted which works
     - testing fen string (seems to work for now)
-    - started working on CHess.cpp implementation
+    - started working on ChessEngine.cpp implementation
+    - Main implementation of ChessEngine.cpp is finished.
+    - Algorithms and logic still need to be tested which will be done tomorrow.

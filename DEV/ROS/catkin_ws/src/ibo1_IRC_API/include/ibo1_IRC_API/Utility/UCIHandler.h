@@ -1,8 +1,8 @@
 #ifndef UCIHANDLER_H
 #define UCIHANDLER_H
 
-#include <ibo1_IRC_API/SubProcessHandler.h>
-#include <ibo1_IRC_API/DataManipulation.h>
+#include <ibo1_IRC_API/Utility/SubProcessHandler.h>
+#include <ibo1_IRC_API/Utility/DataManipulation.h>
    
     // ////////// //
     // Structs.   //
@@ -47,14 +47,10 @@ class UCIHandler{
         bool isEngineReady();
         bool startUCI(vector<EngineOption> &engineOptions);
 
-        string makeMove(string const &fenPosition, string const &searchSettings);
+        void makeMove(string const &fenPosition, string const &searchSettings, string &chessEngineMove);
         void setEngineOptions(string const &optionName, string const &value);
         bool startNewGame();
         void closeProcess();
-
-        // Moved here for testing
-        EngineOption createEngineOption(string &returnedLine);
-
 
         // ////////////////////// //
         // Read/Write properties. //
@@ -69,7 +65,7 @@ class UCIHandler{
         // ////////////// //
         // Class methods. //
         // ////////////// //
-        //EngineOption createEngineOption(string &returnedLine);
+        EngineOption createEngineOption(string &returnedLine);
 
         // //////////////// //
         // Class variables. //

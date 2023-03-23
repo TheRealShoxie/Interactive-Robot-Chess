@@ -129,7 +129,7 @@ add_library(ibo1_serverNodeLibrary
 )
 add_library(ibo1_chessNodeLibrary
   src/Utility/SubProcessHandler.cpp
-  src/Chess/Chess.cpp
+  src/Chess/ChessEngine.cpp
   src/Utility/UCIHandler.cpp
   src/Utility/DataManipulation.cpp
 )

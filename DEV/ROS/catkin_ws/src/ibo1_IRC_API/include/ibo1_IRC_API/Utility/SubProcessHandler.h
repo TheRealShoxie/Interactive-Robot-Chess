@@ -27,7 +27,7 @@ private:
 public:
     const inline int read_fd() const { return fd[0]; }
     const inline int write_fd() const { return fd[1]; }
-    cpipe() { if (pipe(fd)) throw std::runtime_error("Failed to create pipe"); }
+    cpipe() { if (pipe(fd)) throw runtime_error("Failed to create pipe"); }
     void close() { ::close(fd[0]); ::close(fd[1]); }
     ~cpipe() { close(); }
 };
@@ -38,17 +38,17 @@ private:
     cpipe read_pipe;
 public:
     int child_pid = -1;
-    std::unique_ptr<__gnu_cxx::stdio_filebuf<char> > write_buf = NULL; 
-    std::unique_ptr<__gnu_cxx::stdio_filebuf<char> > read_buf = NULL;
-    std::ostream stdin;
-    std::istream stdout;
+    unique_ptr<__gnu_cxx::stdio_filebuf<char> > write_buf = NULL; 
+    unique_ptr<__gnu_cxx::stdio_filebuf<char> > read_buf = NULL;
+    ostream stdin;
+    istream stdout;
 
     SubProcess(): stdin(NULL), stdout(NULL){}
 
     // Contribution from maxim line 58-62
-    SubProcess(std::vector<std::string> const &argvSource, bool with_path = false, const char* const envp[] = 0): stdin(NULL), stdout(NULL){
+    SubProcess(vector<string> const &argvSource, bool with_path = false, const char* const envp[] = 0): stdin(NULL), stdout(NULL){
         child_pid = fork();
-        if (child_pid == -1) throw std::runtime_error("Failed to start child process"); 
+        if (child_pid == -1) throw runtime_error("Failed to start child process"); 
         if (child_pid == 0) {   // In child process
             dup2(write_pipe.read_fd(), STDIN_FILENO);
             dup2(read_pipe.write_fd(), STDOUT_FILENO);
@@ -78,8 +78,8 @@ public:
         else {
             close(write_pipe.read_fd());
             close(read_pipe.write_fd());
-            write_buf = std::unique_ptr<__gnu_cxx::stdio_filebuf<char> >(new __gnu_cxx::stdio_filebuf<char>(write_pipe.write_fd(), std::ios::out));
-            read_buf = std::unique_ptr<__gnu_cxx::stdio_filebuf<char> >(new __gnu_cxx::stdio_filebuf<char>(read_pipe.read_fd(), std::ios::in));
+            write_buf = unique_ptr<__gnu_cxx::stdio_filebuf<char> >(new __gnu_cxx::stdio_filebuf<char>(write_pipe.write_fd(), ios::out));
+            read_buf = unique_ptr<__gnu_cxx::stdio_filebuf<char> >(new __gnu_cxx::stdio_filebuf<char>(read_pipe.read_fd(), ios::in));
             stdin.rdbuf(write_buf.get());
             stdout.rdbuf(read_buf.get());
         }

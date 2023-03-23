@@ -1,8 +1,8 @@
 #ifndef USERS_H
 #define USERS_H
    
-#include "ibo1_IRC_API/User.h"
-#include "ibo1_IRC_API/FileHandler.h"
+#include "ibo1_IRC_API/DataObjects/User.h"
+#include "ibo1_IRC_API/Utility/FileHandler.h"
 
 #include <algorithm>
 // Used for throwing exceptions

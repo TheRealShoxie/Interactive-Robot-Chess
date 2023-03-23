@@ -1,8 +1,8 @@
 #include <ros/ros.h>
 
-#include "ibo1_IRC_API/IRCServer.h"
-#include "ibo1_IRC_API/User.h"
-#include "ibo1_IRC_API/Users.h"
+#include "ibo1_IRC_API/Server/IRCServer.h"
+#include "ibo1_IRC_API/DataObjects/User.h"
+#include "ibo1_IRC_API/DataObjects/Users.h"
 #include <std_msgs/String.h>
 
 
