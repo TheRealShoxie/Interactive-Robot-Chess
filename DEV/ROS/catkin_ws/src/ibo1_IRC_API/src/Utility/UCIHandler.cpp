@@ -1,4 +1,4 @@
-#include "ibo1_IRC_API/UCIHandler.h"
+#include "ibo1_IRC_API/Utility/UCIHandler.h"
 
     // ///////////// //
     // Constructors. //
@@ -8,6 +8,10 @@
     
     UCIHandler::UCIHandler(string const &processFilePathName)
         :subProcessHandler(processFilePathName){
+
+        // Absorbing the first line that is sent by the chess engine when it starts.
+        string returnedLine;
+        subProcessHandler.getLine(returnedLine);
     }
 
     // ////////////// //
@@ -28,18 +32,25 @@
         // Deleting start of the option String
         returnedLine.erase(returnedLine.begin(), returnedLine.begin() + startOfData.size());
 
+        // Getting the name of the option
         engineOption.name = dm.subString(returnedLine, typeSplit);
+
         
         end = returnedLine.find(defaultSplit);
+
+        //Check if default exists otherwise assign typeOfValue and return
         if(end == -1){
             engineOption.typeOfValue = returnedLine;
             return engineOption;
         }
 
+        //Extracting the typeOfValue
         engineOption.typeOfValue = dm.subString(returnedLine, defaultSplit);
 
-        // Checking if there is content after the
+        // Checking if there is content after the default
         if(returnedLine.size() > 0){
+
+            // Deleting the white space that is left over and find the next white space splitter
             returnedLine.erase(returnedLine.begin(), returnedLine.begin() + 1);
             end = returnedLine.find(" ");
 
@@ -88,26 +99,29 @@
 
     }
 
+
     bool UCIHandler::startUCI(vector<EngineOption> &engineOptions){
         EngineOption engineOption;
         string returnedLine;
         bool isFinished = false;
         int end;
-        subProcessHandler.getLine(returnedLine);
 
+        // Sending the uci command
         subProcessHandler.write("uci");
 
-        //int maxReads = 10000;
-        int i = 0;
 
-
+        //Reading options and creating engineOptions till uciok is read.
         while(!isFinished){
+            // Getting the line from the stream
             subProcessHandler.getLine(returnedLine);
+
+            // Checking for uciok
             if(returnedLine.compare("uciok") == 0){
                 isFinished = true;
                 break;
             }
 
+            // Checking if there is an option, if yes create engineOption and add to the vector. 
             if(returnedLine.rfind("option", 0) == 0){
                 engineOption = createEngineOption(returnedLine);
 
@@ -115,7 +129,6 @@
                     engineOptions.push_back(engineOption);
                 }
             }
-            i ++;
         }
         return true;
 
@@ -123,26 +136,27 @@
         //return false;
     }
 
-    string UCIHandler::makeMove(string const &fenPosition, string const &searchSettings){
+    void UCIHandler::makeMove(string const &fenPosition, string const &searchSettings, string &chessEngineMove){
         string returnedLine;
         string startOfData = "bestmove ";
-        string move = "";
         bool isFinished = false;
-        
+
+        // Setting currentPosition
         subProcessHandler.write("position " + fenPosition);
+
+        // Searching for answer from the chess engine
         subProcessHandler.write("go " +searchSettings);
 
+        // Keep reading till we find the best move, then extract the move and return that
         while(!isFinished){
             subProcessHandler.getLine(returnedLine);
             if(returnedLine.rfind("bestmove ", 0) == 0){
 
                 returnedLine.erase(returnedLine.begin(), returnedLine.begin() + startOfData.size());
-                move = dm.subString(returnedLine, " ");
+                chessEngineMove = dm.subString(returnedLine, " ");
                 isFinished = true;
             }
         }
-
-        return move;
     }
 
     void UCIHandler::setEngineOptions(string const &optionName, string const &value){
