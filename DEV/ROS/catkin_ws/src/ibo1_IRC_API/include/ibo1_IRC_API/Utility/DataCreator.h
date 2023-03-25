@@ -2,6 +2,7 @@
 #define DATACREATOR_H
    
 #include "ibo1_IRC_API/Utility/DataManipulation.h"
+#include "ibo1_IRC_API/User/User.h"
 #include <string>
 
 using namespace std;
@@ -45,6 +46,7 @@ class DataCreator{
         // //////// //
         // method to create a engineOption out of the uci option string
         static EngineOption createEngineOption(string &returnedLine);
+        static void convertBytesToString(const vector<BYTE>& receivedData, string& chessEngineName);
 
         // ////////////////////// //
         // Read/Write properties. //

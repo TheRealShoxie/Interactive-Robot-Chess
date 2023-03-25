@@ -31,20 +31,25 @@ Further the reply will always consist of the command sent to check for the corre
 
 ## Commands
 
-|   Command |   Size of data    |   data            |   Reply Command   |   Size of data    |   data    |   Description
-|   :-----: |   :----------:    |   :--:            |   :-----------:   |   :----------:    |   :--:    |   :---------
-|   0x00    |   0               |   none            |   none            |   none               |   none    |   disconnect command to tell the server to close the current connection.
-|   0x01    |   0               |   none            |   0x00            |   0               |   none    |   connecting command to verify connection established. Should be first command sent
-|   0x02    |   n               |   UTF-8 encoding  |   0x01            |   1byte           |   boolean |   Logging in command. Data consists of Username1F(Ascii Unit Seperator)Password, returns true/false for isAdmin
-|   0x03    |   n               |   UTF-8 encoding  |   0x01            |   1byte           |   boolean |   creating User in command. Data consists of Username1F(Ascii Unit Seperator)Password, returns true/false for isAdmin
-|   0x04    |   n               |   UTF-8 encoding  |   0x01            |   1byte           |   boolean |   creating User in command. Data consists of Username1F(Ascii Unit Seperator)Password, returns true/false for isAdmin
+|   Command |   Size of data    |   data            |   Reply Command   |   Size of data    |   data            |   Description
+|   :-----: |   :----------:    |   :--:            |   :-----------:   |   :----------:    |   :--:            |   :---------
+|   0x00    |   0               |   none            |   none            |   none            |   none            |   disconnect command to tell the server to close the current connection.
+|   0x01    |   0               |   none            |   0x01            |   0               |   none            |   connecting command to verify connection established. Should be first command sent
+|   0x02    |   n               |   UTF-8 encoding  |   0x02            |   1byte           |   boolean         |   Logging in command. Data consists of <code>Username1F(Ascii Unit Seperator)Password</code>, returns true/false for isAdmin
+|   0x03    |   n               |   UTF-8 encoding  |   0x03            |   0               |   none            |   creating User in command. Data consists of <code>Username1F(Ascii Unit Seperator)Password</code>, returns true/false for isAdmin
+|   0x04    |   0               |   none            |   0x04            |   n               |   UTF-8 encoding  |   getPossible Chess engines. Return data consists of each <code>chessEngine11F(Ascii Unit Seperator)chessEngine1F(Ascii Unit Seperator)chessEngine....</code>
+|   0x05    |   n               |   UTF-8 encoding  |   0x05            |   0               |   none            |   start chess Engine. Data consists of <code>chessEngineName</code>
+|   0x06    |   0               |   none            |   0x06            |   0               |   none            |   stop chess Engine.
 
 
 ## Error Codes
 |   Value   |   Description
 |   :---:   |   :----------
-|   0xFF    |   Command doesn't exist
-|   0xFE    |   Client not yet connected.
-|   0xFD    |   User does not exist.
-|   0xFC    |   User name already exists.
-|   0xFB    |   User couldn't be created.
+|   0xFF    |   Reading bytes error
+|   0xFE    |   Command doesn't exist
+|   0xFD    |   Client not yet connected.
+|   0xFC    |   User does not exist.
+|   0xFB    |   User name already exists.
+|   0xFA    |   User couldn't be created.
+|   0xF9    |   Chess Engine could not be found.
+|   0xF8    |   Chess Engine could not be started.

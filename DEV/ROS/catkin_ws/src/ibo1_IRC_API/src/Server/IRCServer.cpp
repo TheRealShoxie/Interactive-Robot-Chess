@@ -26,12 +26,12 @@ void IRCServer::connectClient(){
 }
 
 //Implementation of Sending method
-int IRCServer::sendBuffer(std::vector<BYTE> sendingBuffer){
+int IRCServer::sendBuffer(vector<BYTE> sendingBuffer){
     return send(clientSocket, &sendingBuffer[0], sendingBuffer.size(), 0);
 }
 
 //Implementation of Receiving method
-int IRCServer::receiveBuffer(std::vector<BYTE>& receivingBuffer){
+int IRCServer::receiveBuffer(vector<BYTE>& receivingBuffer){
 
     // Waiting for a message
     return recv(clientSocket, &receivingBuffer[0], receivingBuffer.size(), 0);
@@ -40,7 +40,7 @@ int IRCServer::receiveBuffer(std::vector<BYTE>& receivingBuffer){
 
 // Converts vector Byte to integer
 // https://stackoverflow.com/questions/34943835/convert-four-bytes-to-integer-using-c
-int IRCServer::convertBufferDataSizeToInt(std::vector<BYTE> buffer){
+int IRCServer::convertBufferDataSizeToInt(vector<BYTE> buffer){
 
     return int( (buffer[1]) << 24 |
                 (buffer[2]) << 16 |
@@ -49,8 +49,8 @@ int IRCServer::convertBufferDataSizeToInt(std::vector<BYTE> buffer){
 }
 
 // Converts Int to a vector Byte
-std::vector<BYTE> IRCServer::convertIntToBufferDataSize(int dataSize){
-    std::vector<BYTE> intAsBytes;
+vector<BYTE> IRCServer::convertIntToBufferDataSize(int dataSize){
+    vector<BYTE> intAsBytes;
 
     intAsBytes.push_back(dataSize >> 24);
     intAsBytes.push_back(dataSize >> 16);
@@ -137,8 +137,8 @@ void IRCServer::initiateServerSocket(){
 }
 
 // Gets the data from the input buffer as a vector and returns that.
-std::vector<BYTE> IRCServer::getData(int bufferSize){
-    std::vector<BYTE> dataBuffer;
+vector<BYTE> IRCServer::getData(int bufferSize){
+    vector<BYTE> dataBuffer;
     dataBuffer.resize(bufferSize);
     int bytesRecv = receiveBuffer(dataBuffer);
 
@@ -159,8 +159,6 @@ int IRCServer::commandExtraction(){
 
     vector<BYTE> cmdBuffer;
     cmdBuffer.resize(5);
-    
-    cout << "Waiting for message!" << endl;
 
     int bytesRecv = receiveBuffer(cmdBuffer);
     cout << "Received Bytes: " << bytesRecv << endl;
@@ -172,7 +170,10 @@ int IRCServer::commandExtraction(){
 
 
     if(clientConnected == false){
-        if(cmdBuffer[0] != CMD_CONNECT) return -1;
+        if(cmdBuffer[0] != CMD_CONNECT){
+            clientCommand = ERROR_CONNECT;
+            return -1;
+        }
         else connectClient();
     }
 
@@ -187,6 +188,17 @@ int IRCServer::commandExtraction(){
             clientCommand = CMD_LOGIN;
             break;
 
+        case CMD_CREATEUSER:
+            clientCommand = CMD_CREATEUSER;
+            break;
+
+        case CMD_GETCHESSENGINES:
+            clientCommand = CMD_GETCHESSENGINES;
+            break;
+
+        case CMD_STARTCHESSENGINE:
+            clientCommand = CMD_STARTCHESSENGINE;
+            break;
 
         // Checking if command is to disconnect.
         case CMD_DISCONNECT:
@@ -208,7 +220,7 @@ int IRCServer::commandExtraction(){
 
 
 // Used to send an answer to the client.
-int IRCServer::sendAnswer(std::vector<BYTE> replyData){
+int IRCServer::sendAnswer(vector<BYTE> replyData){
 
     BYTE replyCmd = 0x00;
     int replyDataSize = 0;
@@ -217,44 +229,18 @@ int IRCServer::sendAnswer(std::vector<BYTE> replyData){
     if(replyData.empty()) replyDataSize = 0;
     else replyDataSize = replyData.size();
 
-    std::vector<BYTE> dataSizeAsBytes = convertIntToBufferDataSize(replyDataSize);
+    vector<BYTE> dataSizeAsBytes = convertIntToBufferDataSize(replyDataSize);
     replyData.insert(replyData.begin(), dataSizeAsBytes.begin(), dataSizeAsBytes.end());
 
     replyCmd = clientCommand;
 
-    // switch (clientCommand)
-    // {
-    //     case CMD_CONNECT:
-    //         replyCmd = CMD_CONNECT;
-    //         break;
-
-    //     case CMD_LOGIN:
-    //         replyCmd = CMD_LOGIN;
-    //         break;
-
-    //     case ERROR_CMD_UNRECOGNIZABLE:
-    //         replyCmd = ERROR_CMD_UNRECOGNIZABLE;
-    //         break;
-
-    //     case ERROR_CONNECT:
-    //         replyCmd = ERROR_CONNECT;
-    //         break;
-
-    //     case ERROR_CMD_USERDOESNTEXIST:
-    //         replyCmd = ERROR_CMD_USERDOESNTEXIST;
-    //         break;
-        
-    //     default:
-    //         break;
-    // }
-
     replyData.insert(replyData.begin(), replyCmd);
 
 
-    std::cout << "Following message will be sent: " << std::endl;
+    /*cout << "Following message will be sent: " << endl;
     for(auto item : replyData){
-        std::cout << (int)item << std::endl;
-    }
+        cout << (int)item << endl;
+    }*/
 
     sendBuffer(replyData);
     

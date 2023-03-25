@@ -178,21 +178,6 @@ public class IRCClient {
         out = clientSocket.getOutputStream();
         in = clientSocket.getInputStream();
 
-        //TODO: Remove this again
-        ProtocolObject sendTest = new ProtocolObject();
-        sendTest.setCmdByte((byte) 0x02);
-        sendTest.setDataSize(0);
-
-        // Sending connecting command to server
-        send(sendTest);
-
-        // Receiving answer from the server
-        ProtocolObject receivingDataTest = receive();
-
-        // Printing received message
-        System.out.println(receivingDataTest);
-
-
         ProtocolObject sendOpenConnection = new ProtocolObject();
         sendOpenConnection.setCmdByte((byte) 0x01);
         sendOpenConnection.setDataSize(0);
@@ -204,6 +189,7 @@ public class IRCClient {
         ProtocolObject receivingData = receive();
 
         // Printing received message
+        System.out.println("Received answer from connecting");
         System.out.println(receivingData);
     }
 

@@ -1,57 +1,93 @@
-#include <ros/ros.h>
+#include <ibo1_IRC_API/Server/IRCServerNodeHelper.h>
 
-#include "ibo1_IRC_API/Server/IRCServer.h"
-#include "ibo1_IRC_API/User/User.h"
-#include "ibo1_IRC_API/User/Users.h"
 #include <std_msgs/String.h>
 
 
     // ////////// //
     // Constants. //
     // ////////// //
-static string usersFilePathName = "src/ibo1_IRC_API/data/Users/users.txt";
-static string chessEnginesFilePathName = "src/ibo1_IRC_API/data/Chess/chessEngines.txt";
+static string usersFilePathName = "/home/omar/Uni/Major_Project/Interactive-Robot-Chess/DEV/ROS/catkin_ws/src/ibo1_IRC_API/data/Users/users.txt";
+ibo1_IRC_API::Protocol returnedProtocol;
+
+/*
+---------------------------------------------------------------------------------------------------------------------------------
+*/
+
+    // ////////// //
+    // Callbacks. //
+    // ////////// //
+void chessEngineMessageReceived(const ibo1_IRC_API::Protocol& msg){
+    ROS_INFO("I receive here Server!");
+    returnedProtocol = msg;
+}
 
 
-void communicationLogic(int bufferSizeData, IRCServer *server, Users *users){
-    std::vector<BYTE> receivedData;
-    std::vector<BYTE> answer;
 
-    if(bufferSizeData == -1){
-        server->setClientCommand(ERROR_CONNECT);
-    }
-    else if(bufferSizeData > 0 && bufferSizeData < 1000){
-        receivedData = server->getData(bufferSizeData);
+/*
+---------------------------------------------------------------------------------------------------------------------------------
+*/
 
-        cout << "Client connected: " << to_string(server->getClientConnected()) << endl;
-        cout << "CLIENT COMMAND is:" << (int)(server->getClientCommand()) << endl;
+void communicationLogic(int bufferSizeData, IRCServer *server, Users *users, ros::Publisher *server_pub){
+    vector<BYTE> receivedData;
+    vector<BYTE> answer;
 
-        switch (server->getClientCommand())
-        {
-            case CMD_CONNECT:
-                break;
+    if(bufferSizeData > 0 && bufferSizeData < 100000) receivedData = server->getData(bufferSizeData);
+    
+    cout << "CLIENT COMMAND is:" << (int)(server->getClientCommand()) << endl;
 
-            case CMD_LOGIN: {
-                User user = User(receivedData);
-                try{
-                    User foundUser = users->findUser(user);
-                    cout << "User: \n" << foundUser.toString() << endl;
-                    cout << foundUser.isAdmin() << endl;
-                    if(foundUser.isAdmin()) answer.push_back(0x01);
-                    else answer.push_back(0x00);
-                }catch(runtime_error er){
-                    cout << "User was not found!" << endl;
-                    server->setClientCommand(ERROR_CMD_USERDOESNTEXIST);
-                }
-                break;
-            }
-                
-            default:
-                return;
-                break;
+    switch (server->getClientCommand())
+    {
+        case CMD_LOGIN: {
+            IRCServerNodeHelper::cmdUserLogin(receivedData, server, users, answer);
         }
 
+        case CMD_CREATEUSER:
+            // Still needs to be implemented.
+            break;
+        
+
+        case CMD_GETCHESSENGINES:{
+            IRCServerNodeHelper::forwarderChessWrapper(receivedData, CMD_GETCHESSENGINES, server_pub);
+
+            BYTE returnedCommand;
+            vector<BYTE> expectedReturn;
+            expectedReturn.push_back(CMD_GETCHESSENGINES);
+
+            while(IRCServerNodeHelper::receiverChessWrapper(returnedProtocol, returnedCommand, answer, expectedReturn)){
+                ros::spinOnce();
+            }
+
+            returnedProtocol.cmd = 0;
+            break;
+        }
+        
+        case CMD_STARTCHESSENGINE:{
+            IRCServerNodeHelper::forwarderChessWrapper(receivedData, CMD_STARTCHESSENGINE, server_pub);
+
+            BYTE returnedCommand;
+            vector<BYTE> expectedReturn;
+            expectedReturn.push_back(CMD_STARTCHESSENGINE);
+            expectedReturn.push_back(ERROR_CMD_CHESSENGINEDOESNTEXIST);
+            expectedReturn.push_back(ERROR_CMD_CHESSENGINENOTSTARTED);
+
+            while(IRCServerNodeHelper::receiverChessWrapper(returnedProtocol, returnedCommand, answer, expectedReturn)){
+                ros::spinOnce();
+            }
+
+            returnedProtocol.cmd = 0;
+            server->setClientCommand(returnedCommand);
+            break;
+        }
+        
+        case CMD_STOPCHESSENGINE:
+            IRCServerNodeHelper::forwarderChessWrapper(receivedData, CMD_STOPCHESSENGINE, server_pub);
+            break;
+        
+
+        default:
+            break;
     }
+
 
     server->sendAnswer(answer);
 
@@ -66,16 +102,31 @@ void communicationLogic(int bufferSizeData, IRCServer *server, Users *users){
 int main (int argc, char **argv){
     ros::init(argc, argv, "ircServer");
     ros::NodeHandle nh;
+    ros:: AsyncSpinner spinner(1);
+    spinner.start();
 
-    ros::Publisher server_pub = nh.advertise<std_msgs::String>("/ircServer_messages", 10);
-    Users users(usersFilePathName);
+    ros::Publisher server_pub = nh.advertise<ibo1_IRC_API::Protocol>("ircServer_messages", 10);
+    ros::Subscriber chessEngineWrapper_sub = nh.subscribe("/chessWrapper_messages", 10, &chessEngineMessageReceived);
+    
 
-    vector<ChessEngineDefinitionStruct> chessEngines = FileHandler::readChessEngines(chessEnginesFilePathName);
+    std_msgs::String messageToSendToChessEngine;
+    messageToSendToChessEngine.data = "engineStart";
+    server_pub.publish(messageToSendToChessEngine);
+    ros::spinOnce();
 
-    for(ChessEngineDefinitionStruct ceds : chessEngines){
-        cout << ceds.name << endl;
-        cout << ceds.filePathName << endl;
+
+    
+
+    
+
+    ros::Rate rate(10);
+
+    while(server_pub.getNumSubscribers() == 0){
+        rate.sleep();
     }
+
+
+    Users users(usersFilePathName);
 
     IRCServer server = IRCServer(54001);
     server.initiateServerSocket();
@@ -83,9 +134,9 @@ int main (int argc, char **argv){
 
     int bufferSizeData = 0;
 
-    ros::Rate rate(10);
     while(ros::ok()){
 
+        cout << "Waiting for message!" << endl;
 
         bufferSizeData = server.commandExtraction();
 
@@ -94,14 +145,15 @@ int main (int argc, char **argv){
             cout << "Was told to disconnect!" << endl;
             break;
         }
-        
+
         cout << "Size of to come Data: " << bufferSizeData << endl;
-        communicationLogic(bufferSizeData, &server, &users);
+        communicationLogic(bufferSizeData, &server, &users, &server_pub);
 
+        cout << "\n--------------------------------------------------------" << endl;
+
+        ros::spinOnce();
         rate.sleep();
-    }
-
-    cout << "exiting" << endl;
+    } 
 
     return 0;
 }

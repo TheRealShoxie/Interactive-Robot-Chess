@@ -1,13 +1,19 @@
-#ifndef CHESSENGINES_H
-#define CHESSENGINES_H
+#ifndef IRCSERVERNODEHELPER_H
+#define IRCSERVERNODEHELPER_H
 
-#include <ibo1_IRC_API/Chess/ChessEngine.h>
+#include <ros/ros.h>
 
+#include <ibo1_IRC_API/Protocol.h>
+
+
+#include <ibo1_IRC_API/User/Users.h>
+#include <ibo1_IRC_API/Server/IRCServer.h>
+   
     // ////////// //
     // Constants. //
     // ////////// //
 
-class TemplateClass{
+class IRCServerNodeHelper{
 
     public:
 
@@ -18,8 +24,9 @@ class TemplateClass{
         // //////// //
         // Methods. //
         // //////// //
-        static void read(string filePathName);
-        void save(string filePathName);
+        static void cmdUserLogin(const vector<BYTE>& receivedData, IRCServer *server, Users *users, vector<BYTE>& answer);
+        static void forwarderChessWrapper(const vector<BYTE>& receivedData, const BYTE cmd, ros::Publisher *server_pub);
+        static bool receiverChessWrapper(const ibo1_IRC_API::Protocol receivedFromChessEngineWrapper, BYTE &returnedCMD, vector<BYTE>& returnedInternalProtocol, const vector<BYTE>& expectedReturn);
 
         // ////////////////////// //
         // Read/Write properties. //
@@ -42,8 +49,7 @@ class TemplateClass{
         // /////////////////// //
         // Instance variables. //
         // /////////////////// //
-        vector<ChessEngineDefinitionStruct> availableChessEngines;
 
     
 };
-#endif //CHESSENGINES_H
+#endif //IRCSERVERNODEHELPER_H

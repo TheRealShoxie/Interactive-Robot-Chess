@@ -1,5 +1,9 @@
 <launch>
-<!-- Starting the ircServer_node -->
-<node pkg="ibo1_IRC_API" type="ircServer" name="ircServer" output="screen" />
-
+	<param name="chessEngineFilePathName" type="string" value ="" />
+	
+	<!-- Starting the ircServer_node -->
+	<node pkg="ibo1_IRC_API" type="ircServer" name="ircServer" output="screen" />
+	
+	<!-- Starting the ircChess_node-->
+	<node pkg="ibo1_IRC_API" type="ircChess" name="ircChess" output="screen" />
 </launch>

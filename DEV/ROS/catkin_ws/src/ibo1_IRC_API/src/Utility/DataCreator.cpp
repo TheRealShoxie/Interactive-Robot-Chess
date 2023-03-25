@@ -79,3 +79,9 @@
 
         return engineOption;
     }
+
+
+
+    void DataCreator::convertBytesToString(const vector<BYTE>& protocolData, string& chessEngineName){
+        chessEngineName = string(protocolData.begin(), protocolData.end());
+    }

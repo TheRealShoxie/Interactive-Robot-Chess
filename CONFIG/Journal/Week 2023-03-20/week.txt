@@ -24,3 +24,11 @@ Thursday:
     - Creating a way to use different chess engines
     - 2nd chess engine used is Komodo https://komodochess.com/
     - non commercial open source
+
+Friday:
+    -took a break.
+
+Saturday:
+    - Started working intercommunication between ChessEngineWrapperNode and ServerNode
+    - Initial methods for talking setup.
+    - Create logic in chesswrapper engine still and add code for moving pieces then start working on User Interface implementation.

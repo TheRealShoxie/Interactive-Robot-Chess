@@ -30,8 +30,8 @@ public class User{
     // ////////// //
 
     final static byte cmdByteLogin = (byte)0x02;
-    final static byte userDoesNotExist = (byte)0xFD;
-    final static byte unrecognizableCmd = (byte)0xFF;
+    final static byte userDoesNotExist = (byte)0xFC;
+    final static byte unrecognizableCmd = (byte)0xFE;
 
     // //////////////// //
     // Class variables. //
