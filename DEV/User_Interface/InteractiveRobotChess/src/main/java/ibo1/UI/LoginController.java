@@ -10,11 +10,16 @@ import Client.IRCClient;
 import CustomException.ProtocolException;
 import Protocol.User;
 import ibo1.Application.Main;
-import ibo1.Utility.AlertMessage;
+import ibo1.Utility.PopUpMessages;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import Enum.ProtocolErrors;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -51,12 +56,12 @@ public class LoginController {
      * @param event ButtonEvent from JavaFX
      */
     @FXML
-    private void login( javafx.event.ActionEvent event ) {
+    private void login( javafx.event.ActionEvent event ) throws IOException {
         String userName = textFieldUsername.getText();
         String password = textFieldPassword.getText();
 
         if(userName.isBlank() || password.isBlank()){
-            AlertMessage.showAlert("Fields not filled out",
+            PopUpMessages.showAlert("Fields not filled out",
                     "NOT ALL FIELDS WERE FILLED!",
                     "Please ensure that both user name and password have information within them.",
                     Alert.AlertType.ERROR);
@@ -68,40 +73,52 @@ public class LoginController {
         try {
             user.login(ircClient);
         } catch (IOException e) {
-            AlertMessage.showAlert("IOException", "SENDING OR RECEIVING ERROR",
+            PopUpMessages.showAlert("IOException", "SENDING OR RECEIVING ERROR",
                     "There was an error with sending or receiving using the client. " +
                                 "Possibly lost connection to the server",
                     Alert.AlertType.ERROR);
             return;
         } catch (ProtocolException e) {
             if(e.getMessage().equals(ProtocolErrors.User_DOES_NOTEXIST.toString())){
-                AlertMessage.showAlert("ProtocolError", "USER DOES NOT EXIST!",
-                        "The connection to the server could not be made. Please ensure it is connected " +
-                                "correctly and can be called. Also double check the supplied IP Address",
+                PopUpMessages.showAlert("ProtocolError", "USER DOES NOT EXIST!",
+                        "The user does not exist.",
                         Alert.AlertType.ERROR);
                 return;
             }
             else if(e.getMessage().equals(ProtocolErrors.UNEXPECTED_RETURN_CMD.toString())){
-                AlertMessage.showAlert("ProtocolError", "UNEXPECTED RETURN CMD",
+                PopUpMessages.showAlert("ProtocolError", "UNEXPECTED RETURN CMD",
                         "The returned cmdbyte of the protocol was not expected",
                         Alert.AlertType.ERROR);
                 return;
             }
             else{
-                AlertMessage.showAlert("ProtocolError", "UNKNOWN ERROR",
+                PopUpMessages.showAlert("ProtocolError", "UNKNOWN ERROR",
                         "Please contact an admin if this error occurs with the specifics on what you did.",
                         Alert.AlertType.ERROR);
                 return;
             }
         }
 
+        // Setting the current user.
+        mainApp.setUser(user);
+
+
+        Parent homePageLayout;
+
         //TODO: move to correct screen.
         if(user.isAdmin()){
             System.out.println("Move to Admin panel.");
+            homePageLayout = FXMLLoader.load(getClass().getResource("HomePageUser.fxml"));
         } else{
             System.out.println("Move to User panel.");
+            homePageLayout = FXMLLoader.load(getClass().getResource("HomePageUser.fxml"));
         }
 
+        Scene homePageScene = new Scene(homePageLayout);
+
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(homePageScene);
+        stage.show();
     }
 
     // /////////////////// //

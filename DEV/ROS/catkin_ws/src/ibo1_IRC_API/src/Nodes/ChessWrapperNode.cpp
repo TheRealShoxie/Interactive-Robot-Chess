@@ -1,13 +1,15 @@
 #include <ros/ros.h>
 
 #include <ibo1_IRC_API/Utility/FileHandler.h>
+#include <ibo1_IRC_API/Server/IRCServer.h>
 
 #include <std_msgs/String.h>
 #include <ibo1_IRC_API/Protocol.h>
 
 
 static string chessEnginesFilePathName = "/home/omar/Uni/Major_Project/Interactive-Robot-Chess/DEV/ROS/catkin_ws/src/ibo1_IRC_API/data/Chess/chessEngines.txt";
-ibo1_IRC_API::Protocol returnedProtocol;
+static ibo1_IRC_API::Protocol returnedProtocol;
+static ChessEngine *chessEnginePointer;
 
 /*
 ---------------------------------------------------------------------------------------------------------------------------------
@@ -18,8 +20,9 @@ ibo1_IRC_API::Protocol returnedProtocol;
     // ////////// //
 
 void serverMessageReceived(const ibo1_IRC_API::Protocol& msg){
-    ROS_INFO("I receive here ChessEngineWrapper!");
     returnedProtocol = msg;
+    cout << "I received following on chessWrapper from server: " << endl;
+    cout << "CmdByte: " << (int)returnedProtocol.cmd << endl;
 }
 
 
@@ -33,8 +36,83 @@ void serverMessageReceived(const ibo1_IRC_API::Protocol& msg){
 
 
 void wrapperLogic(vector<ChessEngineDefinitionStruct>& chessEngines, ros::Publisher *chessWrapper_pub){
+    vector<BYTE> response;
+    ibo1_IRC_API::Protocol sendProtocol;
 
-    BYTE test;
+    BYTE gotCMD = returnedProtocol.cmd;
+
+    switch (gotCMD)
+    {
+        //Get chess engine names
+        case CMD_GETCHESSENGINES:{
+            string chessEngineNames = "";
+            for(ChessEngineDefinitionStruct ce : chessEngines){
+                chessEngineNames += ce.name;
+                chessEngineNames += "\u241f";
+            }
+            copy(chessEngineNames.begin(), chessEngineNames.end(), std::back_inserter(response));
+            sendProtocol.cmd = CMD_GETCHESSENGINES;
+            sendProtocol.data = response;
+            chessWrapper_pub->publish(sendProtocol);
+
+            break;
+        }
+        case CMD_STARTCHESSENGINE:{
+            string toStartChessEngineName = "";
+            string toStartChessEngineFilePathName;
+            DataCreator::convertBytesToString(returnedProtocol.data, toStartChessEngineName);
+
+            cout << "ChessEngine Name to start: " << toStartChessEngineName << endl;
+
+            for(ChessEngineDefinitionStruct ce : chessEngines){
+                if(ce.name.compare(toStartChessEngineName) == 0){
+                    toStartChessEngineFilePathName = ce.filePathName;
+                }
+            }
+
+            cout << toStartChessEngineFilePathName << endl;
+
+            if(toStartChessEngineFilePathName.empty()){
+                sendProtocol.cmd = ERROR_CMD_CHESSENGINEDOESNTEXIST;
+                sendProtocol.data = response;
+                cout << "Couldnt find Chess Engine Name!" << endl;
+            }else{
+                ChessEngine currentChessEngine(toStartChessEngineFilePathName);
+
+                cout << chessEnginePointer << endl;
+
+                if(!(chessEnginePointer == 0)){
+                    chessEnginePointer->closeEngine();
+                }
+
+                chessEnginePointer = &currentChessEngine;
+                sendProtocol.cmd = CMD_STARTCHESSENGINE;
+                cout << "Started Chess Engine!" << endl;
+            }
+
+            sendProtocol.data = response;
+            chessWrapper_pub->publish(sendProtocol);
+            break;
+        }
+
+        case CMD_STOPCHESSENGINE:{
+            if(chessEnginePointer == 0){
+                sendProtocol.cmd == ERROR_CMD_NOCHESSENGINERUNNING;
+            }else{
+                chessEnginePointer->closeEngine();
+                chessEnginePointer = 0;
+                sendProtocol.cmd == CMD_STOPCHESSENGINE;
+            }
+            sendProtocol.data = response;
+            chessWrapper_pub->publish(sendProtocol);
+            break;
+        }
+
+        default:
+            break;
+    }
+
+    returnedProtocol.cmd = (BYTE)0x00;
 
 }
 
@@ -61,18 +139,6 @@ int main (int argc, char **argv){
     while(chessWrapper_pub.getNumSubscribers() == 0){
         rate.sleep();
     }
-
-    ibo1_IRC_API::Protocol test;
-    test.cmd = (BYTE)0x02;
-    vector<BYTE> dataTest;
-    dataTest.push_back((BYTE)0x02); 
-    dataTest.push_back((BYTE)0x03); 
-    dataTest.push_back((BYTE)0x04); 
-    dataTest.push_back((BYTE)0x05); 
-    dataTest.push_back((BYTE)0x06); 
-    test.data = dataTest;
-
-    chessWrapper_pub.publish(test);
 
     while(ros::ok()){
 

@@ -37,6 +37,7 @@ class ChessEngine{
         // //////// //
         void playerMove(string &move);
         void startNewGame();
+        void closeEngine();
 
 
         ChessEngine& operator= (ChessEngine&&){ return *this; }
@@ -50,6 +51,7 @@ class ChessEngine{
         // ///////////////////// //
         // Read-only properties. //
         // ///////////////////// //
+        bool getChessEngineStarted();
 
     private:
 
@@ -110,8 +112,9 @@ class ChessEngine{
         };
 
 
-        string searchOptions;
+        string searchOptions = "";
         vector<EngineOption> engineOptions;
+        bool chessEngineStarted = false;
 
 };
 #endif //CHESSENGINE_H

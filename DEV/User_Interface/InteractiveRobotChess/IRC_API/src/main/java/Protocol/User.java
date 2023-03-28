@@ -12,6 +12,7 @@ import Enum.ProtocolErrors;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * User - Object Representation for a User or Admin.
@@ -52,17 +53,10 @@ public class User{
         ProtocolObject protocolObject = new ProtocolObject();
         protocolObject.setCmdByte(cmdByteLogin);
 
-        // Try to convert to UTF-16 encoding
-        try {
-            byte[] dataStringAsBytes = dataString.getBytes("UTF-8");
-            protocolObject.setDataSize(dataStringAsBytes.length);
-            protocolObject.setData(dataStringAsBytes);
-
-            //If it fails throw runtimeError
-        } catch (UnsupportedEncodingException e) {
-            System.err.println(e.getMessage());
-            throw new RuntimeException(e);
-        }
+        // Converting to UTF8
+        //byte[] dataStringAsBytes = dataString.getBytes(StandardCharsets.UTF_8);
+        //protocolObject.setDataSize(dataStringAsBytes.length);
+        protocolObject.setData(dataString.getBytes(StandardCharsets.UTF_8));
 
         return protocolObject;
     }

@@ -17,8 +17,10 @@ ibo1_IRC_API::Protocol returnedProtocol;
     // Callbacks. //
     // ////////// //
 void chessEngineMessageReceived(const ibo1_IRC_API::Protocol& msg){
-    ROS_INFO("I receive here Server!");
     returnedProtocol = msg;
+    cout << "I received following on server from chessWrapper: " << endl;
+    cout << "CmdByte: " << (int)returnedProtocol.cmd << endl;
+
 }
 
 
@@ -53,11 +55,14 @@ void communicationLogic(int bufferSizeData, IRCServer *server, Users *users, ros
             vector<BYTE> expectedReturn;
             expectedReturn.push_back(CMD_GETCHESSENGINES);
 
-            while(IRCServerNodeHelper::receiverChessWrapper(returnedProtocol, returnedCommand, answer, expectedReturn)){
+            bool foundExpectedCmd = false;
+
+            while(!foundExpectedCmd){
+                foundExpectedCmd = IRCServerNodeHelper::receiverChessWrapper(returnedProtocol, returnedCommand, answer, expectedReturn);
                 ros::spinOnce();
             }
 
-            returnedProtocol.cmd = 0;
+            returnedProtocol.cmd = (BYTE)0x00;
             break;
         }
         
@@ -68,20 +73,38 @@ void communicationLogic(int bufferSizeData, IRCServer *server, Users *users, ros
             vector<BYTE> expectedReturn;
             expectedReturn.push_back(CMD_STARTCHESSENGINE);
             expectedReturn.push_back(ERROR_CMD_CHESSENGINEDOESNTEXIST);
-            expectedReturn.push_back(ERROR_CMD_CHESSENGINENOTSTARTED);
 
-            while(IRCServerNodeHelper::receiverChessWrapper(returnedProtocol, returnedCommand, answer, expectedReturn)){
+            bool foundExpectedCmd = false;
+
+            while(!foundExpectedCmd){
+                foundExpectedCmd = IRCServerNodeHelper::receiverChessWrapper(returnedProtocol, returnedCommand, answer, expectedReturn);
                 ros::spinOnce();
             }
 
-            returnedProtocol.cmd = 0;
+            returnedProtocol.cmd = (BYTE)0x00;
             server->setClientCommand(returnedCommand);
             break;
         }
         
-        case CMD_STOPCHESSENGINE:
+        case CMD_STOPCHESSENGINE:{
             IRCServerNodeHelper::forwarderChessWrapper(receivedData, CMD_STOPCHESSENGINE, server_pub);
+
+            BYTE returnedCommand;
+            vector<BYTE> expectedReturn;
+            expectedReturn.push_back(CMD_STOPCHESSENGINE);
+            expectedReturn.push_back(ERROR_CMD_NOCHESSENGINERUNNING);
+
+            bool foundExpectedCmd = false;
+
+            while(!foundExpectedCmd){
+                foundExpectedCmd = IRCServerNodeHelper::receiverChessWrapper(returnedProtocol, returnedCommand, answer, expectedReturn);
+                ros::spinOnce();
+            }
+
+            returnedProtocol.cmd = (BYTE)0x00;
+            server->setClientCommand(returnedCommand);
             break;
+        }
         
 
         default:
@@ -113,11 +136,6 @@ int main (int argc, char **argv){
     messageToSendToChessEngine.data = "engineStart";
     server_pub.publish(messageToSendToChessEngine);
     ros::spinOnce();
-
-
-    
-
-    
 
     ros::Rate rate(10);
 
@@ -153,7 +171,7 @@ int main (int argc, char **argv){
 
         ros::spinOnce();
         rate.sleep();
-    } 
+    }
 
     return 0;
 }

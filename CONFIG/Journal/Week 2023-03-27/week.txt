@@ -1,0 +1,14 @@
+Monday:
+    - No meeting as we are in easter break.
+    - Finished initial intercommunication between chess wrapper and ircServer in ROS system.
+    - Decided to continue sprint 2 as it is not finished yet.
+    - Started working on UI implementation for chess
+        - Started creating a homepage with a menu break
+        - Started working on Chess engine start option
+            - Added a function to create showChoiceDialog.
+            - Renamed AlertMessages to PopUpMessages as that class will also hold the ChoiceDialog popups.
+            - Now choosing of which chessengine to use works and it will close any previous chess engine processes automatically.
+    Review:
+        - For tomorrow start implementing chess game on UI. Ignore setting search and engineOptions for now.
+        - Flexibility with commands helping out a lot. Need to find a way to get around the while loops so I am not stuck in there forever. 
+        - Need to check if there is a possibility for that to happen?

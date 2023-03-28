@@ -7,8 +7,9 @@
 package ibo1.Application;
 
 import Client.IRCClient;
-import Protocol.APIObjectInterface;
+import Protocol.ChessEngine;
 import Protocol.User;
+import ibo1.UI.StartUpController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -16,7 +17,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.Objects;
 
 /**
  * Main - Is the starting point of the program. It is the connection point between the backend
@@ -27,7 +27,7 @@ import java.util.Objects;
  * Interactive Robot Chess Server, which is run within a ROS system on a Linux machine.
  * @author Omar Ibrahim
  * @version 0.1 ( Initial development ).
- * @see ibo1.UI.HomePageController
+ * @see StartUpController
  */
 public class Main extends Application {
     // //////////////// //
@@ -57,8 +57,9 @@ public class Main extends Application {
         // Try loading the home page fxml file, and returning it is not null
         try {
             ircClient = new IRCClient();
+            chessEngine = new ChessEngine();
 
-            FXMLLoader loader = new FXMLLoader( getClass( ).getResource("../UI/HomePage.fxml") );
+            FXMLLoader loader = new FXMLLoader( getClass( ).getResource("../UI/StartUp.fxml") );
             Parent mainLayout = loader.load( );
             return new Scene(mainLayout);
         }
@@ -84,7 +85,8 @@ public class Main extends Application {
     // /////////////////// //
 
     private static IRCClient ircClient;
-    private static User user;
+    private static User currentUser;
+    private static ChessEngine chessEngine;
 
     // ////////////////////// //
     // Read/Write properties. //
@@ -92,10 +94,17 @@ public class Main extends Application {
 
     /**
      *
-     * @param user The user to use
+     * @param user The current user
      */
     public void setUser(User user) {
-        this.user = user;
+        this.currentUser = user;
+    }
+
+    /**
+     * @param chessEngine The global chess engine instance
+     */
+    public static void setChessEngine(ChessEngine chessEngine) {
+        Main.chessEngine = chessEngine;
     }
 
     /**
@@ -110,10 +119,16 @@ public class Main extends Application {
      * @return the current User
      */
     public User getUser() {
-        return user;
+        return currentUser;
     }
 
 
+    /**
+     * @return The global chess engine instance
+     */
+    public static ChessEngine getChessEngine() {
+        return chessEngine;
+    }
 
     // ///////////////////// //
     // Read-only properties. //

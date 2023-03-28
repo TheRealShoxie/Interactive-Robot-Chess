@@ -113,8 +113,10 @@ public class ProtocolObject {
     public void setData(byte[] data) {
         if(data.length != 0){
             this.data = data;
-        } else{
+            this.dataSize = data.length;
+        } else {
             this.data = new byte[0];
+            this.dataSize = 0;
         }
     }
 

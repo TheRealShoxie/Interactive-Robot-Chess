@@ -10,6 +10,7 @@
         dataChecker(){
 
         // Initializing engine
+        chessEngineStarted = true;
         uciHandler.startUCI(engineOptions);
         if(!(uciHandler.isEngineReady())) throw runtime_error("Engine was not ready!");
         startNewGame();
@@ -222,6 +223,10 @@
     // Read-only properties. //
     // ///////////////////// //
 
+    bool ChessEngine::getChessEngineStarted(){
+        return chessEngineStarted;
+    }
+
     // //////// //
     // Methods. //
     // //////// //
@@ -244,7 +249,7 @@
 
         }
         // Checking if we got the move command to make the chessEngine move first.
-        else if(move.compare("engineStart")){
+        else if(move.compare("engineStart") == 0){
             // Making the ChessEngine make the move.
             uciHandler.makeMove(currentFENPosition, searchOptions, chessEngineMove);
 
@@ -252,7 +257,7 @@
             updateBoardState(move);
         }
         
-         else{
+        else{
             return;
         }
     }
@@ -264,4 +269,8 @@
         castleRights[0][1] = true;
         castleRights[1][0] = true;
         castleRights[1][1] = true;
+    }
+
+    void ChessEngine::closeEngine(){
+        uciHandler.closeProcess();
     }

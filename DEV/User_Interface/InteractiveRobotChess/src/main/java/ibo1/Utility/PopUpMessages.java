@@ -8,7 +8,11 @@ package ibo1.Utility;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.layout.Region;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * AlertMessage - Class that allows to show information or warnings to the user when exceptions occur or warnings are shown.
@@ -18,7 +22,7 @@ import javafx.scene.layout.Region;
  * @author Omar Ibrahim
  * @version 0.1 ( Initial development ).
  */
-public abstract class AlertMessage {
+public abstract class PopUpMessages {
     // ////////// //
     // Constants. //
     // ////////// //
@@ -41,7 +45,7 @@ public abstract class AlertMessage {
      * @param onlyOkayButton Set need for okay button
      * @param alertType Type of alert of type Alert.AlertType
      */
-    public static void showAlert(String titleString, String headerString, String contentString,
+    private static void createAndShowAlert(String titleString, String headerString, String contentString,
                                  boolean onlyOkayButton, Alert.AlertType alertType){
 
         Alert alert;
@@ -67,6 +71,35 @@ public abstract class AlertMessage {
 
         // Show alert and halt execution
         alert.showAndWait();
+    }
+
+
+    /**
+     * Creates and shows a choice dialog.
+     * <p>
+     * Waits for the selection of a choice and returns that choice.
+     *
+     * @param titleString Title text of the choice dialog
+     * @param headerString Header text of the choice dialog
+     * @param contentString Content text of the choice dialog
+     * @param choices Choices of the ChoiceDialog of type List<String>
+     * @return returns the selected choice as String
+     */
+    private static String createAndShowChoiceDialog(String titleString, String headerString, String contentString, List<String> choices){
+
+        //Creating a new ChoiceDialog and adding the choices
+        ChoiceDialog choiceDialog = new ChoiceDialog(choices.get(0), choices);
+
+        // Setting the title, header and content text
+        choiceDialog.setTitle(titleString);
+        choiceDialog.setHeaderText(headerString);
+        choiceDialog.setContentText(contentString);
+
+        // Showing and waiting till a user selected and confirmed
+        Optional<String> result = choiceDialog.showAndWait();
+
+        // Returns the selection
+        return result.get();
     }
 
     // /////////////////// //
@@ -98,6 +131,19 @@ public abstract class AlertMessage {
      * @param alertType Type of alert of type Alert.AlertType
      */
     public static void showAlert (String titleString, String headerString, String contentString, Alert.AlertType alertType){
-        showAlert(titleString, headerString, contentString, true, alertType);
+        createAndShowAlert(titleString, headerString, contentString, true, alertType);
+    }
+
+
+    /**
+     * Creates a choice dialog for chess engines.
+     * <p>
+     * This is used to select which chess engine will be used.
+     *
+     * @param choices Possible chess engines as String
+     * @return the selected chess engine
+     */
+    public static String showChoiceDialogChessEngine(List<String> choices){
+        return createAndShowChoiceDialog("Chess Engine Picker","Select the chess engine to use:","ChessEngine:", choices);
     }
 }

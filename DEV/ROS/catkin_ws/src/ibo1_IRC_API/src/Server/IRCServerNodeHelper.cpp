@@ -54,8 +54,6 @@
         returnedCMD  = receivedFromChessWrapper.cmd;
 
         for(auto &byte : expectedReturn){
-            cout << "WHAT IS IN THE BYTE" << endl;
-            cout << (int)byte << endl;
             if(byte == returnedCMD){
                 returnedInternalProtocol = receivedFromChessWrapper.data;
                 return true;

@@ -32,3 +32,6 @@ Saturday:
     - Started working intercommunication between ChessEngineWrapperNode and ServerNode
     - Initial methods for talking setup.
     - Create logic in chesswrapper engine still and add code for moving pieces then start working on User Interface implementation.
+
+Sunday:
+    - Nothing has been done a break was taken.

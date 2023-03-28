@@ -82,6 +82,6 @@
 
 
 
-    void DataCreator::convertBytesToString(const vector<BYTE>& protocolData, string& chessEngineName){
-        chessEngineName = string(protocolData.begin(), protocolData.end());
+    void DataCreator::convertBytesToString(const vector<BYTE>& protocolData, string& stringObject){
+        stringObject = string(protocolData.begin(), protocolData.end());
     }

@@ -10,7 +10,7 @@ package ibo1.UI;
 import Client.IRCClient;
 import CustomException.InvalidDataException;
 import ibo1.Application.Main;
-import ibo1.Utility.AlertMessage;
+import ibo1.Utility.PopUpMessages;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -24,15 +24,18 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 /**
- * HomePageController - Is the controller for the HomePage.fxml file, defining which
+ * StartUpController - Is the controller for the StartUp.fxml file, defining which
  * methods the buttons can refer to. This is the starting point of the User Interface,
  * and extends to the rest of the User Interface files.
  * <p>
  * It is used to call methods depending on which buttons are pressed on the home page.
  * @author Omar Ibrahim
  * @version 0.1 ( Initial development ).
+ *
+ * @see PopUpMessages
+ * @see Main
  */
-public class HomePageController {
+public class StartUpController {
 
     // //////////////// //
     //     Constants.   //
@@ -53,7 +56,7 @@ public class HomePageController {
     /**
      * Connects to the server and when connection is successful switches to the
      * Login scene.
-     * @param event Used to switch to Login scene.
+     * @param event Used to switch to Log-in scene.
      * @throws IOException Thrown if Login scene cannot be loaded.
      */
     @FXML
@@ -67,14 +70,14 @@ public class HomePageController {
 
             //Exception if IP Address is invalid
         } catch (InvalidDataException e) {
-            AlertMessage.showAlert("InvalidDataException", "INVALID IP ADDRESS!",
+            PopUpMessages.showAlert("InvalidDataException", "INVALID IP ADDRESS!",
                     "The entered IP address is invalid. Please refer to documentation on what format " +
                             "a IP address is made of.", Alert.AlertType.ERROR);
             return;
 
             //Exception if Connection not possible or refused.
         } catch(IOException e ){
-            AlertMessage.showAlert("IOException", "CONNECTION REFUSED!",
+            PopUpMessages.showAlert("IOException", "CONNECTION REFUSED!",
                     "The connection to the server could not be made. Please ensure it is connected " +
                             "correctly and can be called. Also double check the supplied IP Address.",
                     Alert.AlertType.ERROR);
