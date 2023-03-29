@@ -25,3 +25,5 @@ Wednesday:
         - Castling doesnt work yet
         - Still no move command send to server and getting computer move back
         - These need to be worked on tomorrow
+        - Further comments need to be made.
+        - Further License reference needs to be made.
