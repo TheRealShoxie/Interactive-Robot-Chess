@@ -1,4 +1,4 @@
-Monday:
+Tuesday:
     - No meeting as we are in easter break.
     - Finished initial intercommunication between chess wrapper and ircServer in ROS system.
     - Decided to continue sprint 2 as it is not finished yet.
@@ -12,3 +12,16 @@ Monday:
         - For tomorrow start implementing chess game on UI. Ignore setting search and engineOptions for now.
         - Flexibility with commands helping out a lot. Need to find a way to get around the while loops so I am not stuck in there forever. 
         - Need to check if there is a possibility for that to happen?
+
+Wednesday:
+    - Started working on GUI Chess Board. Decided to use 3rd party code as this is not the goal of the project. Used is: https://github.com/Stevoisiak/JavaFX-Online-Chess
+        - It has MIT license. Pictures different license so need to be careful.
+        - Did this because makes workflow faster.
+        - Able to display
+
+    - Review:
+        - Switching between black and white side doesnt work
+        - Promotion doesnt work yet
+        - Castling doesnt work yet
+        - Still no move command send to server and getting computer move back
+        - These need to be worked on tomorrow

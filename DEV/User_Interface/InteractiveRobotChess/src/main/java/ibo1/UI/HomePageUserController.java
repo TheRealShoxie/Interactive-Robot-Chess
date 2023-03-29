@@ -14,9 +14,8 @@ import ibo1.Utility.PopUpMessages;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import Enum.ProtocolErrors;
-
+import javafx.scene.layout.*;
 import java.io.IOException;
-import java.util.List;
 
 /**
  * HomePageUserController - Is the controller for the HomePageUser.fxml file, defining which
@@ -111,15 +110,18 @@ public class HomePageUserController {
 
         // From here on out get the chess engine options and let the user select
         System.err.println("Chess engine started!");
+    }
 
 
+    private void drawChessBoard(){
     }
 
 
     // /////////////////// //
     // Instance variables. //
     // /////////////////// //
-
+    @FXML
+    private AnchorPane contentAnchor;
 
 
     // //////// //
@@ -135,5 +137,14 @@ public class HomePageUserController {
         mainApp = new Main();
         ircClient = mainApp.getIrcClient();
         chessEngine = mainApp.getChessEngine();
+
+        contentAnchor.heightProperty();
+
+
+        //GridPane testGridPane = drawChessBoard();
+        //AnchorPane.setTopAnchor(testGridPane, 10.0);
+        GridPane test = new UIChessBoard(true);
+        contentAnchor.getChildren().add(test);
+
     }
 }

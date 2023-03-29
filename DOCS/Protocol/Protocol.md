@@ -43,7 +43,7 @@ Further the reply will always consist of the command sent to check for the corre
 |   0x07    |   0               |   none            |   0x07            |   n               |   UTF-8 encoding  |   get chess engine options. Data consists of <code>Unknown</code>
 |   0x08    |   n               |   UTF-8 encoding  |   0x08            |   0               |   none            |   set chess engine option. Data consists of <code>Unknown</code>
 |   0x09    |   n               |   UTF-8 encoding  |   0x08            |   0               |   none            |   set search option. Data consists of <code>Unknown</code>
-|   0x010   |   n               |   UTF-8 encoding  |   0x010           |   0               |   none            |   chess move Command <code>ChessMove</code> example: D2D4, A2A4,.....
+|   0x010   |   n               |   UTF-8 encoding  |   0x010           |   n               |   UTF-8 encoding  |   chess move Command <code>ChessMove</code> example: D2D4, A2A4,.....
 
 
 ## Error Codes

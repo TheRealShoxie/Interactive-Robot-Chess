@@ -6,6 +6,7 @@
  */
 package Protocol;
 
+import ChessSpecific.MoveInfo;
 import Client.IRCClient;
 import CustomException.ProtocolException;
 import Enum.ProtocolErrors;
@@ -37,15 +38,17 @@ public class ChessEngine {
     // Class variables. //
     // //////////////// //
 
+
+    // ////////////// //
+    // Class methods. //
+    // ////////////// //
+
     /**
      * Sets the internal chessEngineChoices to the data received from the protocol
      * command getChessEngines.
      *
      * @param data Received bytes from the protocol
      */
-    // ////////////// //
-    // Class methods. //
-    // ////////////// //
     private void createChessEngineOptionsList(byte[] data){
         String dataAsString = new String(data, StandardCharsets.UTF_8);
         String[] possibleChessEngines = dataAsString.split("\u241f");
@@ -83,6 +86,11 @@ public class ChessEngine {
     // Methods. //
     // //////// //
 
+    /**
+     * @param ircClient ircClient to be used
+     * @throws IOException thrown by sending and receiving the buffer
+     * @throws ProtocolException thrown if returned cmd does not match expected
+     */
     public void getPossibleChessEngines(IRCClient ircClient) throws IOException, ProtocolException {
 
         // Creating the Protocol object for the possible chess Engine command
@@ -108,7 +116,14 @@ public class ChessEngine {
         else throw new ProtocolException(ProtocolErrors.UNEXPECTED_RETURN_CMD.toString());
     }
 
-    public boolean startChessEngine(IRCClient ircClient, String chessEngineName) throws IOException, ProtocolException {
+
+    /**
+     * @param ircClient ircClient to be used
+     * @param chessEngineName chess engine to be started
+     * @throws IOException thrown by sending and receiving the buffer
+     * @throws ProtocolException thrown if returned cmd does not match expected or if chess engine doesn't exist.
+     */
+    public void startChessEngine(IRCClient ircClient, String chessEngineName) throws IOException, ProtocolException {
 
         byte[] dataStringAsBytes = chessEngineName.getBytes(StandardCharsets.UTF_8);
 
@@ -129,13 +144,23 @@ public class ChessEngine {
         // Setting the List options for chessEngines;
         if(receivedCommandByte == cmdByteStartChessEngine){
             // Setting chessEngineChoices
-            return true;
+            return;
         }
         else if(receivedCommandByte == chessEngineNotFound) throw new ProtocolException(ProtocolErrors.CHESSENGINE_NOT_FOUND.toString());
         else if(receivedCommandByte == chessEngineNotStarted) throw new ProtocolException(ProtocolErrors.CHESSENGINE_NOT_STARTED.toString());
         // Command was not recognizable
         else if(receivedCommandByte == unrecognizableCmd) throw new ProtocolException(ProtocolErrors.UNRECOGNIZABLE_CMD.toString());
-            // Does not match expected return
+        // Does not match expected return
         else throw new ProtocolException(ProtocolErrors.UNEXPECTED_RETURN_CMD.toString());
     }
+
+    public void makeChessMove(IRCClient ircClient, MoveInfo move){
+
+        //Checking if move is a valid move
+        if(true){
+
+        }
+    }
+
+
 }

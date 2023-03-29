@@ -59,7 +59,8 @@ public class Main extends Application {
             ircClient = new IRCClient();
             chessEngine = new ChessEngine();
 
-            FXMLLoader loader = new FXMLLoader( getClass( ).getResource("../UI/StartUp.fxml") );
+            //FXMLLoader loader = new FXMLLoader( getClass( ).getResource("../UI/StartUp.fxml") );
+            FXMLLoader loader = new FXMLLoader( getClass( ).getResource("../UI/HomePageUser.fxml") );
             Parent mainLayout = loader.load( );
             return new Scene(mainLayout);
         }
