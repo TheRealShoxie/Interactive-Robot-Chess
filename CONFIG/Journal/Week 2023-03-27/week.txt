@@ -31,4 +31,9 @@ Wednesday:
 
 Thursday:
     - Started working on reviewed problems from yesterday
-    
+    - Scrabed legal or illegal moves on the UI side and move it to the ros system
+        - Reasons being that if played in person the ROS system needs to deal with checking for legal or illegal moves not the UI
+        - We will have some 
+    - Implented basic chessboard and legal illegal move checker 
+    - Need to work on more tomorrow on legal or illegal on ros system tomorrow and create tests
+
