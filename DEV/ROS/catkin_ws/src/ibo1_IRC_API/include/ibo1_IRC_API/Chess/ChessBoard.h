@@ -1,32 +1,28 @@
-#ifndef DATACHECKER_H
-#define DATACHECKER_H
+#ifndef CHESSBOARD_H
+#define CHESSBOARD_H
    
-#include <string>
-#include <regex>
-
-using namespace std;
+   
+#include <ibo1_IRC_API/Utility/DataChecker.h>
+#include <ibo1_IRC_API/Chess/Cell.h>
    
     // ////////// //
     // Constants. //
     // ////////// //
 
-class DataChecker{
+class ChessBoard{
 
     public:
 
         // ///////////// //
         // Constructors. //
         // ///////////// //
+        ChessBoard();
+        ChessBoard(string const &FenPosition);
 
         // //////// //
         // Methods. //
         // //////// //
-        static bool isCorrectMove(string const& moveString){
-            regex r("[1-8][a-h][1-8][a-h]");
-            smatch match;
-            if(regex_search(moveString,match, r)) return true;
-            return false;
-        }
+        bool move(string const &move);
 
         // ////////////////////// //
         // Read/Write properties. //
@@ -41,6 +37,11 @@ class DataChecker{
         // ////////////// //
         // Class methods. //
         // ////////////// //
+        bool pawnMoveValid();
+        int isMoveValid(int startPos, int endPos);
+        void getVecPosFromMove(string const &move, int &startPos, int &endPos);
+        void processMove(string const &move);
+        
         
         // //////////////// //
         // Class variables. //
@@ -49,7 +50,12 @@ class DataChecker{
         // /////////////////// //
         // Instance variables. //
         // /////////////////// //
+        string currentFENPosition;
+        vector<Cell> chessBoard;
+        int wholeMoves;
+        bool whiteTurn;
+        bool castleRights[2][2];
 
     
 };
-#endif //DATACHECKER_H
+#endif //CHESSBOARD_H

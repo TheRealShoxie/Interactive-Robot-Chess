@@ -49,21 +49,5 @@ public class King extends ChessPiece {
     // //////// //
     // Methods. //
     // //////// //
-    @Override
-    public MoveList[] getChessPieceMove() {
-        MoveList[] m ={
-                MoveList.UP,
-                MoveList.UP_RIGHT,
-                MoveList.RIGHT,
-                MoveList.DOWN_RIGHT,
-                MoveList.DOWN,
-                MoveList.DOWN_LEFT,
-                MoveList.LEFT,
-                MoveList.UP_LEFT
-        };
-        return m;
-    }
-
-    public boolean usesSingleMove(){return true;}
     public String getName(){return "king";}
 }

@@ -138,13 +138,9 @@ public class HomePageUserController {
         ircClient = mainApp.getIrcClient();
         chessEngine = mainApp.getChessEngine();
 
-        contentAnchor.heightProperty();
 
-
-        //GridPane testGridPane = drawChessBoard();
-        //AnchorPane.setTopAnchor(testGridPane, 10.0);
-        GridPane test = new UIChessBoard(true);
-        contentAnchor.getChildren().add(test);
+        //GridPane chessBoardGUI = new UIChessBoard(true);
+        contentAnchor.getChildren().add(new UIChessBoard(false));
 
     }
 }

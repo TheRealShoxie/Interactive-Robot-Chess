@@ -27,3 +27,8 @@ Wednesday:
         - These need to be worked on tomorrow
         - Further comments need to be made.
         - Further License reference needs to be made.
+
+
+Thursday:
+    - Started working on reviewed problems from yesterday
+    

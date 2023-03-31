@@ -1,32 +1,26 @@
-#ifndef DATACHECKER_H
-#define DATACHECKER_H
-   
-#include <string>
-#include <regex>
+#ifndef ROOK_H
+#define ROOK_H
 
-using namespace std;
+#include <ibo1_IRC_API/Chess/ChessPieces/ChessPiece.h>
    
     // ////////// //
     // Constants. //
     // ////////// //
 
-class DataChecker{
+class Rook: public ChessPiece{
 
     public:
 
         // ///////////// //
         // Constructors. //
         // ///////////// //
+        Rook(bool isWhite){
+            chessPieceWhite = isWhite;
+        }
 
         // //////// //
         // Methods. //
         // //////// //
-        static bool isCorrectMove(string const& moveString){
-            regex r("[1-8][a-h][1-8][a-h]");
-            smatch match;
-            if(regex_search(moveString,match, r)) return true;
-            return false;
-        }
 
         // ////////////////////// //
         // Read/Write properties. //
@@ -35,6 +29,24 @@ class DataChecker{
         // ///////////////////// //
         // Read-only properties. //
         // ///////////////////// //
+        bool getOnlyMovesOneCell(){
+            return false;
+        }
+        vector<MoveSet> getMoveSet(){
+            vector<MoveSet> moveSets;
+
+            moveSets.push_back(UP);
+            moveSets.push_back(RIGHT);
+            moveSets.push_back(LEFT);
+            moveSets.push_back(DOWN);
+
+            if(!getHasMoved()){
+                moveSets.push_back(CASTLE_KING_SIDE_ROOK);
+                moveSets.push_back(CASTLE_QUEEN_SIDE_ROOK);
+            }
+
+            return moveSets;
+        }
 
     private:
 
@@ -49,7 +61,5 @@ class DataChecker{
         // /////////////////// //
         // Instance variables. //
         // /////////////////// //
-
-    
 };
-#endif //DATACHECKER_H
+#endif //ROOK_H

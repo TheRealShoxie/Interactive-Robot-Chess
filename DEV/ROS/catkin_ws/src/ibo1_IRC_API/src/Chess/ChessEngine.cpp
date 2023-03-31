@@ -6,8 +6,7 @@
 
     ChessEngine::ChessEngine(string const &processFilePathName)
         :uciHandler(processFilePathName), searchOptions("depth 10"), wholeMoves(0), colorTurn('w'),
-        currentFENPosition("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"),
-        dataChecker(){
+        currentFENPosition("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"){
 
         // Initializing engine
         chessEngineStarted = true;
@@ -233,33 +232,21 @@
     void ChessEngine::playerMove(string &move){
         string chessEngineMove = "";
 
-        if(dataChecker.isCorrectMove(move)){
+        if(DataChecker::isCorrectMove(move)){
             
             // Updating internal board state with player move
             updateBoardState(move);
-
-            // Making the ChessEngine make the move.
-            uciHandler.makeMove(currentFENPosition, searchOptions, chessEngineMove);
-
-            // Updating internal board state with engine move
-            updateBoardState(move);
-
-
-
-
         }
-        // Checking if we got the move command to make the chessEngine move first.
-        else if(move.compare("engineStart") == 0){
-            // Making the ChessEngine make the move.
-            uciHandler.makeMove(currentFENPosition, searchOptions, chessEngineMove);
+    }
 
-            // Updating internal board state with engine move
-            updateBoardState(move);
-        }
-        
-        else{
-            return;
-        }
+    void ChessEngine::chessEngineMove(string &move){
+        string chessEngineMove = "";
+
+        // Making the ChessEngine make the move.
+        uciHandler.makeMove(currentFENPosition, searchOptions, chessEngineMove);
+
+        // Updating internal board state with engine move
+        updateBoardState(move);
     }
 
     void ChessEngine::startNewGame(){

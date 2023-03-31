@@ -29,10 +29,10 @@ public class Cell {
     // /////////////////// //
     // Instance variables. //
     // /////////////////// //
-    ChessPiece chessPiece;
-    int xPos;
-    int yPos;
-    boolean lightCell;
+    private ChessPiece chessPiece;
+    private int xPos;
+    private int yPos;
+    private boolean lightCell;
 
     // ///////////// //
     // Constructors. //
@@ -75,8 +75,6 @@ public class Cell {
     // //////// //
     // Methods. //
     // //////// //
-
-    public boolean isOccupied(){return (this.chessPiece != null); }
 
     public ChessPiece releaseChessPiece(){
         ChessPiece tempChessPiece = this.chessPiece;

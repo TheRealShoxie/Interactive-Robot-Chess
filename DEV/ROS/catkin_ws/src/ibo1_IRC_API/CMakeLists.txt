@@ -141,6 +141,9 @@ add_library(ibo1_nodeLibrary
 
   src/Utility/SubProcessHandler.cpp
   src/Chess/ChessEngine.cpp
+  src/Chess/ChessBoard.cpp
+
+
   src/Utility/UCIHandler.cpp
   src/Utility/DataChecker.cpp
   src/Utility/DataCreator.cpp

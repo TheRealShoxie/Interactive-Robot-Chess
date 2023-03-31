@@ -27,143 +27,73 @@ public class ChessBoard {
     // ////////////// //
 
     private void defineStartPositions(){
-        //white pieces
-        this.cells[0][7].setChessPiece(new Rook(true));
-        this.cells[1][7].setChessPiece(new Knight(true));
-        this.cells[2][7].setChessPiece(new Bishop(true));
-        this.cells[3][7].setChessPiece(new Queen(true));
-        this.cells[4][7].setChessPiece(new King(true));
-        this.cells[5][7].setChessPiece(new Bishop(true));
-        this.cells[6][7].setChessPiece(new Knight(true));
-        this.cells[7][7].setChessPiece(new Rook(true));
 
-        for(int i = 0; i < this.cells[0].length; i++)
-            this.cells[i][6].setChessPiece(new Pawn(true));
+        int whiteY;
+        int whitePawnY;
+        int blackY;
+        int blackPawnY;
 
-        //black pieces
-        this.cells[0][0].setChessPiece(new Rook(false));
-        this.cells[1][0].setChessPiece(new Knight(false));
-        this.cells[2][0].setChessPiece(new Bishop(false));
-        this.cells[3][0].setChessPiece(new Queen(false));
-        this.cells[4][0].setChessPiece(new King(false));
-        this.cells[5][0].setChessPiece(new Bishop(false));
-        this.cells[6][0].setChessPiece(new Knight(false));
-        this.cells[7][0].setChessPiece(new Rook(false));
-
-        for(int i = 0; i < this.cells[0].length; i++)
-            this.cells[i][1].setChessPiece(new Pawn(false));
-    }
-
-    private boolean pawnValidityCheck(MoveInfo moveInfo){
-        Cell oldCell = moveInfo.getOldCell();
-        Cell newCell = moveInfo.getNewCell();
-
-        ChessPiece chessPiece = oldCell.getChessPiece();
-
-        // If we are not dealing with a pawn return true
-        if(!chessPiece.getName().equals("pawn")) return true;
-
-        if(moveInfo.getGapX() == 0){
-            int colorMod = moveInfo.getGapY() / Math.abs(moveInfo.getGapY());
-
-            for(int c = 1; c <= Math.abs(moveInfo.getGapY()); c++){
-                if(cells[oldCell.getXPos()][oldCell.getXPos() + (c*colorMod)].isOccupied()) return false;
-            }
+        if(this.playerIsWhite){
+            whiteY = 7;
+            whitePawnY = 6;
+            blackY = 0;
+            blackPawnY = 1;
         }
         else{
-            if((!newCell.isOccupied()) ||
-                    (chessPiece.getColor() == newCell.getChessPiece().getColor())
-            ) return false;
+            whiteY = 0;
+            whitePawnY = 1;
+            blackY = 7;
+            blackPawnY = 6;
+        }
+
+        //white pieces
+        this.cells[0][whiteY].setChessPiece(new Rook(true));
+        this.cells[1][whiteY].setChessPiece(new Knight(true));
+        this.cells[2][whiteY].setChessPiece(new Bishop(true));
+        this.cells[3][whiteY].setChessPiece(new Queen(true));
+        this.cells[4][whiteY].setChessPiece(new King(true));
+        this.cells[5][whiteY].setChessPiece(new Bishop(true));
+        this.cells[6][whiteY].setChessPiece(new Knight(true));
+        this.cells[7][whiteY].setChessPiece(new Rook(true));
+
+        for(int i = 0; i < this.cells[0].length; i++)
+            this.cells[i][whitePawnY].setChessPiece(new Pawn(true));
+
+        //black pieces
+        this.cells[0][blackY].setChessPiece(new Rook(false));
+        this.cells[1][blackY].setChessPiece(new Knight(false));
+        this.cells[2][blackY].setChessPiece(new Bishop(false));
+        this.cells[3][blackY].setChessPiece(new Queen(false));
+        this.cells[4][blackY].setChessPiece(new King(false));
+        this.cells[5][blackY].setChessPiece(new Bishop(false));
+        this.cells[6][blackY].setChessPiece(new Knight(false));
+        this.cells[7][blackY].setChessPiece(new Rook(false));
+
+        for(int i = 0; i < this.cells[0].length; i++)
+            this.cells[i][blackPawnY].setChessPiece(new Pawn(false));
+    }
+
+    private boolean processMove(Cell oldCell, Cell newCell){
+        char[] moveCmd = new char[4];
+        if(this.playerIsWhite){
+            moveCmd[0] = (char)(oldCell.getXPos()+97);
+            moveCmd[1] = Character.forDigit(7-oldCell.getYPos()+1, 10);
+            moveCmd[2] = (char)(newCell.getXPos()+97);
+            moveCmd[3] = Character.forDigit(7-newCell.getYPos()+1, 10);
+        }else{
+            moveCmd[0] = (char)(7-oldCell.getXPos()+97);
+            moveCmd[1] = Character.forDigit(oldCell.getYPos()+1, 10);
+            moveCmd[2] = (char)(7-newCell.getXPos()+97);
+            moveCmd[3] = Character.forDigit(newCell.getYPos()+1, 10);
+        }
+        System.err.println(String.valueOf(moveCmd));
+
+        System.err.println("Send move to chessEngine");
+        if(false){
+            System.err.println();
         }
 
         return true;
-    }
-
-    private boolean moveIsValid(MoveInfo moveInfo){
-        Cell oldCell;
-        Cell newCell;
-        ChessPiece chessPiece;
-        MoveList[] possibleMoves;
-
-        // If we have an empty move return false
-        if(moveInfo == null) return false;
-
-        // Trying to extract oldCell and newCell from moveInfo
-        try{
-            oldCell = moveInfo.getOldCell();
-            newCell = moveInfo.getNewCell();
-        } catch(NullPointerException e) {return false;}
-
-        // Checking if the cell to move from is empty.
-        if(!oldCell.isOccupied()) return false;
-
-        chessPiece = oldCell.getChessPiece();
-        possibleMoves = chessPiece.getChessPieceMove();
-
-
-        int multiMoveCount;
-        int stretchedMoveX;
-        int stretchedMoveY;
-
-        for(MoveList move : possibleMoves){
-
-            //Piece only has 1 cell it can move
-            multiMoveCount = 1;
-
-            //Checking if chessPiece can move multiple cells
-            if(!chessPiece.usesSingleMove()) multiMoveCount = 8;
-
-            // Setting if has collided to false
-            boolean hasCollided = false;
-            for(int moveCount = 1; moveCount <= multiMoveCount; moveCount++){
-                //If we have collided we want to stop searching for chessPieces that can move multiple cells
-                if(hasCollided) break;
-
-                stretchedMoveX = move.getX() * moveCount;
-                stretchedMoveY = move.getY() * moveCount;
-
-                Cell toCheckCell;
-
-                try{
-                    toCheckCell = this.cells[oldCell.getXPos()+stretchedMoveX][oldCell.getYPos() + stretchedMoveY];
-                }catch(Exception e){break;}
-
-                // Checking if cell is occupied
-                if(toCheckCell.isOccupied()){
-                    hasCollided = true;
-                    boolean piecesSameColor = toCheckCell.getChessPiece().getColor()
-                                              == oldCell.getChessPiece().getColor();
-
-                    if(piecesSameColor) break;
-
-                    if(toCheckCell.getChessPiece() != newCell.getChessPiece()) break;
-                }
-
-                if(moveInfo.getGapX() == stretchedMoveX && moveInfo.getGapY() == stretchedMoveY){
-
-                    if(pawnValidityCheck(moveInfo)) return true;
-
-
-                    chessPiece.setHasMoved(true);
-                    break;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    private boolean processMove(MoveInfo moveInfo){
-        if(moveIsValid(moveInfo)){
-            Cell oldCell = moveInfo.getOldCell();
-            Cell newCell = moveInfo.getNewCell();
-
-            newCell.setChessPiece(oldCell.releaseChessPiece());
-            return true;
-        }
-        else{
-            return false;
-        }
     }
 
     // /////////////////// //
@@ -171,6 +101,7 @@ public class ChessBoard {
     // /////////////////// //
     Cell[][] cells;
     Cell activeCell;
+    boolean playerIsWhite;
 
     // ///////////// //
     // Constructors. //
@@ -179,6 +110,7 @@ public class ChessBoard {
 
         //Setting up cell grid for the board
         this.cells = new Cell[8][8];
+        this.playerIsWhite = playerIsWhite;
 
 
         for(int x = 0; x < cells[0].length; x++){
@@ -186,8 +118,8 @@ public class ChessBoard {
                 Cell cell;
 
                 //Checking if cell should be a light-colored cell or dark-colored
-                if( (x+y)%2 != 0) cell = new Cell(true, x, y);
-                else cell = new Cell(false, x, y);
+                if( (x+y)%2 != 0) cell = new Cell(false, x, y);
+                else cell = new Cell(true, x, y);
 
                 if(playerIsWhite) cells[x][y] = cell;
                 else cells[x][y] = cell;
@@ -224,15 +156,11 @@ public class ChessBoard {
                 && activeCell.getChessPiece() != null
                 && activeCell.getChessPiece() != clickedCell.getChessPiece()){
 
-            MoveInfo moveInfo;
-            moveInfo = new MoveInfo(activeCell, clickedCell);
-
-            //Process move
-            if(processMove(moveInfo)){
-                System.err.println("Need to send move command");
+            if(processMove(activeCell, clickedCell)){
+                System.err.println("Need to get move by chessEngine");
+            } else{
+                System.err.println("Move was illegal");
             }
-
-            //Send move
 
             // Reset activeCell
             this.activeCell = null;

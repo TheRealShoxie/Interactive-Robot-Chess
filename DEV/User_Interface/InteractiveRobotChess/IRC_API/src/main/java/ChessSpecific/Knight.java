@@ -48,22 +48,6 @@ public class Knight extends ChessPiece {
 
     // //////// //
     // Methods. //
-    // //////// //
-    @Override
-    public MoveList[] getChessPieceMove() {
-        MoveList[] m ={
-                MoveList.KNIGHT_LEFT_UP,
-                MoveList.KNIGHT_UP_LEFT,
-                MoveList.KNIGHT_UP_RIGHT,
-                MoveList.KNIGHT_RIGHT_UP,
-                MoveList.KNIGHT_RIGHT_DOWN,
-                MoveList.KNIGHT_DOWN_RIGHT,
-                MoveList.KNIGHT_DOWN_LEFT,
-                MoveList.KNIGHT_LEFT_DOWN
-        };
-        return m;
-    }
-
-    public boolean usesSingleMove(){return true;}
+    // //////// //}
     public String getName(){return "knight";}
 }

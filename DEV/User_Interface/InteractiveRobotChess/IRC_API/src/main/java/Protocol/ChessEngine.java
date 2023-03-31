@@ -6,7 +6,6 @@
  */
 package Protocol;
 
-import ChessSpecific.MoveInfo;
 import Client.IRCClient;
 import CustomException.ProtocolException;
 import Enum.ProtocolErrors;
@@ -154,7 +153,7 @@ public class ChessEngine {
         else throw new ProtocolException(ProtocolErrors.UNEXPECTED_RETURN_CMD.toString());
     }
 
-    public void makeChessMove(IRCClient ircClient, MoveInfo move){
+    public void makeChessMove(IRCClient ircClient){
 
         //Checking if move is a valid move
         if(true){

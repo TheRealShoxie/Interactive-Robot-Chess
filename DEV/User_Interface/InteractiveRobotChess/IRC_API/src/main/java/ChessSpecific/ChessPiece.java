@@ -29,10 +29,7 @@ public abstract class ChessPiece {
     // /////////////////// //
     // Instance variables. //
     // /////////////////// //
-
-    protected boolean hasMoved;
     protected boolean isWhite;
-    //protected String imageFilePath;
 
     // ///////////// //
     // Constructors. //
@@ -40,22 +37,11 @@ public abstract class ChessPiece {
 
     public ChessPiece(boolean isWhite){
         this.isWhite = isWhite;
-
-        hasMoved = false;
     }
 
     // ////////////////////// //
     // Read/Write properties. //
     // ////////////////////// //
-
-    public void setHasMoved(boolean hasMoved) {
-        this.hasMoved = hasMoved;
-    }
-
-    public boolean isHasMoved() {
-        return this.hasMoved;
-    }
-
 
     // ///////////////////// //
     // Read-only properties. //
@@ -70,15 +56,9 @@ public abstract class ChessPiece {
         else return "black";
     }
 
-    public boolean isWhite(){
-        return this.isWhite;
-    }
-
 
     // //////// //
     // Methods. //
     // //////// //
-    public abstract MoveList[] getChessPieceMove();
     public abstract String getName();
-    public abstract boolean usesSingleMove();
 }

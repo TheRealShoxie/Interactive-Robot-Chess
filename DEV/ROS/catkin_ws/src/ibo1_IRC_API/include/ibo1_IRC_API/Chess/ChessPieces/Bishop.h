@@ -1,32 +1,26 @@
-#ifndef DATACHECKER_H
-#define DATACHECKER_H
-   
-#include <string>
-#include <regex>
+#ifndef BISHOP_H
+#define BISHOP_H
 
-using namespace std;
+#include <ibo1_IRC_API/Chess/ChessPieces/ChessPiece.h>
    
     // ////////// //
     // Constants. //
     // ////////// //
 
-class DataChecker{
+class Bishop: public ChessPiece{
 
     public:
 
         // ///////////// //
         // Constructors. //
         // ///////////// //
+        Bishop(bool isWhite){
+            chessPieceWhite = isWhite;
+        }
 
         // //////// //
         // Methods. //
         // //////// //
-        static bool isCorrectMove(string const& moveString){
-            regex r("[1-8][a-h][1-8][a-h]");
-            smatch match;
-            if(regex_search(moveString,match, r)) return true;
-            return false;
-        }
 
         // ////////////////////// //
         // Read/Write properties. //
@@ -35,6 +29,19 @@ class DataChecker{
         // ///////////////////// //
         // Read-only properties. //
         // ///////////////////// //
+        bool getOnlyMovesOneCell(){
+            return false;
+        }
+        vector<MoveSet> getMoveSet(){
+            vector<MoveSet> moveSets;
+
+            moveSets.push_back(UP_RIGHT);
+            moveSets.push_back(UP_LEFT);
+            moveSets.push_back(DOWN_RIGHT);
+            moveSets.push_back(DOWN_LEFT);
+
+            return moveSets;
+        }
 
     private:
 
@@ -49,7 +56,5 @@ class DataChecker{
         // /////////////////// //
         // Instance variables. //
         // /////////////////// //
-
-    
 };
-#endif //DATACHECKER_H
+#endif //BISHOP_H

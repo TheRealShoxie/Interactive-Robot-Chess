@@ -49,17 +49,5 @@ public class Bishop extends ChessPiece {
     // //////// //
     // Methods. //
     // //////// //
-    @Override
-    public MoveList[] getChessPieceMove() {
-        MoveList[] m ={
-                MoveList.UP_RIGHT,
-                MoveList.DOWN_RIGHT,
-                MoveList.DOWN_LEFT,
-                MoveList.UP_LEFT
-        };
-        return m;
-    }
-
-    public boolean usesSingleMove(){return false;}
     public String getName(){return "bishop";}
 }

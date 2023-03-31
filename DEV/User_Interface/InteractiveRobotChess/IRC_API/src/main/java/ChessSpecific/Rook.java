@@ -49,17 +49,5 @@ public class Rook extends ChessPiece {
     // //////// //
     // Methods. //
     // //////// //
-    @Override
-    public MoveList[] getChessPieceMove() {
-        MoveList[] m ={
-                MoveList.UP,
-                MoveList.RIGHT,
-                MoveList.DOWN,
-                MoveList.LEFT
-        };
-        return m;
-    }
-
-    public boolean usesSingleMove(){return false;}
     public String getName(){return "rook";}
 }

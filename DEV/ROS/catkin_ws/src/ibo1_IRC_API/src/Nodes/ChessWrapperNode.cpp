@@ -135,7 +135,7 @@ int main (int argc, char **argv){
 
     ros::Rate rate(10);
 
-    // Waiting till ros system subscribers are activated
+    //Waiting till ros system subscribers are activated
     while(chessWrapper_pub.getNumSubscribers() == 0){
         rate.sleep();
     }

@@ -20,7 +20,16 @@ class DataManipulation{
         // //////// //
         // Methods. //
         // //////// //
-        static string subString(string &stringToExtract, string splitter);
+        static string subString(string &stringToExtract, string splitter){
+            int end;
+            string returnString;
+
+            end = stringToExtract.find(splitter);
+            returnString = stringToExtract.substr(0, end);
+            stringToExtract.erase(stringToExtract.begin(), stringToExtract.begin() + end + splitter.size());
+
+            return returnString;
+        }
 
         // ////////////////////// //
         // Read/Write properties. //

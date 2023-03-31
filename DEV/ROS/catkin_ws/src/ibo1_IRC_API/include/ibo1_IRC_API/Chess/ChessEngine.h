@@ -6,7 +6,7 @@
 
 
 #include <ibo1_IRC_API/Utility/UCIHandler.h>
-#include <ibo1_IRC_API/Utility/DataChecker.h>
+#include <ibo1_IRC_API/Chess/ChessBoard.h>
     // ////////// //
     // Structs.   //
     // ////////// //
@@ -36,6 +36,7 @@ class ChessEngine{
         // Methods. //
         // //////// //
         void playerMove(string &move);
+        void chessEngineMove(string &move);
         void startNewGame();
         void closeEngine();
 
@@ -70,7 +71,6 @@ class ChessEngine{
         // Instance variables. //
         // /////////////////// //
         UCIHandler uciHandler;
-        DataChecker dataChecker;
         /*
             * Might not be needed
         */
@@ -84,6 +84,7 @@ class ChessEngine{
         //     {3, 3, 3, 3, 3, 3, 3, 3},
         //     {3, 3, 3, 3, 3, 3, 3, 3}
         // };
+        ChessBoard chessBoardActual;
         char chessBoard[64] = {
             'r','n','b','q','k','b','n','r',
             'p','p','p','p','p','p','p','p',

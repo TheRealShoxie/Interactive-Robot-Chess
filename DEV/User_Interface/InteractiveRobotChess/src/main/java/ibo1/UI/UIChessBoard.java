@@ -33,7 +33,6 @@ public class UIChessBoard extends GridPane{
 
     private void updateBoardState(){
         Cell[][] cells = chessBoard.getCells();
-        System.err.println("Updating board state");
 
         for(int x = 0; x < cells[0].length; x++){
             for(int y = 0; y < cells[1].length; y++) {
@@ -41,7 +40,6 @@ public class UIChessBoard extends GridPane{
                 spaces[x][y].setCell(cells[x][y]);
             }
         }
-
     }
 
     /**
@@ -54,7 +52,6 @@ public class UIChessBoard extends GridPane{
     // /////////////////// //
     Space[][] spaces = new Space[8][8];
     ChessBoard chessBoard;
-    Space activeSpace;
 
     // ///////////// //
     // Constructors. //
@@ -89,11 +86,6 @@ public class UIChessBoard extends GridPane{
     // ////////////////////// //
     // Read/Write properties. //
     // ////////////////////// //
-
-    public void setActiveSpace(Space activeSpace) {
-        this.activeSpace = activeSpace;
-    }
-
 
     // ///////////////////// //
     // Read-only properties. //
