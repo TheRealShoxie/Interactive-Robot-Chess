@@ -6,6 +6,9 @@
  */
 package ChessSpecific;
 
+import Client.IRCClient;
+import Protocol.ChessEngine;
+
 /**
  * ClassName - ClassDescription initial
  * <p>
@@ -73,7 +76,7 @@ public class ChessBoard {
             this.cells[i][blackPawnY].setChessPiece(new Pawn(false));
     }
 
-    private boolean processMove(Cell oldCell, Cell newCell){
+    private void processMove(Cell oldCell, Cell newCell, StringBuilder sb){
         char[] moveCmd = new char[4];
         if(this.playerIsWhite){
             moveCmd[0] = (char)(oldCell.getXPos()+97);
@@ -86,14 +89,31 @@ public class ChessBoard {
             moveCmd[2] = (char)(7-newCell.getXPos()+97);
             moveCmd[3] = Character.forDigit(newCell.getYPos()+1, 10);
         }
-        System.err.println(String.valueOf(moveCmd));
+        sb.append(String.valueOf(moveCmd));
+    }
 
-        System.err.println("Send move to chessEngine");
-        if(false){
-            System.err.println();
+    private void processMove(String move){
+        char[] moveCmd = move.toCharArray();
+
+        int oldCellX = 0;
+        int oldCellY = 0;
+        int newCellX = 0;
+        int newCellY = 0;
+
+        if(this.playerIsWhite){
+            oldCellX = (int)moveCmd[0] - 97;
+            oldCellY = 7 - Character.getNumericValue(moveCmd[1]) - 1;
+            newCellX = (int)moveCmd[2] - 97;
+            newCellY = 7 - Character.getNumericValue(moveCmd[3]) - 1;
+
+        }else{
+            oldCellX = 7 - (int)moveCmd[0] - 97;
+            oldCellY = Character.getNumericValue(moveCmd[1]) - 1;
+            newCellX = 7 - (int)moveCmd[2] - 97;
+            newCellY = Character.getNumericValue(moveCmd[3]) - 1;
         }
 
-        return true;
+        cells[newCellX][newCellY].setChessPiece(cells[oldCellX][oldCellY].releaseChessPiece());
     }
 
     // /////////////////// //
@@ -102,15 +122,19 @@ public class ChessBoard {
     Cell[][] cells;
     Cell activeCell;
     boolean playerIsWhite;
+    ChessEngine chessEngine;
+    IRCClient ircClient;
 
     // ///////////// //
     // Constructors. //
     // ///////////// //
-    public ChessBoard(boolean playerIsWhite){
+    public ChessBoard(boolean playerIsWhite, ChessEngine chessEngine, IRCClient ircClient){
 
         //Setting up cell grid for the board
         this.cells = new Cell[8][8];
         this.playerIsWhite = playerIsWhite;
+        this.chessEngine = chessEngine;
+        this.ircClient = ircClient;
 
 
         for(int x = 0; x < cells[0].length; x++){
@@ -156,14 +180,30 @@ public class ChessBoard {
                 && activeCell.getChessPiece() != null
                 && activeCell.getChessPiece() != clickedCell.getChessPiece()){
 
-            if(processMove(activeCell, clickedCell)){
-                System.err.println("Need to get move by chessEngine");
-            } else{
-                System.err.println("Move was illegal");
-            }
+            StringBuilder move = new StringBuilder();
+            processMove(activeCell, clickedCell, move);
+
+            System.err.println("We are sending following move command: " +move.toString());
 
             // Reset activeCell
             this.activeCell = null;
+
+            try{
+                chessEngine.makePlayerMove(ircClient, move.toString());
+                processMove(move.toString());
+            } catch(Exception e){
+                System.err.println(e.getMessage());
+                return;
+            }
+
+            try{
+                String chessEngineMove = chessEngine.makeChessEngineMove(ircClient);
+                System.err.println(chessEngineMove);
+                processMove(chessEngineMove);
+            } catch(Exception e){
+                System.err.println(e.getMessage());
+                return;
+            }
 
         }
         //Otherwise

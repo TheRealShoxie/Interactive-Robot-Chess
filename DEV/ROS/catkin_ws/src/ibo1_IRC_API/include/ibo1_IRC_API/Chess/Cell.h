@@ -22,7 +22,6 @@ class Cell{
         // Constructors. //
         // ///////////// //
         Cell(int pos){
-            cellIsOccupied = false;
             chessPiece = NULL;
             position = pos;
         }
@@ -38,11 +37,13 @@ class Cell{
         }
 
         bool getChessPieceColor(){
-            if(chessPiece != NULL){
-                return chessPiece->isWhite();
-            }else{
-                return NULL;
-            }
+            if(chessPiece != NULL) return chessPiece->isWhite();
+            else return NULL;
+        }
+
+        char getChessPieceName(){
+            if(chessPiece != NULL) return chessPiece->getName();
+            else return '-';
         }
 
         // ////////////////////// //
@@ -61,7 +62,8 @@ class Cell{
         // Read-only properties. //
         // ///////////////////// //
         bool isOccupied(){
-            return cellIsOccupied;
+            if(chessPiece != NULL) return true;
+            else return false;
         }
 
         int getPosition(){
@@ -81,7 +83,6 @@ class Cell{
         // /////////////////// //
         // Instance variables. //
         // /////////////////// //
-        bool cellIsOccupied;
         ChessPiece* chessPiece;
         int position;
         

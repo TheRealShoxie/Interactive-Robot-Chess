@@ -110,6 +110,9 @@ public class HomePageUserController {
 
         // From here on out get the chess engine options and let the user select
         System.err.println("Chess engine started!");
+
+        //GridPane chessBoardGUI = new UIChessBoard(true);
+        contentAnchor.getChildren().add(new UIChessBoard(true, chessEngine, ircClient));
     }
 
 
@@ -138,9 +141,6 @@ public class HomePageUserController {
         ircClient = mainApp.getIrcClient();
         chessEngine = mainApp.getChessEngine();
 
-
-        //GridPane chessBoardGUI = new UIChessBoard(true);
-        contentAnchor.getChildren().add(new UIChessBoard(false));
-
+        //contentAnchor.getChildren().add(new UIChessBoard(true, chessEngine, ircClient));
     }
 }

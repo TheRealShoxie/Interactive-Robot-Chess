@@ -22,7 +22,9 @@ class ChessBoard{
         // //////// //
         // Methods. //
         // //////// //
-        bool move(string const &move);
+        int move(string &move);
+        string toFENString();
+        string toString();
 
         // ////////////////////// //
         // Read/Write properties. //
@@ -37,10 +39,13 @@ class ChessBoard{
         // ////////////// //
         // Class methods. //
         // ////////////// //
-        bool pawnMoveValid();
+        int pawnMoveValid(Cell startCell, Cell endCell);
+        int castleMoveValid(Cell startCell, Cell endCell);
+        void castle(string const &moveKing, string const &moveRook, int &startPos, int &endPos, int &isMoveValidCode);
         int isMoveValid(int startPos, int endPos);
         void getVecPosFromMove(string const &move, int &startPos, int &endPos);
-        void processMove(string const &move);
+        int processMove(string const &move);;
+        void fromFENString(string const &fenPos);
         
         
         // //////////////// //
@@ -50,10 +55,17 @@ class ChessBoard{
         // /////////////////// //
         // Instance variables. //
         // /////////////////// //
-        string currentFENPosition;
         vector<Cell> chessBoard;
         int wholeMoves;
+        int halfMoves;
+        bool previousMoveWasPawn;
         bool whiteTurn;
+        /*
+            * [0][0] = white king side
+            * [0][1] = white queen side
+            * [0][0] = black king side
+            * [0][0] = black queen side
+        */
         bool castleRights[2][2];
 
     

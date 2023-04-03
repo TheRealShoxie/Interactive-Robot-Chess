@@ -37,3 +37,14 @@ Thursday:
     - Implented basic chessboard and legal illegal move checker 
     - Need to work on more tomorrow on legal or illegal on ros system tomorrow and create tests
 
+Sunday:
+    - Wrote some tests for CHessBoard including from FenString to Board
+    - Valid/Invalid moves
+    - Making a move and then checking the updated BoardState
+    - Something not completely working with halfMoves and wholeMoves. Need to double check the logic again!
+    - Most of the logic has been done including castling. Check and Checkmate needs to be implemented and put on hold for now.
+    - Problem with ChessEngine consistency of the UCI handler. Seems like they are empty ?
+    - Needs to be discussed in meeting tomorrow why
+    
+    
+

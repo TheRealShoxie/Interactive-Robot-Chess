@@ -44,12 +44,17 @@ class King: public ChessPiece{
             moveSets.push_back(DOWN_LEFT);
             moveSets.push_back(DOWN_RIGHT);
 
-            if(!getHasMoved()){
+            if(!hasMoved){
                 moveSets.push_back(CASTLE_KING_SIDE_KING);
                 moveSets.push_back(CASTLE_QUEEN_SIDE_KING);
             }
 
             return moveSets;
+        }
+
+        char getName(){
+            if(chessPieceWhite) return 'K';
+            else return 'k';
         }
 
     private:

@@ -7,6 +7,8 @@
 
 #include <ibo1_IRC_API/Utility/UCIHandler.h>
 #include <ibo1_IRC_API/Chess/ChessBoard.h>
+#include <ibo1_IRC_API/ProtocolAPI/ProtocolDefinition.h>
+
     // ////////// //
     // Structs.   //
     // ////////// //
@@ -35,10 +37,12 @@ class ChessEngine{
         // //////// //
         // Methods. //
         // //////// //
-        void playerMove(string &move);
-        void chessEngineMove(string &move);
+        void playerMove(BYTE &returnedProtocolByte, string &move);
+        void chessEngineMove(BYTE &returnedProtocolByte, string &chessEngineMove);
         void startNewGame();
         void closeEngine();
+        string getChessBoardFENString();
+        string getChessBoardString();
 
 
         ChessEngine& operator= (ChessEngine&&){ return *this; }
@@ -48,6 +52,8 @@ class ChessEngine{
         // ////////////////////// //
         void setSearchOptions(string const &setSearchOptions);
         void getSearchOptions(string &getSearchOptions);
+        void getChessEngineOptions(vector<EngineOption> &engineOptions);
+        void setChessEngineOptions(string const &optionName, string const &value);
 
         // ///////////////////// //
         // Read-only properties. //
@@ -59,9 +65,7 @@ class ChessEngine{
         // ////////////// //
         // Class methods. //
         // ////////////// //
-        void updateBoardState(string const &move);
-        void updateFENPosition();
-        void updateNotCastle(string const &move);
+        void getProtocolCode(int moveCode, BYTE const &defaultValue, BYTE &returnByte);
         
         // //////////////// //
         // Class variables. //
@@ -71,47 +75,8 @@ class ChessEngine{
         // Instance variables. //
         // /////////////////// //
         UCIHandler uciHandler;
-        /*
-            * Might not be needed
-        */
-        // bitset<2> currentChessBoardBitSet[8][8] = {
-        //     {3, 3, 3, 3, 4, 3, 3, 3},
-        //     {3, 3, 3, 3, 3, 3, 3, 3},
-        //     {3, 3, 3, 3, 3, 3, 3, 3},
-        //     {3, 3, 3, 3, 3, 3, 3, 3},
-        //     {3, 3, 3, 3, 3, 3, 3, 3},
-        //     {3, 3, 3, 3, 3, 3, 3, 3},
-        //     {3, 3, 3, 3, 3, 3, 3, 3},
-        //     {3, 3, 3, 3, 3, 3, 3, 3}
-        // };
-        ChessBoard chessBoardActual;
-        char chessBoard[64] = {
-            'r','n','b','q','k','b','n','r',
-            'p','p','p','p','p','p','p','p',
-            '-','-','-','-','-','-','-','-',
-            '-','-','-','-','-','-','-','-',
-            '-','-','-','-','-','-','-','-',
-            '-','-','-','-','-','-','-','-',
-            'P','P','P','P','P','P','P','P',
-            'R','N','B','Q','K','B','N','R'
-        };
-        // Capital letters = white, small = black, move color = w/b, KQkq = can castle, last number how many full moves
-        string currentFENPosition;
-        // number of moves so far
-        int wholeMoves;
-        char colorTurn;
-        /*
-            * [0][0] = white king side
-            * [0][1] = white queen side
-            * [0][0] = black king side
-            * [0][0] = black queen side
 
-        */
-        bool castleRights[2][2] = {
-            {true, true},
-            {true, true}
-        };
-
+        ChessBoard* chessBoard;
 
         string searchOptions = "";
         vector<EngineOption> engineOptions;

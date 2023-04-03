@@ -32,6 +32,7 @@ class Bishop: public ChessPiece{
         bool getOnlyMovesOneCell(){
             return false;
         }
+
         vector<MoveSet> getMoveSet(){
             vector<MoveSet> moveSets;
 
@@ -41,6 +42,11 @@ class Bishop: public ChessPiece{
             moveSets.push_back(DOWN_LEFT);
 
             return moveSets;
+        }
+
+        char getName(){
+            if(chessPieceWhite) return 'B';
+            else return 'b';
         }
 
     private:

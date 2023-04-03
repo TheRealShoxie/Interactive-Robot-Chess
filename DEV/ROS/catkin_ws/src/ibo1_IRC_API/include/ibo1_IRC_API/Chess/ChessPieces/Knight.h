@@ -48,6 +48,11 @@ class Knight: public ChessPiece{
             return moveSets;
         }
 
+        char getName(){
+            if(chessPieceWhite) return 'N';
+            else return 'n';
+        }
+
     private:
 
         // ////////////// //

@@ -32,18 +32,18 @@ class Pawn: public ChessPiece{
         bool getOnlyMovesOneCell(){
             return false;
         }
+
         vector<MoveSet> getMoveSet(){
             vector<MoveSet> moveSets;
 
-            if(isWhite()){
+            if(chessPieceWhite){
                 moveSets.push_back(UP);
                 moveSets.push_back(UP_RIGHT);
                 moveSets.push_back(UP_LEFT);
 
                 if(!getHasMoved()){
                     moveSets.push_back(DOUBLE_UP);
-                }
-
+                }                 
             }
             else{
                 moveSets.push_back(DOWN);
@@ -52,11 +52,17 @@ class Pawn: public ChessPiece{
 
                 if(!getHasMoved()){
                     moveSets.push_back(DOUBLE_DOWN);
-                } 
+                }
             }
 
 
             return moveSets;
+        }
+
+
+        char getName(){
+            if(chessPieceWhite) return 'P';
+            else return 'p';
         }
 
     private:

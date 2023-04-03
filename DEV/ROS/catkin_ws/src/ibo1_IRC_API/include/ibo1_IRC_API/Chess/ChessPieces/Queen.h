@@ -47,6 +47,11 @@ class Queen: public ChessPiece{
             return moveSets;
         }
 
+        char getName(){
+            if(chessPieceWhite) return 'Q';
+            else return 'q';
+        }
+
     private:
 
         // ////////////// //

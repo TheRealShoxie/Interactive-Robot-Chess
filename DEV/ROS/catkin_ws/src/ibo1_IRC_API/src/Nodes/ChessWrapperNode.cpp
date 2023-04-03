@@ -1,7 +1,6 @@
 #include <ros/ros.h>
 
 #include <ibo1_IRC_API/Utility/FileHandler.h>
-#include <ibo1_IRC_API/Server/IRCServer.h>
 
 #include <std_msgs/String.h>
 #include <ibo1_IRC_API/Protocol.h>
@@ -21,8 +20,10 @@ static ChessEngine *chessEnginePointer;
 
 void serverMessageReceived(const ibo1_IRC_API::Protocol& msg){
     returnedProtocol = msg;
+    cout << "----------------------------------------------------------" << endl;
     cout << "I received following on chessWrapper from server: " << endl;
     cout << "CmdByte: " << (int)returnedProtocol.cmd << endl;
+    cout << "----------------------------------------------------------" << endl;
 }
 
 
@@ -108,6 +109,58 @@ void wrapperLogic(vector<ChessEngineDefinitionStruct>& chessEngines, ros::Publis
             break;
         }
 
+        case CMD_PLAYERMOVE:{
+            if(chessEnginePointer == 0){
+                sendProtocol.cmd == ERROR_CMD_NOCHESSENGINERUNNING;
+            }else{
+                string moveCommand = "";
+                DataCreator::convertBytesToString(returnedProtocol.data, moveCommand);
+
+                cout << "ChessEngine Pointer: " << chessEnginePointer << endl;
+                cout << "Got movement command: " << moveCommand << endl;
+                cout << "Current chessBoard state: " << chessEnginePointer->getChessBoardFENString() << endl;
+
+                BYTE toReturnProtocolCmd;
+                chessEnginePointer->playerMove(toReturnProtocolCmd, moveCommand);
+
+                cout << "To return CmdByte: " << (int)toReturnProtocolCmd << endl;
+                cout << "After chessBoard state: " << chessEnginePointer->getChessBoardFENString() << endl;
+
+
+                sendProtocol.cmd = toReturnProtocolCmd;
+                sendProtocol.data = response;
+                chessWrapper_pub->publish(sendProtocol);
+                break;
+            }
+        }
+
+        case CMD_CHESSENGINEMOVE:{
+            if(chessEnginePointer == NULL){
+                sendProtocol.cmd == ERROR_CMD_NOCHESSENGINERUNNING;
+            }else{
+                string chessEngineMove = "";
+                BYTE toReturnProtocolCmd;
+
+                cout << "ChessEngine Pointer: " << chessEnginePointer << endl;
+                cout << "Current chessBoard state: " << chessEnginePointer->getChessBoardFENString() << endl;
+
+                chessEnginePointer->chessEngineMove(toReturnProtocolCmd, chessEngineMove);
+
+                cout << "ChessEngine movement command: " << chessEngineMove << endl;
+                cout << "Current chessBoard state: " << chessEnginePointer->getChessBoardFENString() << endl;
+
+                copy(chessEngineMove.begin(), chessEngineMove.end(), std::back_inserter(response));
+
+                cout << "To return CmdByte: " << toReturnProtocolCmd << endl;
+                cout << "Got movement command: " << chessEngineMove << endl;
+
+                sendProtocol.cmd = toReturnProtocolCmd;
+                sendProtocol.data = response;
+                chessWrapper_pub->publish(sendProtocol);
+                break;
+            }
+        }
+
         default:
             break;
     }
@@ -132,6 +185,7 @@ int main (int argc, char **argv){
 
     vector<ChessEngineDefinitionStruct> chessEngines = FileHandler::readChessEngines(chessEnginesFilePathName);
 
+    ChessBoard ch = ChessBoard();
 
     ros::Rate rate(10);
 
@@ -142,11 +196,7 @@ int main (int argc, char **argv){
 
     while(ros::ok()){
 
-        
-
         wrapperLogic(chessEngines, &chessWrapper_pub);
-
-
 
         ros::spinOnce();
         rate.sleep();

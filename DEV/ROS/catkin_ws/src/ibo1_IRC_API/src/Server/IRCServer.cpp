@@ -200,6 +200,17 @@ int IRCServer::commandExtraction(){
             clientCommand = CMD_STARTCHESSENGINE;
             break;
 
+        case CMD_STOPCHESSENGINE:
+            clientCommand = CMD_STOPCHESSENGINE;
+
+        case CMD_PLAYERMOVE:
+            clientCommand = CMD_PLAYERMOVE;
+            break;
+
+        case CMD_CHESSENGINEMOVE:
+            clientCommand = CMD_CHESSENGINEMOVE;
+            break;
+
         // Checking if command is to disconnect.
         case CMD_DISCONNECT:
 

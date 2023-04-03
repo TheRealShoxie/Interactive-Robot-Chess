@@ -8,6 +8,7 @@ package ibo1.UI;
 
 import ChessSpecific.*;
 import Client.IRCClient;
+import Protocol.ChessEngine;
 import ibo1.UIElements.Space;
 import javafx.scene.layout.GridPane;
 
@@ -36,7 +37,6 @@ public class UIChessBoard extends GridPane{
 
         for(int x = 0; x < cells[0].length; x++){
             for(int y = 0; y < cells[1].length; y++) {
-
                 spaces[x][y].setCell(cells[x][y]);
             }
         }
@@ -57,10 +57,10 @@ public class UIChessBoard extends GridPane{
     // Constructors. //
     // ///////////// //
 
-    public UIChessBoard(boolean playerIsWhite){
+    public UIChessBoard(boolean playerIsWhite, ChessEngine chessEngine, IRCClient ircClient){
         super();
 
-        chessBoard = new ChessBoard(playerIsWhite);
+        chessBoard = new ChessBoard(playerIsWhite, chessEngine, ircClient);
 
         for(int x = 0; x < spaces[0].length; x++){
             for(int y = 0; y < spaces[1].length; y++) {

@@ -84,7 +84,7 @@
         bool isFinished = false;
 
         // Setting currentPosition
-        subProcessHandler.write("position " + fenPosition);
+        subProcessHandler.write("position fen " + fenPosition);
 
         // Searching for answer from the chess engine
         subProcessHandler.write("go " +searchSettings);

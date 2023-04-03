@@ -25,8 +25,13 @@ class ChessPiece{
         // ////////////////////// //
         // Read/Write properties. //
         // ////////////////////// //
-        void setHasMoved(bool chessPieceHasMoved);
-        bool getHasMoved();
+        void setHasMoved(bool chessPieceHasMoved){
+            hasMoved = chessPieceHasMoved;
+        }
+
+        bool getHasMoved(){
+            return hasMoved;
+        }
 
         // ///////////////////// //
         // Read-only properties. //
@@ -35,13 +40,17 @@ class ChessPiece{
             return chessPieceWhite;
         }
         
-        bool getOnlyMovesOneCell(){
+        virtual bool getOnlyMovesOneCell(){
             return onlyMovesOneCell;
         }
 
-        vector<MoveSet> getMoveSet(){
+        virtual vector<MoveSet> getMoveSet(){
             vector<MoveSet> moveSets;
             return moveSets;
+        }
+
+        virtual char getName(){
+            return '-';
         }
 
     private:
