@@ -40,7 +40,6 @@ class ChessEngine{
         void playerMove(BYTE &returnedProtocolByte, string &move);
         void chessEngineMove(BYTE &returnedProtocolByte, string &chessEngineMove);
         void startNewGame();
-        void closeEngine();
         string getChessBoardFENString();
         string getChessBoardString();
 
@@ -76,7 +75,7 @@ class ChessEngine{
         // /////////////////// //
         UCIHandler uciHandler;
 
-        ChessBoard* chessBoard;
+        ChessBoard chessBoard;
 
         string searchOptions = "";
         vector<EngineOption> engineOptions;

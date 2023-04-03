@@ -78,15 +78,13 @@ void wrapperLogic(vector<ChessEngineDefinitionStruct>& chessEngines, ros::Publis
                 sendProtocol.data = response;
                 cout << "Couldnt find Chess Engine Name!" << endl;
             }else{
-                ChessEngine currentChessEngine(toStartChessEngineFilePathName);
-
                 cout << chessEnginePointer << endl;
 
                 if(!(chessEnginePointer == 0)){
-                    chessEnginePointer->closeEngine();
+                    delete chessEnginePointer;
                 }
 
-                chessEnginePointer = &currentChessEngine;
+                chessEnginePointer = new ChessEngine(toStartChessEngineFilePathName);
                 sendProtocol.cmd = CMD_STARTCHESSENGINE;
                 cout << "Started Chess Engine!" << endl;
             }
@@ -100,7 +98,7 @@ void wrapperLogic(vector<ChessEngineDefinitionStruct>& chessEngines, ros::Publis
             if(chessEnginePointer == 0){
                 sendProtocol.cmd == ERROR_CMD_NOCHESSENGINERUNNING;
             }else{
-                chessEnginePointer->closeEngine();
+                delete chessEnginePointer;
                 chessEnginePointer = 0;
                 sendProtocol.cmd == CMD_STOPCHESSENGINE;
             }
@@ -116,15 +114,13 @@ void wrapperLogic(vector<ChessEngineDefinitionStruct>& chessEngines, ros::Publis
                 string moveCommand = "";
                 DataCreator::convertBytesToString(returnedProtocol.data, moveCommand);
 
-                cout << "ChessEngine Pointer: " << chessEnginePointer << endl;
-                cout << "Got movement command: " << moveCommand << endl;
-                cout << "Current chessBoard state: " << chessEnginePointer->getChessBoardFENString() << endl;
+                cout << "Player Move send: " << moveCommand << endl;
+
 
                 BYTE toReturnProtocolCmd;
                 chessEnginePointer->playerMove(toReturnProtocolCmd, moveCommand);
 
                 cout << "To return CmdByte: " << (int)toReturnProtocolCmd << endl;
-                cout << "After chessBoard state: " << chessEnginePointer->getChessBoardFENString() << endl;
 
 
                 sendProtocol.cmd = toReturnProtocolCmd;
@@ -141,18 +137,13 @@ void wrapperLogic(vector<ChessEngineDefinitionStruct>& chessEngines, ros::Publis
                 string chessEngineMove = "";
                 BYTE toReturnProtocolCmd;
 
-                cout << "ChessEngine Pointer: " << chessEnginePointer << endl;
-                cout << "Current chessBoard state: " << chessEnginePointer->getChessBoardFENString() << endl;
-
                 chessEnginePointer->chessEngineMove(toReturnProtocolCmd, chessEngineMove);
-
-                cout << "ChessEngine movement command: " << chessEngineMove << endl;
-                cout << "Current chessBoard state: " << chessEnginePointer->getChessBoardFENString() << endl;
 
                 copy(chessEngineMove.begin(), chessEngineMove.end(), std::back_inserter(response));
 
-                cout << "To return CmdByte: " << toReturnProtocolCmd << endl;
-                cout << "Got movement command: " << chessEngineMove << endl;
+                cout << "To return CmdByte: " << (int)toReturnProtocolCmd << endl;
+                cout << "ChessEngine movement: " << chessEngineMove << endl;
+                cout << "Current Board state as FEN: " << chessEnginePointer->getChessBoardFENString() << endl;
 
                 sendProtocol.cmd = toReturnProtocolCmd;
                 sendProtocol.data = response;

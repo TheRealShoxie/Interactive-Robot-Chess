@@ -1,0 +1,6 @@
+Monday:
+    - Meeting with Maxim
+    - Helped me create deconstructors and a shared pointer
+    - Adding promotion still needs to be tested
+    - Need to add check and check mate
+    - Need to implement castling promotion and check/check mate on ui

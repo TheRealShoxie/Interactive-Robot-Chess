@@ -44,10 +44,7 @@ class ChessPiece{
             return onlyMovesOneCell;
         }
 
-        virtual vector<MoveSet> getMoveSet(){
-            vector<MoveSet> moveSets;
-            return moveSets;
-        }
+        virtual vector<MoveSet> getMoveSet() = 0;
 
         virtual char getName(){
             return '-';

@@ -30,7 +30,7 @@ class Pawn: public ChessPiece{
         // Read-only properties. //
         // ///////////////////// //
         bool getOnlyMovesOneCell(){
-            return false;
+            return true;
         }
 
         vector<MoveSet> getMoveSet(){

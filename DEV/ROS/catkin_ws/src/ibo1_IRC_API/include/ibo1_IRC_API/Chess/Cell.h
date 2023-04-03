@@ -1,6 +1,8 @@
 #ifndef CELL_H
 #define CELL_H
 
+#include <memory>
+
 #include <ibo1_IRC_API/Chess/ChessPieces/ChessPiece.h>
 #include <ibo1_IRC_API/Chess/ChessPieces/Rook.h>
 #include <ibo1_IRC_API/Chess/ChessPieces/Bishop.h>
@@ -30,8 +32,8 @@ class Cell{
         // Methods. //
         // //////// //
 
-        ChessPiece* releaseChessPiece(){
-            ChessPiece* tempChessPiece = chessPiece;
+        std::shared_ptr<ChessPiece> releaseChessPiece(){
+            std::shared_ptr<ChessPiece> tempChessPiece = chessPiece;
             setChessPiece(NULL);
             return tempChessPiece;
         }
@@ -50,11 +52,15 @@ class Cell{
         // Read/Write properties. //
         // ////////////////////// //
 
-        void setChessPiece(ChessPiece* setChessPiece){
+        void setChessPiece(ChessPiece *newPiece) {
+            setChessPiece(std::shared_ptr<ChessPiece>(newPiece));
+        }
+
+        void setChessPiece(std::shared_ptr<ChessPiece> setChessPiece){
             chessPiece = setChessPiece;
         }
 
-        ChessPiece* getChessPiece(){
+        std::shared_ptr<ChessPiece> getChessPiece(){
             return chessPiece;
         }
 
@@ -83,7 +89,7 @@ class Cell{
         // /////////////////// //
         // Instance variables. //
         // /////////////////// //
-        ChessPiece* chessPiece;
+        std::shared_ptr<ChessPiece> chessPiece;
         int position;
         
 };

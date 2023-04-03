@@ -117,6 +117,18 @@ TEST(ChessBoard, MoveValidFromFenPosInValidPawnMoveDouble){
     ASSERT_EQ(returned, expectedReturn);
 }
 
+//Testing chessBoard move from FenPosition invalid pawn move double black in the way
+TEST(ChessBoard, MoveValidFromStartPosInValidPawnMoveQuadruple){
+    ChessBoard chessBoard = ChessBoard();
+
+    string movement = "A2A6";
+    int expectedReturn = -5;
+
+    int returned = chessBoard.move(movement);
+
+    ASSERT_EQ(returned, expectedReturn);
+}
+
 //Testing chessBoard move from FenPosition invalid pawn move single black in the way
 TEST(ChessBoard, MoveValidFromFenPosInValidPawnMoveSingle){
     string fenPos = "rnbqkbnr/p1pppppp/8/P7/8/1p6/1PPPPPPP/RNBQKBNR w KQkq - 0 4";

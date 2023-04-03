@@ -298,6 +298,38 @@
         }
     }
 
+
+    // Updates the turn and wholeMoves and halfMoves
+    void ChessBoard::fenVariableUpdate(int const &startPos, int const &endPos){
+        //Switch colors turn
+            whiteTurn = !whiteTurn;
+
+            // If the cell we move to is occupied increase wholeMoves
+            if(chessBoard.at(endPos).isOccupied()){
+                wholeMoves ++;
+                previousMoveWasPawn = false;
+            }
+            // If the chessPiece that has been moved is a pawn then increase wholeMoves
+            else if(tolower(chessBoard.at(startPos).getChessPiece()->getName()) == 'p' && previousMoveWasPawn){
+                wholeMoves ++;
+                previousMoveWasPawn = false;
+            }
+            // If the chessPiece that has been moved is a pawn and previous was not a pawn Moved, then set previousPawn true and reset halfMoves
+            else if(tolower(chessBoard.at(startPos).getChessPiece()->getName()) == 'p' && !previousMoveWasPawn){
+                previousMoveWasPawn = true;
+                halfMoves = 0;
+            }
+            // Otherwise we increase halfMoves
+            else{
+                //If previousPawn is true then we increase wholeMoves and reset previousPawn
+                if(previousMoveWasPawn){
+                    wholeMoves ++;
+                    previousMoveWasPawn = false;
+                }
+                halfMoves ++;
+            }
+    }
+
     
     /*
         return values meaning:
@@ -305,7 +337,7 @@
             -1 Pawn collided straight move
             -2 Pawn collided diagonal move
     */
-    int ChessBoard::pawnMoveValid(Cell startCell, Cell endCell){
+    int ChessBoard::pawnMoveValid(Cell &startCell, Cell &endCell){
 
         // If we do not have a pawn return false
         if(tolower(startCell.getChessPieceName()) != 'p') return 0;
@@ -348,33 +380,59 @@
             -6 King doesn't have castleRights King side
             -7 King doesn't have castleRights Queen side
     */
-    int ChessBoard::castleMoveValid(Cell startCell, Cell endCell){
+    int ChessBoard::castleMoveValid(Cell &startCell, Cell &endCell){
         // If we do not have a pawn return false
         if(tolower(startCell.getChessPieceName()) != 'k') return 0;
+
+        bool isWhiteKing = startCell.getChessPieceColor();
 
         // Checking if we are castling left or right
         if(abs(endCell.getPosition()-startCell.getPosition())%2 == 0){
             int move = endCell.getPosition() - startCell.getPosition();
-            bool isWhiteKing = startCell.getChessPieceColor();
 
+            // Checking if we are dealing with white king
             if(isWhiteKing){
+
+                // If we do king side castle and we dont have castle Rights there return
                 if(move == 2 && !castleRights[0][0]){
-                    startCell.getChessPiece()->setHasMoved(true);
                     return -6;
                 }
+                // If we do queen side castle and we dont have castle Rights there we need to setHasMoved true as it wasn't set yet.
                 if(move == -2 && !castleRights[0][1]){
-                    startCell.getChessPiece()->setHasMoved(true);
                     return -7;
                 }
             }
+            // Otherwise we are dealing with black king
             else{
+                // If we do king side castle and we dont have castle Rights there we need to setHasMoved true as it wasn't set yet.
                 if(move == 2 && !castleRights[1][0]){
-                    startCell.getChessPiece()->setHasMoved(true);
                     return -6;
                 }
+                // If we do queen side castle and we dont have castle Rights there we need to setHasMoved true as it wasn't set yet.
                 if(move == -2 && !castleRights[1][1]){
-                    startCell.getChessPiece()->setHasMoved(true);
                     return -7;
+                }
+            }
+        }
+        // Update castle Rights if still exist
+        else{
+
+            // Checking if we are dealing with white king
+            if(isWhiteKing){
+
+                // Checking if either side still has castle rights remove the castle rights
+                if(castleRights[0][0] || castleRights[0][1]){
+                    castleRights[0][0] = false;
+                    castleRights[0][1] = false;
+                }
+            }
+            // Otherwise we are dealing with black king
+            else{
+
+                // Checking if either side still has castle rights remove the castle rights
+                if(castleRights[1][0] || castleRights[1][1]){
+                    castleRights[1][0] = false;
+                    castleRights[1][1] = false;
                 }
             }
         }
@@ -396,8 +454,9 @@
     */
     int ChessBoard::isMoveValid(int startPos, int endPos){
 
-        Cell startCell = chessBoard.at(startPos);
-        Cell endCell = chessBoard.at(endPos);
+
+        Cell &startCell = chessBoard.at(startPos);
+        Cell &endCell = chessBoard.at(endPos);
 
 
         // Checking if startCell is empty, if yes return -3
@@ -407,7 +466,7 @@
         if(!(whiteTurn == startCell.getChessPieceColor())) return -4;
 
         //Getting startCell chessPiece information
-        ChessPiece* chessPiece = startCell.getChessPiece();
+        std::shared_ptr<ChessPiece> chessPiece = startCell.getChessPiece();
         vector<MoveSet> moveSets = chessPiece->getMoveSet();
 
         int multiCellMoveCount;
@@ -450,8 +509,9 @@
                         hasCollided = true;
                         break;
                     }
+
                     // Checking if the cell we move through is not same as color and we are not at the wanted reached position. If yes we have collided
-                    else if(tempCell.getChessPieceColor() != startCell.getChessPieceColor() && tempCell.getPosition() != endCell.getPosition()){
+                    if(tempCell.getChessPieceColor() != startCell.getChessPieceColor() && tempCell.getPosition() != endCell.getPosition()){
                         hasCollided = true;
                         break;
                     }
@@ -471,7 +531,7 @@
 
                     if(returnedCastleMoveValid != 0) return returnedCastleMoveValid; 
 
-                    //Otherwise it is correct move or not a pawn
+                    //Otherwise it is correct move or not a pawn or correct move or not a king
                     //Need to check if piece is a pawn if yes need to do extra checks
                     chessPiece->setHasMoved(true);
 
@@ -539,6 +599,7 @@
         int endPos = 0;
         int isMoveValidCode = 0;
 
+
         // Checking if move is a castling move
 
         //White Castle King side and we have castleRights
@@ -554,6 +615,7 @@
         }
         //White Castle Queen side
         else if(move.compare("e1c1") == 0 && castleRights[0][1]){
+
             // Trying to castle
             castle("e1c1", "a1d1", startPos, endPos, isMoveValidCode);
 
@@ -585,41 +647,20 @@
         }
         //Otherwise not castling
         else{
+
             getVecPosFromMove(move, startPos, endPos);
 
+
             isMoveValidCode = isMoveValid(startPos, endPos);
+
         }
+
 
         // If move is valid
         if(isMoveValidCode == 0){
-
-            //Switch colors turn
-            whiteTurn = !whiteTurn;
-
-            // If the cell we move to is occupied increase wholeMoves
-            if(chessBoard.at(endPos).isOccupied()){
-                wholeMoves ++;
-                previousMoveWasPawn = false;
-            }
-            // If the chessPiece that has been moved is a pawn then increase wholeMoves
-            else if(tolower(chessBoard.at(startPos).getChessPiece()->getName()) == 'p' && previousMoveWasPawn){
-                wholeMoves ++;
-                previousMoveWasPawn = false;
-            }
-            // If the chessPiece that has been moved is a pawn and previous was not a pawn Moved, then set previousPawn true and reset halfMoves
-            else if(tolower(chessBoard.at(startPos).getChessPiece()->getName()) == 'p' && !previousMoveWasPawn){
-                previousMoveWasPawn = true;
-                halfMoves = 0;
-            }
-            // Otherwise we increase halfMoves
-            else{
-                //If previousPawn is true then we increase wholeMoves and reset previousPawn
-                if(previousMoveWasPawn){
-                    wholeMoves ++;
-                    previousMoveWasPawn = false;
-                }
-                halfMoves ++;
-            }
+            
+            //Updating colorTurn, halfMoves and wholeMoves
+            fenVariableUpdate(startPos, endPos);
 
             // Updating castle Rights if needed
             // Checking if piece that was moved was the White Rook
@@ -649,12 +690,102 @@
             //Making the move
             chessBoard.at(endPos).setChessPiece( chessBoard.at(startPos).releaseChessPiece() );
 
+
+
             return 0;
         }
         
         return isMoveValidCode;
         
+    }
 
+    /*
+        return values meaning:
+             0 move is valid
+            -1 Pawn collided straight move
+            -2 Pawn collided diagonal move
+            -3 starting Cell is empty, thus no moveable piece
+            -4 not that colors turn
+            -5 went through all moveSets and did not find a correct move thus move invalid or it was blocked by own color
+            -6 King doesn't have castleRights King side
+            -7 King doesn't have castleRights Queen side
+            -8 The piece is not a pawn thus cannot be used for promotion
+            -9 Pawn is not moving into endPosition and cannot be used for promotion
+            -10 Invalid piece name to promote into
+    */
+    int ChessBoard::processPromotionMove(string const &move){
+        int startPos = 0;
+        int endPos = 0;
+        int isMoveValidCode = 0;
+        char pieceToCreate = move[4];
+        ChessPiece* chessPiecePromoted;
+
+
+        getVecPosFromMove(move, startPos, endPos);
+
+        //Checking if the piece to move is a pawn
+        if(tolower(chessBoard.at(startPos).getChessPieceName()) == 'p'){
+
+            // Checking if we are going to the end of the board
+            if(endPos == 7 || endPos == 0){
+
+                //Check if the pawn move is valid
+                isMoveValidCode = isMoveValid(startPos, endPos);
+
+                if(isMoveValidCode == 0){
+
+                    // Checking which piece to create and in which color
+                    switch (pieceToCreate)
+                    {
+                        case 'r':
+                            // Checking color of initial pawn and create that colors piece
+                            if(chessBoard.at(startPos).getChessPieceColor()) chessPiecePromoted = new Rook(true);
+                            else chessPiecePromoted = new Rook(false);
+
+                            // So that it is not allowed to castle
+                            chessPiecePromoted->setHasMoved(true);
+                            break;
+
+                        case 'n':
+                            if(chessBoard.at(startPos).getChessPieceColor()) chessPiecePromoted = new Knight(true);
+                            else chessPiecePromoted = new Knight(false);
+                            break;
+
+                        case 'b':
+                            if(chessBoard.at(startPos).getChessPieceColor()) chessPiecePromoted = new Bishop(true);
+                            else chessPiecePromoted = new Bishop(false);
+                            break;
+
+                        case 'q':
+                            if(chessBoard.at(startPos).getChessPieceColor()) chessPiecePromoted = new Queen(true);
+                            else chessPiecePromoted = new Queen(false);
+                            break;
+                        
+                        default:
+                            return -10;
+                            break;
+                    }
+
+                    //Updating colorTurn, halfMoves and wholeMoves
+                    fenVariableUpdate(startPos, endPos);
+
+                    //Setting new promoted piece
+                    chessBoard.at(startPos).setChessPiece(NULL);
+                    chessBoard.at(endPos).setChessPiece(chessPiecePromoted);
+
+                }
+                else{
+                    return isMoveValidCode;
+                }
+            }
+            // Otherwise we do not move to the end of the board so -9
+            else{
+                return -9;
+            }
+        }
+
+        // Otherwise not a pawn return -8 code
+        return -8; 
     }
 
     // ////////////////////// //
@@ -671,33 +802,38 @@
 
 
     /*
-         0 move is valid
-        -1 Pawn collided straight move
-        -2 Pawn collided diagonal move
-        -3 starting Cell is empty, thus no moveable piece
-        -4 not that colors turn
-        -5 went through all moveSets and did not find a correct move thus move invalid or it was blocked by own color
-        -6 King doesn't have castleRights King side
-        -7 King doesn't have castleRights Queen side
-        -8 Inputted move does not correspond format
+        return values meaning:
+             0 move is valid
+            -1 Pawn collided straight move
+            -2 Pawn collided diagonal move
+            -3 starting Cell is empty, thus no moveable piece
+            -4 not that colors turn
+            -5 went through all moveSets and did not find a correct move thus move invalid or it was blocked by own color
+            -6 King doesn't have castleRights King side
+            -7 King doesn't have castleRights Queen side
+            -8 The piece is not a pawn thus cannot be used for promotion
+            -9 Pawn is not moving into endPosition and cannot be used for promotion
+            -10 Invalid piece name to promote into
+            -11 Inputted move does not correspond format
     */
     int ChessBoard::move(string &move){
 
         transform(move.begin(), move.end(), move.begin(), ::tolower);
 
-        if(DataChecker::isCorrectMove(move)){
+        if(DataChecker::isCorrectMoveFormat(move)){
 
             int returnedProcessMove = processMove(move);
+            return returnedProcessMove;
 
-            if(returnedProcessMove == 0){
-                return 0;
-            }
-            else{
-                return returnedProcessMove;
-            }
+        }
+        else if(DataChecker::isCorrectMoveFormatPromotion(move)){
+
+            int returnedProcessPromotionMove = processPromotionMove(move);
+
+            return returnedProcessPromotionMove;
         }
         else{
-            return -8;
+            return -11;
         }
     }
 

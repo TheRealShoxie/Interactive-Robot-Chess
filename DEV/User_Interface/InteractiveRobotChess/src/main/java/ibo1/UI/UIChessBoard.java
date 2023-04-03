@@ -42,6 +42,30 @@ public class UIChessBoard extends GridPane{
         }
     }
 
+    private void updateSpaces(int startSpaceX, int startSpaceY, int endSpaceX, int endSpaceY){
+        spaces[startSpaceX][startSpaceY].setCell(chessBoard.getCellAtPosition(startSpaceX,startSpaceY));
+        spaces[endSpaceX][endSpaceY].setCell(chessBoard.getCellAtPosition(endSpaceX,endSpaceY));
+    }
+
+    private void setActiveSpace(Space space){
+        if(this.activeSpace != null) this.activeSpace.getStyleClass().removeAll("chess-space-active");
+
+        this.activeSpace = space;
+
+        if(this.activeSpace != null) this.activeSpace.getStyleClass().add("chess-space-active");
+    }
+
+    private void chessEngineMove(){
+
+        int cellPositions[] = this.chessBoard.chessEngineMove();
+
+        if(cellPositions.length == 4){
+            //updateSpaces(cellPositions[0], cellPositions[1], cellPositions[2], cellPositions[3]);
+            updateBoardState();
+            this.setDisable(false);
+        }
+    }
+
     /**
      * ------------------------------------------------------------------------------------
 
@@ -52,6 +76,7 @@ public class UIChessBoard extends GridPane{
     // /////////////////// //
     Space[][] spaces = new Space[8][8];
     ChessBoard chessBoard;
+    Space activeSpace;
 
     // ///////////// //
     // Constructors. //
@@ -65,7 +90,6 @@ public class UIChessBoard extends GridPane{
         for(int x = 0; x < spaces[0].length; x++){
             for(int y = 0; y < spaces[1].length; y++) {
 
-
                 Space space = new Space(this.chessBoard.getCellAtPosition(x,y));
                 spaces[x][y] = space;
 
@@ -75,12 +99,16 @@ public class UIChessBoard extends GridPane{
                 final int yVal = y;
 
                 spaces[x][y].setOnAction(e -> {
-                    this.chessBoard.onCellClick(xVal, yVal);
-                    this.updateBoardState();
+                    this.onSpaceClick(xVal, yVal);
                 });
-
             }
         }
+
+        if(!playerIsWhite){
+            this.setDisable(true);
+            this.chessEngineMove();
+        }
+
     }
 
     // ////////////////////// //
@@ -94,5 +122,40 @@ public class UIChessBoard extends GridPane{
     // //////// //
     // Methods. //
     // //////// //
+    public void onSpaceClick(int x, int y){
+        Space clickedSpace = spaces[x][y];
+
+        if(activeSpace != null
+                && activeSpace.getCell().getChessPiece() != null
+                && activeSpace.getCell().getChessPiece() != clickedSpace.getCell().getChessPiece()){
+
+            int activeCellX = activeSpace.getCell().getXPos();
+            int activeCellY = activeSpace.getCell().getYPos();
+            int clickedCellX = clickedSpace.getCell().getXPos();
+            int clickedCellY = clickedSpace.getCell().getYPos();
+
+            boolean madeMove = this.chessBoard.playerMove(activeCellX, activeCellY,
+                    clickedCellX, clickedCellY);
+
+
+            if(!madeMove) return;
+
+            updateSpaces(activeCellX, activeCellY, clickedCellX, clickedCellY);
+
+            this.setActiveSpace(null);
+            this.setDisable(false);
+
+            this.chessEngineMove();
+        }
+        else if(activeSpace != null && activeSpace.getCell().getChessPiece() == clickedSpace.getCell().getChessPiece()){
+            this.setActiveSpace(null);
+        }
+        else{
+            if(spaces[x][y].getCell().getChessPiece() != null){
+                this.setActiveSpace(spaces[x][y]);
+            }
+        }
+
+    }
 
 }

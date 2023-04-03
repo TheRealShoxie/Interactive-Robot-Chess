@@ -20,12 +20,12 @@
     // Methods. //
     // //////// //
 
-    void IRCServerNodeHelper::cmdUserLogin(const vector<BYTE>& receivedData, IRCServer *server, Users *users, vector<BYTE>& answer){
+    void IRCServerNodeHelper::cmdUserLogin(const vector<BYTE>& receivedData, IRCServer &server, Users &users, vector<BYTE>& answer){
         cout << "-------UserLogin-------" << endl;
 
         try{
             User user = User(receivedData);
-            User foundUser = users->findUser(user);
+            User foundUser = users.findUser(user);
 
             
             cout << "User requested: " << user.toString() << endl;
@@ -36,17 +36,17 @@
             else answer.push_back(0x00);
         }catch(runtime_error er){
             cout << "User was not found!" << endl;
-            server->setClientCommand(ERROR_CMD_USERDOESNTEXIST);
+            server.setClientCommand(ERROR_CMD_USERDOESNTEXIST);
         }
     }
 
-    void IRCServerNodeHelper::forwarderChessWrapper(const vector<BYTE>& receivedData, BYTE cmd, ros::Publisher *server_pub){
+    void IRCServerNodeHelper::forwarderChessWrapper(const vector<BYTE>& receivedData, BYTE cmd, ros::Publisher &server_pub){
         ibo1_IRC_API::Protocol forwardProtocol;
         forwardProtocol.cmd = cmd;
 
         forwardProtocol.data = receivedData;
 
-        server_pub->publish(forwardProtocol);
+        server_pub.publish(forwardProtocol);
     }
 
     bool IRCServerNodeHelper::receiverChessWrapper(const ibo1_IRC_API::Protocol receivedFromChessWrapper, BYTE &returnedCMD, vector<BYTE>& returnedInternalProtocol, const vector<BYTE>& expectedReturn){

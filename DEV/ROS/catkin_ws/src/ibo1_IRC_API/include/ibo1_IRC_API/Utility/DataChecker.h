@@ -21,11 +21,22 @@ class DataChecker{
         // //////// //
         // Methods. //
         // //////// //
-        static bool isCorrectMove(string const &moveString){
+        static bool isCorrectMoveFormat(string const &moveString){
 
             if(moveString.length() > 4) return false;
             
             regex r("[a-h][1-8][a-h][1-8]");
+            smatch match;
+
+            if(regex_search(moveString,match, r)) return true;
+            return false;
+        }
+
+        static bool isCorrectMoveFormatPromotion(string const &moveString){
+
+            if(moveString.length() > 4) return false;
+            
+            regex r("[a-h][1-8][a-h][1-8][a-z]");
             smatch match;
 
             if(regex_search(moveString,match, r)) return true;

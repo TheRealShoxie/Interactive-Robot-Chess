@@ -50,6 +50,18 @@
             break;
 
         case -8:
+            returnByte = ERROR_CMD_PIECETOPROMOTEISNOTPAWN; 
+            break;
+
+        case -9:
+            returnByte = ERROR_CMD_PAWNNOTMOVINGTOENDOFBOARD; 
+            break;
+
+        case -10:
+            returnByte = ERROR_CMD_INVALIDPIECENAMETOPROMOTEINTO; 
+            break;
+
+        case -11:
             returnByte = ERROR_CMD_INVALIDMOVEFORMAT; 
             break;
         
@@ -93,9 +105,7 @@
     // //////// //
     void ChessEngine::playerMove(BYTE &returnedProtocolByte, string &move){
 
-        string chessEngineMove = "";
-
-        int returnedMoveCode = chessBoard->move(move);
+        int returnedMoveCode = chessBoard.move(move);
 
         BYTE returnedCommand;
         
@@ -103,44 +113,35 @@
     }
 
     void ChessEngine::chessEngineMove(BYTE &returnedProtocolByte, string &chessEngineMove){
-        
-        cout << "ChessEngineMove Try to get fenString! "<< endl;
 
         // Getting the current Fen representation of the board
-        string currentFENPosition = chessBoard->toFENString();
+        string currentFENPosition = chessBoard.toFENString();
 
-        cout << "ChessEngineMove Try make the chessEngine move! "<< endl;
-        cout << "UCIHandler memory address: " << &uciHandler << endl;
 
         // Making the ChessEngine make the move.
         uciHandler.makeMove(currentFENPosition, searchOptions, chessEngineMove);
 
-        cout << "ChessEngine made a move and the move is: " << chessEngineMove << endl;
+        // Checking if chessEngine did not find a move otherwise return chess engine created no move
+        if(chessEngineMove.compare("moveNotFound!") == 0){
+            returnedProtocolByte = ERROR_CMD_CHESSENGINECREATEDNOMOVE;
+        }else{
+            // Setting the move of the chessEngine to the internal board.
+            int returnedMoveCode = chessBoard.move(chessEngineMove);
 
-        // Setting the move of the chessEngine to the internal board.
-        int returnedMoveCode = chessBoard->move(chessEngineMove);
-
-        cout << "Tried the move and we got following code: " << returnedMoveCode << endl;
-
-        
-        getProtocolCode(returnedMoveCode, CMD_CHESSENGINEMOVE, returnedProtocolByte);
+            
+            getProtocolCode(returnedMoveCode, CMD_CHESSENGINEMOVE, returnedProtocolByte);
+        }
     }
 
     void ChessEngine::startNewGame(){
-        cout << "UCIHandler memory address: " << &uciHandler << endl;
         if(!(uciHandler.startNewGame())) throw runtime_error("Couldn't start a fresh game!");
-        chessBoard = new ChessBoard();
-    }
-
-    void ChessEngine::closeEngine(){
-        uciHandler.closeProcess();
+        chessBoard = ChessBoard();
     }
 
     string ChessEngine::getChessBoardFENString(){
-
-        return chessBoard->toFENString();
+        return chessBoard.toFENString();
     }
 
     string ChessEngine::getChessBoardString(){
-        return chessBoard->toString();
+        return chessBoard.toString();
     }

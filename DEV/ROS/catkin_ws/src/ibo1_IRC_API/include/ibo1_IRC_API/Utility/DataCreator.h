@@ -18,15 +18,6 @@ using namespace std;
         string minValue;
         string maxValue;
         string restValues;
-
-        inline bool operator==(const EngineOption& e) const{
-            return (name.compare(e.name) == 0 
-                    && typeOfValue.compare(e.typeOfValue) == 0 
-                    && defaultValue.compare(e.defaultValue) == 0 
-                    && minValue.compare(e.minValue) == 0 
-                    && maxValue.compare(e.maxValue) == 0 
-                    && restValues.compare(e.restValues) == 0);
-        }
     };
    
     // ////////// //

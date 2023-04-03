@@ -75,6 +75,10 @@ public class Space extends Button {
         }
     }
 
+    public Cell getCell(){
+        return this.cell;
+    }
+
 
     // ///////////////////// //
     // Read-only properties. //

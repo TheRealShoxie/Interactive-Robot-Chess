@@ -83,18 +83,14 @@
         string startOfData = "bestmove ";
         bool isFinished = false;
 
-        cout << "I get here inside make Move UCIHandler!" << endl;
-        cout << "Memory address of subProcessHandler: " << &subProcessHandler << endl; 
 
         // Setting currentPosition
         subProcessHandler.write("position fen " + fenPosition);
 
-        cout << "I wrote the position" << endl;
-
         // Searching for answer from the chess engine
         subProcessHandler.write("go " +searchSettings);
 
-        cout << "I wrote go" << endl;
+        int readLineCounter = 0;
 
         // Keep reading till we find the best move, then extract the move and return that
         while(!isFinished){
@@ -103,6 +99,15 @@
                 returnedLine.erase(returnedLine.begin(), returnedLine.begin() + startOfData.size());
                 chessEngineMove = DataManipulation::subString(returnedLine, " ");
                 isFinished = true;
+            }
+            // If we still didn't find best move
+            else{
+                // Did we already reach the limit of read lines then break out and say not found
+                if(readLineCounter > 100){
+                    isFinished = true;
+                    chessEngineMove = "moveNotFound!";
+                }
+                readLineCounter ++;
             }
         }
     }
@@ -123,7 +128,6 @@
 
     }
     
-    void UCIHandler::closeProcess(){
+    UCIHandler::~UCIHandler(){
         subProcessHandler.write("quit");
-        subProcessHandler.closeSubProcess();
     }

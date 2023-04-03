@@ -121,7 +121,7 @@ class SubProcessHandler{
 
         void getLine(string &returnedLine);
         void write(string const &message);
-        void closeSubProcess();
+        ~SubProcessHandler();
 
         // ////////////////////// //
         // Read/Write properties. //

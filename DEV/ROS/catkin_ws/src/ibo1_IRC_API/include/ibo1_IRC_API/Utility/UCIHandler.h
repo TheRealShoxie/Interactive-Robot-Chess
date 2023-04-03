@@ -32,7 +32,7 @@ class UCIHandler{
         void makeMove(string const &fenPosition, string const &searchSettings, string &chessEngineMove);
         void setEngineOptions(string const &optionName, string const &value);
         bool startNewGame();
-        void closeProcess();
+        ~UCIHandler();
 
         // ////////////////////// //
         // Read/Write properties. //

@@ -115,22 +115,16 @@ public class HomePageUserController {
         contentAnchor.getChildren().add(new UIChessBoard(true, chessEngine, ircClient));
     }
 
-
-    private void drawChessBoard(){
-    }
-
-
     // /////////////////// //
     // Instance variables. //
     // /////////////////// //
+
     @FXML
     private AnchorPane contentAnchor;
-
 
     // //////// //
     // Methods. //
     // //////// //
-
 
     /**
      * Used to initialize main and the welcome text.
@@ -140,7 +134,6 @@ public class HomePageUserController {
         mainApp = new Main();
         ircClient = mainApp.getIrcClient();
         chessEngine = mainApp.getChessEngine();
-
-        //contentAnchor.getChildren().add(new UIChessBoard(true, chessEngine, ircClient));
     }
+
 }

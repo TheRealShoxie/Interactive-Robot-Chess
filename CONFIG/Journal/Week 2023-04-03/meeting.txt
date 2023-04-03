@@ -1,0 +1,4 @@
+Meeting:
+    - shared pointer
+        - container with references and its original pointer
+        - change pointers to references

@@ -31,23 +31,29 @@ public class ChessEngine {
     final static byte cmdByteStopChessEngine = (byte)0x06;
     final static byte cmdByteGetChessEngineOptions = (byte)0x07;
     final static byte cmdByteSetChessEngineOption = (byte)0x08;
-    final static byte cmdBytePlayerMove = (byte)0x09;
-    final static byte cmdByteChessEngineMove = (byte)0x0A;
-    final static byte cmdByteSetSearchEngineOption = (byte)0x0B;
+    final static byte cmdByteSetSearchEngineOption = (byte)0x09;
+    final static byte cmdBytePlayerMove = (byte)0x0A;
+    final static byte cmdByteChessEngineMove = (byte)0x0B;
+
 
 
     final static byte chessEngineNotFound = (byte)0xF9;
     final static byte chessEngineNotStarted = (byte)0xF8;
     final static byte chessEngineNotRunning = (byte)0xF7;
     final static byte chessEngineOptionDoesntExist = (byte)0xF6;
-    final static byte chessEnginePawnCollidedStraight = (byte)0xF5;
-    final static byte chessEnginePawnCollidedDiagonalOrEmptySpace = (byte)0xF4;
-    final static byte chessEngineEmptyStartingCell = (byte)0xF3;
-    final static byte chessEngineNotThatColorsTurn = (byte)0xF2;
-    final static byte chessEngineMoveInvalidOrBlockedBySameColor = (byte)0xF1;
-    final static byte chessEngineCannotCastleKingSide = (byte)0xF0;
-    final static byte chessEngineCannotCastleQueenSide = (byte)0xEF;
-    final static byte chessEngineMoveFormatInvalid = (byte)0xEE;
+    final static byte chessEngineNoSuchSearchOption = (byte)0xF5;
+    final static byte chessEnginePawnCollidedStraight = (byte)0xF4;
+    final static byte chessEnginePawnCollidedDiagonalOrEmptySpace = (byte)0xF3;
+    final static byte chessEngineEmptyStartingCell = (byte)0xF2;
+    final static byte chessEngineNotThatColorsTurn = (byte)0xF1;
+    final static byte chessEngineMoveInvalidOrBlockedBySameColor = (byte)0xF0;
+    final static byte chessEngineCannotCastleKingSide = (byte)0xEF;
+    final static byte chessEngineCannotCastleQueenSide = (byte)0xEE;
+    final static byte chessEnginePieceToPromoteNotPawn = (byte)0xED;
+    final static byte chessEnginePawnNotMovingIntoEndPos = (byte)0xEC;
+    final static byte chessEngineInvalidNameForPieceToPromote = (byte)0xEB;
+    final static byte chessEngineCreatedNoMove = (byte)0xEA;
+    final static byte chessEngineMoveFormatInvalid = (byte)0xE9;
     final static byte unrecognizableCmd = (byte)0xFE;
 
     // //////////////// //
@@ -190,24 +196,42 @@ public class ChessEngine {
 
         byte receivedCommandByte = receivedProtocol.getCmdByte();
 
-        // Setting the List options for chessEngines;
-        if(receivedCommandByte == cmdBytePlayerMove){
-            // Setting chessEngineChoices
-            return;
+        // Checking what byte we got returned
+        switch (receivedCommandByte){
+            case cmdBytePlayerMove:
+                break;
+            case chessEngineNotRunning:
+                throw new ProtocolException(ProtocolErrors.CHESSENGINE_NOT_RUNNING.toString());
+            case chessEnginePawnCollidedStraight:
+                throw new ProtocolException(ProtocolErrors.CHESSENGINE_PAWN_COLLIDED_STRAIGHT.toString());
+            case chessEnginePawnCollidedDiagonalOrEmptySpace:
+                throw new ProtocolException(ProtocolErrors.CHESSENGINE_PAWN_COLLIDED_DIAGONAL_OREMPTYCELLTHERE.toString());
+            case chessEngineEmptyStartingCell:
+                throw new ProtocolException(ProtocolErrors.CHESSENGINE_STARTING_CELL_EMPTY.toString());
+            case chessEngineNotThatColorsTurn:
+                throw new ProtocolException(ProtocolErrors.CHESSENGINE_NOT_THAT_COLORS_TURN.toString());
+            case chessEngineMoveInvalidOrBlockedBySameColor:
+                throw new ProtocolException(ProtocolErrors.CHESSENGINE_MOVE_INVALID_OR_BLOCKED_BY_OWN_COLOR.toString());
+            case chessEngineCannotCastleKingSide:
+                throw new ProtocolException(ProtocolErrors.CHESSENGINE_CANNOT_CASTLE_KING_SIDE.toString());
+            case chessEngineCannotCastleQueenSide:
+                throw new ProtocolException(ProtocolErrors.CHESSENGINE_CANNOT_CASTLE_QUEEN_SIDE.toString());
+            case chessEnginePieceToPromoteNotPawn:
+                throw new ProtocolException(ProtocolErrors.CHESSENGINE_PIECE_TO_PROMOTE_NOT_PAWN.toString());
+            case chessEnginePawnNotMovingIntoEndPos:
+                throw new ProtocolException(ProtocolErrors.CHESSENGINE_PAWN_NOT_MOVING_INTO_END_POS.toString());
+            case chessEngineInvalidNameForPieceToPromote:
+                throw new ProtocolException(ProtocolErrors.CHESSENGINE_INVALID_NAME_FOR_PIECE_TO_PROMOTE_INTO.toString());
+            case chessEngineMoveFormatInvalid:
+                throw new ProtocolException(ProtocolErrors.CHESSENGINE_MOVE_FORMAT_INVALID.toString());
+                // Command was not recognizable
+            case unrecognizableCmd :
+                throw new ProtocolException(ProtocolErrors.UNRECOGNIZABLE_CMD.toString());
+                // Does not match expected return
+            default:
+                throw new ProtocolException(ProtocolErrors.UNEXPECTED_RETURN_CMD.toString());
         }
-        else if(receivedCommandByte == chessEngineNotRunning) throw new ProtocolException(ProtocolErrors.CHESSENGINE_NOT_RUNNING.toString());
-        else if(receivedCommandByte == chessEnginePawnCollidedStraight) throw new ProtocolException(ProtocolErrors.CHESSENGINE_PAWN_COLLIDED_STRAIGHT.toString());
-        else if(receivedCommandByte == chessEnginePawnCollidedDiagonalOrEmptySpace) throw new ProtocolException(ProtocolErrors.CHESSENGINE_PAWN_COLLIDED_DIAGONAL_OREMPTYCELLTHERE.toString());
-        else if(receivedCommandByte == chessEngineEmptyStartingCell) throw new ProtocolException(ProtocolErrors.CHESSENGINE_STARTING_CELL_EMPTY.toString());
-        else if(receivedCommandByte == chessEngineNotThatColorsTurn) throw new ProtocolException(ProtocolErrors.CHESSENGINE_NOT_THAT_COLORS_TURN.toString());
-        else if(receivedCommandByte == chessEngineMoveInvalidOrBlockedBySameColor) throw new ProtocolException(ProtocolErrors.CHESSENGINE_MOVE_INVALID_OR_BLOCKED_BY_OWN_COLOR.toString());
-        else if(receivedCommandByte == chessEngineCannotCastleKingSide) throw new ProtocolException(ProtocolErrors.CHESSENGINE_CANNOT_CASTLE_KING_SIDE.toString());
-        else if(receivedCommandByte == chessEngineCannotCastleQueenSide) throw new ProtocolException(ProtocolErrors.CHESSENGINE_CANNOT_CASTLE_QUEEN_SIDE.toString());
-        else if(receivedCommandByte == chessEngineMoveFormatInvalid) throw new ProtocolException(ProtocolErrors.CHESSENGINE_MOVE_FORMAT_INVALID.toString());
-            // Command was not recognizable
-        else if(receivedCommandByte == unrecognizableCmd) throw new ProtocolException(ProtocolErrors.UNRECOGNIZABLE_CMD.toString());
-            // Does not match expected return
-        else throw new ProtocolException(ProtocolErrors.UNEXPECTED_RETURN_CMD.toString());
+
     }
 
     public String makeChessEngineMove(IRCClient ircClient) throws IOException, ProtocolException {
@@ -229,24 +253,44 @@ public class ChessEngine {
 
         byte receivedCommandByte = receivedProtocol.getCmdByte();
 
-        // Setting the List options for chessEngines;
-        if(receivedCommandByte == cmdByteChessEngineMove){
-            // Returning chessEngineMove
-            return new String(receivedProtocol.getData(), StandardCharsets.UTF_8);
+
+        // Checking what byte we got returned
+        switch (receivedCommandByte){
+            case cmdByteChessEngineMove:
+                return new String(receivedProtocol.getData(), StandardCharsets.UTF_8);
+            case chessEngineNotRunning:
+                throw new ProtocolException(ProtocolErrors.CHESSENGINE_NOT_RUNNING.toString());
+            case chessEnginePawnCollidedStraight:
+                throw new ProtocolException(ProtocolErrors.CHESSENGINE_PAWN_COLLIDED_STRAIGHT.toString());
+            case chessEnginePawnCollidedDiagonalOrEmptySpace:
+                throw new ProtocolException(ProtocolErrors.CHESSENGINE_PAWN_COLLIDED_DIAGONAL_OREMPTYCELLTHERE.toString());
+            case chessEngineEmptyStartingCell:
+                throw new ProtocolException(ProtocolErrors.CHESSENGINE_STARTING_CELL_EMPTY.toString());
+            case chessEngineNotThatColorsTurn:
+                throw new ProtocolException(ProtocolErrors.CHESSENGINE_NOT_THAT_COLORS_TURN.toString());
+            case chessEngineMoveInvalidOrBlockedBySameColor:
+                throw new ProtocolException(ProtocolErrors.CHESSENGINE_MOVE_INVALID_OR_BLOCKED_BY_OWN_COLOR.toString());
+            case chessEngineCannotCastleKingSide:
+                throw new ProtocolException(ProtocolErrors.CHESSENGINE_CANNOT_CASTLE_KING_SIDE.toString());
+            case chessEngineCannotCastleQueenSide:
+                throw new ProtocolException(ProtocolErrors.CHESSENGINE_CANNOT_CASTLE_QUEEN_SIDE.toString());
+            case chessEnginePieceToPromoteNotPawn:
+                throw new ProtocolException(ProtocolErrors.CHESSENGINE_PIECE_TO_PROMOTE_NOT_PAWN.toString());
+            case chessEnginePawnNotMovingIntoEndPos:
+                throw new ProtocolException(ProtocolErrors.CHESSENGINE_PAWN_NOT_MOVING_INTO_END_POS.toString());
+            case chessEngineInvalidNameForPieceToPromote:
+                throw new ProtocolException(ProtocolErrors.CHESSENGINE_INVALID_NAME_FOR_PIECE_TO_PROMOTE_INTO.toString());
+            case chessEngineCreatedNoMove:
+                throw new ProtocolException(ProtocolErrors.CHESSENGINE_CREATED_NO_MOVE.toString());
+            case chessEngineMoveFormatInvalid:
+                throw new ProtocolException(ProtocolErrors.CHESSENGINE_MOVE_FORMAT_INVALID.toString());
+                // Command was not recognizable
+            case unrecognizableCmd :
+                throw new ProtocolException(ProtocolErrors.UNRECOGNIZABLE_CMD.toString());
+                // Does not match expected return
+            default:
+                throw new ProtocolException(ProtocolErrors.UNEXPECTED_RETURN_CMD.toString());
         }
-        else if(receivedCommandByte == chessEngineNotRunning) throw new ProtocolException(ProtocolErrors.CHESSENGINE_NOT_RUNNING.toString());
-        else if(receivedCommandByte == chessEnginePawnCollidedStraight) throw new ProtocolException(ProtocolErrors.CHESSENGINE_PAWN_COLLIDED_STRAIGHT.toString());
-        else if(receivedCommandByte == chessEnginePawnCollidedDiagonalOrEmptySpace) throw new ProtocolException(ProtocolErrors.CHESSENGINE_PAWN_COLLIDED_DIAGONAL_OREMPTYCELLTHERE.toString());
-        else if(receivedCommandByte == chessEngineEmptyStartingCell) throw new ProtocolException(ProtocolErrors.CHESSENGINE_STARTING_CELL_EMPTY.toString());
-        else if(receivedCommandByte == chessEngineNotThatColorsTurn) throw new ProtocolException(ProtocolErrors.CHESSENGINE_NOT_THAT_COLORS_TURN.toString());
-        else if(receivedCommandByte == chessEngineMoveInvalidOrBlockedBySameColor) throw new ProtocolException(ProtocolErrors.CHESSENGINE_MOVE_INVALID_OR_BLOCKED_BY_OWN_COLOR.toString());
-        else if(receivedCommandByte == chessEngineCannotCastleKingSide) throw new ProtocolException(ProtocolErrors.CHESSENGINE_CANNOT_CASTLE_KING_SIDE.toString());
-        else if(receivedCommandByte == chessEngineCannotCastleQueenSide) throw new ProtocolException(ProtocolErrors.CHESSENGINE_CANNOT_CASTLE_QUEEN_SIDE.toString());
-        else if(receivedCommandByte == chessEngineMoveFormatInvalid) throw new ProtocolException(ProtocolErrors.CHESSENGINE_MOVE_FORMAT_INVALID.toString());
-            // Command was not recognizable
-        else if(receivedCommandByte == unrecognizableCmd) throw new ProtocolException(ProtocolErrors.UNRECOGNIZABLE_CMD.toString());
-            // Does not match expected return
-        else throw new ProtocolException(ProtocolErrors.UNEXPECTED_RETURN_CMD.toString());
     }
 
 

@@ -29,16 +29,16 @@ void chessEngineMessageReceived(const ibo1_IRC_API::Protocol& msg){
 ---------------------------------------------------------------------------------------------------------------------------------
 */
 
-void communicationLogic(int bufferSizeData, IRCServer *server, Users *users, ros::Publisher *server_pub){
+void communicationLogic(int bufferSizeData, IRCServer &server, Users &users, ros::Publisher &server_pub){
     vector<BYTE> receivedData;
     vector<BYTE> answer;
 
-    if(bufferSizeData > 0 && bufferSizeData < 100000) receivedData = server->getData(bufferSizeData);
+    if(bufferSizeData > 0 && bufferSizeData < 100000) receivedData = server.getData(bufferSizeData);
     
-    cout << "CLIENT COMMAND is:" << (int)(server->getClientCommand()) << endl;
+    cout << "CLIENT COMMAND is:" << (int)(server.getClientCommand()) << endl;
 
     if(bufferSizeData >= 0){
-        switch (server->getClientCommand())
+        switch (server.getClientCommand())
         {
             case CMD_LOGIN: {
                 IRCServerNodeHelper::cmdUserLogin(receivedData, server, users, answer);
@@ -50,6 +50,13 @@ void communicationLogic(int bufferSizeData, IRCServer *server, Users *users, ros
             
 
             case CMD_GETCHESSENGINES:{
+                cout << "-------Get ChessEngine names-------" << endl;
+                cout << "Data received: ";
+                for(auto &b : receivedData){
+                    cout << (char)(int(b));
+                }
+                cout << endl;
+
                 IRCServerNodeHelper::forwarderChessWrapper(receivedData, CMD_GETCHESSENGINES, server_pub);
 
                 BYTE returnedCommand;
@@ -63,11 +70,27 @@ void communicationLogic(int bufferSizeData, IRCServer *server, Users *users, ros
                     ros::spinOnce();
                 }
 
+
+                cout << "Data to return: ";
+                for(auto &b : answer){
+                    cout << (char)(int(b));
+                }
+                cout << endl;
+                cout << "Command to send back: " << (int)foundExpectedCmd << endl;
+                cout << "-------------------------";
+
                 returnedProtocol.cmd = (BYTE)0x00;
                 break;
             }
             
             case CMD_STARTCHESSENGINE:{
+                cout << "-------Start ChessEngine-------" << endl;
+                cout << "Data received: ";
+                for(auto &b : receivedData){
+                    cout << (char)(int(b));
+                }
+                cout << endl;
+
                 IRCServerNodeHelper::forwarderChessWrapper(receivedData, CMD_STARTCHESSENGINE, server_pub);
 
                 BYTE returnedCommand;
@@ -82,12 +105,22 @@ void communicationLogic(int bufferSizeData, IRCServer *server, Users *users, ros
                     ros::spinOnce();
                 }
 
+                cout << "Command to send back: " << (int)foundExpectedCmd << endl;
+                cout << "-------------------------";
+
                 returnedProtocol.cmd = (BYTE)0x00;
-                server->setClientCommand(returnedCommand);
+                server.setClientCommand(returnedCommand);
                 break;
             }
             
             case CMD_STOPCHESSENGINE:{
+                cout << "-------Stop ChessEngine-------" << endl;
+                cout << "Data received: ";
+                for(auto &b : receivedData){
+                    cout << (char)(int(b));
+                }
+                cout << endl;
+
                 IRCServerNodeHelper::forwarderChessWrapper(receivedData, CMD_STOPCHESSENGINE, server_pub);
 
                 BYTE returnedCommand;
@@ -102,12 +135,22 @@ void communicationLogic(int bufferSizeData, IRCServer *server, Users *users, ros
                     ros::spinOnce();
                 }
 
+                cout << "Command to send back: " << (int)foundExpectedCmd << endl;
+                cout << "-------------------------";
+
                 returnedProtocol.cmd = (BYTE)0x00;
-                server->setClientCommand(returnedCommand);
+                server.setClientCommand(returnedCommand);
                 break;
             }
 
             case CMD_PLAYERMOVE:{
+                cout << "-------Player Move-------" << endl;
+                cout << "Data received: ";
+                for(auto &b : receivedData){
+                    cout << (char)(int(b));
+                }
+                cout << endl;
+
                 IRCServerNodeHelper::forwarderChessWrapper(receivedData, CMD_PLAYERMOVE, server_pub);
 
                 BYTE returnedCommand;
@@ -122,6 +165,9 @@ void communicationLogic(int bufferSizeData, IRCServer *server, Users *users, ros
                 expectedReturn.push_back(ERROR_CMD_MOVEINVALIDORBLOCKEDBYSAMECOLOR);
                 expectedReturn.push_back(ERROR_CMD_CANNOTCASTLEKINGSIDE);
                 expectedReturn.push_back(ERROR_CMD_CANNOTCASTLEQUEENSIDE);
+                expectedReturn.push_back(ERROR_CMD_PIECETOPROMOTEISNOTPAWN);
+                expectedReturn.push_back(ERROR_CMD_PAWNNOTMOVINGTOENDOFBOARD);
+                expectedReturn.push_back(ERROR_CMD_INVALIDPIECENAMETOPROMOTEINTO);
                 expectedReturn.push_back(ERROR_CMD_INVALIDMOVEFORMAT);
 
                 bool foundExpectedCmd = false;
@@ -131,19 +177,30 @@ void communicationLogic(int bufferSizeData, IRCServer *server, Users *users, ros
                     ros::spinOnce();
                 }
 
+                cout << "Command to send back: " << (int)foundExpectedCmd << endl;
+                cout << "-------------------------";
+
                 returnedProtocol.cmd = (BYTE)0x00;
-                server->setClientCommand(returnedCommand);
+                server.setClientCommand(returnedCommand);
                 break;
 
             }
 
             case CMD_CHESSENGINEMOVE:{
+                cout << "-------Chess Engine Move-------" << endl;
+                cout << "Data received: ";
+                for(auto &b : receivedData){
+                    cout << (char)(int(b));
+                }
+                cout << endl;
+
                 IRCServerNodeHelper::forwarderChessWrapper(receivedData, CMD_CHESSENGINEMOVE, server_pub);
 
                 BYTE returnedCommand;
                 vector<BYTE> expectedReturn;
                 expectedReturn.push_back(CMD_CHESSENGINEMOVE);
                 expectedReturn.push_back(ERROR_CMD_NOCHESSENGINERUNNING);
+
                 expectedReturn.push_back(ERROR_CMD_PAWNCOLLIDEDSTRAIGHT);
                 expectedReturn.push_back(ERROR_CMD_PAWNCOLLIDEDDIAGONALOREMPTYCELL);
                 expectedReturn.push_back(ERROR_CMD_STARTINGCELLEMPTY);
@@ -151,6 +208,10 @@ void communicationLogic(int bufferSizeData, IRCServer *server, Users *users, ros
                 expectedReturn.push_back(ERROR_CMD_MOVEINVALIDORBLOCKEDBYSAMECOLOR);
                 expectedReturn.push_back(ERROR_CMD_CANNOTCASTLEKINGSIDE);
                 expectedReturn.push_back(ERROR_CMD_CANNOTCASTLEQUEENSIDE);
+                expectedReturn.push_back(ERROR_CMD_PIECETOPROMOTEISNOTPAWN);
+                expectedReturn.push_back(ERROR_CMD_PAWNNOTMOVINGTOENDOFBOARD);
+                expectedReturn.push_back(ERROR_CMD_INVALIDPIECENAMETOPROMOTEINTO);
+                expectedReturn.push_back(ERROR_CMD_CHESSENGINECREATEDNOMOVE);
                 expectedReturn.push_back(ERROR_CMD_INVALIDMOVEFORMAT);
 
                 bool foundExpectedCmd = false;
@@ -160,8 +221,16 @@ void communicationLogic(int bufferSizeData, IRCServer *server, Users *users, ros
                     ros::spinOnce();
                 }
 
+                cout << "Data to return: ";
+                for(auto &b : answer){
+                    cout << (char)(int(b));
+                }
+                cout << endl;
+                cout << "Command to send back: " << (int)foundExpectedCmd << endl;
+                cout << "-------------------------";
+
                 returnedProtocol.cmd = (BYTE)0x00;
-                server->setClientCommand(returnedCommand);
+                server.setClientCommand(returnedCommand);
                 break;
 
             }
@@ -175,7 +244,7 @@ void communicationLogic(int bufferSizeData, IRCServer *server, Users *users, ros
     
 
 
-    server->sendAnswer(answer);
+    server.sendAnswer(answer);
 
 }
 
@@ -228,7 +297,7 @@ int main (int argc, char **argv){
         }
 
         cout << "Size of to come Data: " << bufferSizeData << endl;
-        communicationLogic(bufferSizeData, &server, &users, &server_pub);
+        communicationLogic(bufferSizeData, server, users, server_pub);
 
         cout << "\n--------------------------------------------------------" << endl;
 

@@ -33,16 +33,11 @@
     }
 
     void SubProcessHandler::write(string const &message){
-        cout << "Memory Address SubProcessor: " << &subProcess << endl;
-        cout << "Asking for child pid: ";
-        cout << (int)subProcess.child_pid << endl;
-        cout << "Message to be printed: " << message << endl;
-
         if(subProcess.child_pid == -1) return;
         subProcess.stdin << message << endl;
     }
 
-    void SubProcessHandler::closeSubProcess(){
+    SubProcessHandler::~SubProcessHandler() {
         if(subProcess.child_pid == -1) return;
         subProcess.send_eof();
 

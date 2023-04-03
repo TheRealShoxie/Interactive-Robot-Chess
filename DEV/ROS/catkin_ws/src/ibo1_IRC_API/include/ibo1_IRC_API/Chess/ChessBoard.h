@@ -39,13 +39,15 @@ class ChessBoard{
         // ////////////// //
         // Class methods. //
         // ////////////// //
-        int pawnMoveValid(Cell startCell, Cell endCell);
-        int castleMoveValid(Cell startCell, Cell endCell);
+        int pawnMoveValid(Cell &startCell, Cell &endCell);
+        int castleMoveValid(Cell &startCell, Cell &endCell);
         void castle(string const &moveKing, string const &moveRook, int &startPos, int &endPos, int &isMoveValidCode);
         int isMoveValid(int startPos, int endPos);
         void getVecPosFromMove(string const &move, int &startPos, int &endPos);
-        int processMove(string const &move);;
+        int processMove(string const &move);
+        int processPromotionMove(string const &move);
         void fromFENString(string const &fenPos);
+        void fenVariableUpdate(int const &startPos, int const &endPos);
         
         
         // //////////////// //

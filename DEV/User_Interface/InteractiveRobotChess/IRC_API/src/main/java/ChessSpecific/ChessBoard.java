@@ -9,6 +9,8 @@ package ChessSpecific;
 import Client.IRCClient;
 import Protocol.ChessEngine;
 
+import java.nio.charset.Charset;
+
 /**
  * ClassName - ClassDescription initial
  * <p>
@@ -35,26 +37,32 @@ public class ChessBoard {
         int whitePawnY;
         int blackY;
         int blackPawnY;
+        int kingPos;
+        int queenPos;
 
         if(this.playerIsWhite){
             whiteY = 7;
             whitePawnY = 6;
             blackY = 0;
             blackPawnY = 1;
+            kingPos = 4;
+            queenPos = 3;
         }
         else{
             whiteY = 0;
             whitePawnY = 1;
             blackY = 7;
             blackPawnY = 6;
+            kingPos = 3;
+            queenPos = 4;
         }
 
         //white pieces
         this.cells[0][whiteY].setChessPiece(new Rook(true));
         this.cells[1][whiteY].setChessPiece(new Knight(true));
         this.cells[2][whiteY].setChessPiece(new Bishop(true));
-        this.cells[3][whiteY].setChessPiece(new Queen(true));
-        this.cells[4][whiteY].setChessPiece(new King(true));
+        this.cells[queenPos][whiteY].setChessPiece(new Queen(true));
+        this.cells[kingPos][whiteY].setChessPiece(new King(true));
         this.cells[5][whiteY].setChessPiece(new Bishop(true));
         this.cells[6][whiteY].setChessPiece(new Knight(true));
         this.cells[7][whiteY].setChessPiece(new Rook(true));
@@ -66,8 +74,8 @@ public class ChessBoard {
         this.cells[0][blackY].setChessPiece(new Rook(false));
         this.cells[1][blackY].setChessPiece(new Knight(false));
         this.cells[2][blackY].setChessPiece(new Bishop(false));
-        this.cells[3][blackY].setChessPiece(new Queen(false));
-        this.cells[4][blackY].setChessPiece(new King(false));
+        this.cells[queenPos][blackY].setChessPiece(new Queen(false));
+        this.cells[kingPos][blackY].setChessPiece(new King(false));
         this.cells[5][blackY].setChessPiece(new Bishop(false));
         this.cells[6][blackY].setChessPiece(new Knight(false));
         this.cells[7][blackY].setChessPiece(new Rook(false));
@@ -76,7 +84,7 @@ public class ChessBoard {
             this.cells[i][blackPawnY].setChessPiece(new Pawn(false));
     }
 
-    private void processMove(Cell oldCell, Cell newCell, StringBuilder sb){
+    private void convertToMoveFormat(Cell oldCell, Cell newCell, StringBuilder sb){
         char[] moveCmd = new char[4];
         if(this.playerIsWhite){
             moveCmd[0] = (char)(oldCell.getXPos()+97);
@@ -92,8 +100,8 @@ public class ChessBoard {
         sb.append(String.valueOf(moveCmd));
     }
 
-    private void processMove(String move){
-        char[] moveCmd = move.toCharArray();
+    private int[] convertToMoveFormat(String move){
+        char[] moveCmd = move.toLowerCase().toCharArray();
 
         int oldCellX = 0;
         int oldCellY = 0;
@@ -102,25 +110,31 @@ public class ChessBoard {
 
         if(this.playerIsWhite){
             oldCellX = (int)moveCmd[0] - 97;
-            oldCellY = 7 - Character.getNumericValue(moveCmd[1]) - 1;
+            oldCellY = 8 - Character.getNumericValue(moveCmd[1]);
             newCellX = (int)moveCmd[2] - 97;
-            newCellY = 7 - Character.getNumericValue(moveCmd[3]) - 1;
+            newCellY = 8 - Character.getNumericValue(moveCmd[3]);
 
         }else{
-            oldCellX = 7 - (int)moveCmd[0] - 97;
+            oldCellX = 7 - ((int)moveCmd[0] - 97);
             oldCellY = Character.getNumericValue(moveCmd[1]) - 1;
-            newCellX = 7 - (int)moveCmd[2] - 97;
+            newCellX = 7 - ((int)moveCmd[2] - 97);
             newCellY = Character.getNumericValue(moveCmd[3]) - 1;
         }
 
-        cells[newCellX][newCellY].setChessPiece(cells[oldCellX][oldCellY].releaseChessPiece());
+        int returnedInt[] = new int[4];
+        returnedInt[0] = oldCellX;
+        returnedInt[1] = oldCellY;
+        returnedInt[2] = newCellX;
+        returnedInt[3] = newCellY;
+
+        return returnedInt;
+
     }
 
     // /////////////////// //
     // Instance variables. //
     // /////////////////// //
     Cell[][] cells;
-    Cell activeCell;
     boolean playerIsWhite;
     ChessEngine chessEngine;
     IRCClient ircClient;
@@ -145,8 +159,7 @@ public class ChessBoard {
                 if( (x+y)%2 != 0) cell = new Cell(false, x, y);
                 else cell = new Cell(true, x, y);
 
-                if(playerIsWhite) cells[x][y] = cell;
-                else cells[x][y] = cell;
+                cells[x][y] = cell;
             }
         }
 
@@ -172,45 +185,50 @@ public class ChessBoard {
         return this.cells[x][y];
     }
 
-    public void onCellClick(int x, int y){
-        Cell clickedCell = cells[x][y];
+    public boolean playerMove(int activeCellX, int activeCellY, int clickedCellX, int clickedCellY){
 
-        //Checking if activeCell not empty and activeCell piece not null and activeCell not clickedCell
-        if(activeCell != null
-                && activeCell.getChessPiece() != null
-                && activeCell.getChessPiece() != clickedCell.getChessPiece()){
+        StringBuilder move = new StringBuilder();
+        convertToMoveFormat(cells[activeCellX][activeCellY], cells[clickedCellX][clickedCellY], move);
 
-            StringBuilder move = new StringBuilder();
-            processMove(activeCell, clickedCell, move);
+        System.out.println("__________________________________");
+        System.out.println("Sending move command: " +move);
+        System.out.println("__________________________________");
 
-            System.err.println("We are sending following move command: " +move.toString());
-
-            // Reset activeCell
-            this.activeCell = null;
-
-            try{
-                chessEngine.makePlayerMove(ircClient, move.toString());
-
-            } catch(Exception e){
-                System.err.println(e.getMessage());
-                return;
-            }
-
-            try{
-                String chessEngineMove = chessEngine.makeChessEngineMove(ircClient);
-                System.err.println(chessEngineMove);
-                processMove(move.toString());
-                processMove(chessEngineMove);
-            } catch(Exception e){
-                System.err.println(e.getMessage());
-                return;
-            }
-
+        try{
+            chessEngine.makePlayerMove(ircClient, move.toString());
+        } catch(Exception e){
+            System.err.println(e.getMessage());
+            return false;
         }
-        //Otherwise
-        else{
-            //Check if clicked cell piece not null then set active cell as clicked cell
-            if(clickedCell.getChessPiece() != null) this.activeCell = clickedCell;
-        }
+
+        ChessPiece tempChessPiece = cells[activeCellX][activeCellY].releaseChessPiece();
+        cells[clickedCellX][clickedCellY].setChessPiece(tempChessPiece );
+
+        return true;
     }
+
+    public int[] chessEngineMove(){
+
+        String chessEngineMoved = "";
+
+        try{
+            chessEngineMoved = chessEngine.makeChessEngineMove(ircClient);
+        } catch(Exception e){
+            System.err.println(e.getMessage());
+            return new int[0];
+        }
+
+        System.out.println("__________________________________");
+        System.out.println("Received move command: " +chessEngineMoved);
+        System.out.println("__________________________________");
+
+        int cellPos[] = convertToMoveFormat(chessEngineMoved);
+
+        ChessPiece tempChessPiece = cells[cellPos[0]][cellPos[1]].releaseChessPiece();
+        cells[cellPos[2]][cellPos[3]].setChessPiece(tempChessPiece );
+
+        return cellPos;
+
+    }
+
 }

@@ -7,12 +7,16 @@
 
 
 //Testing engineOption extractor
-TEST(DataChecker, correctMove1){
-    DataChecker dc;
+TEST(DataChecker, correctMove){
     string move = "e2e1";
 
-    ASSERT_TRUE(dc.isCorrectMove(move));
+    ASSERT_TRUE(DataChecker::isCorrectMoveFormat(move));
+}
 
+TEST(DataChecker, correctPromotion){
+    string move = "e2e1q";
+
+    ASSERT_TRUE(DataChecker::isCorrectMoveFormatPromotion(move));
 }
 
 
