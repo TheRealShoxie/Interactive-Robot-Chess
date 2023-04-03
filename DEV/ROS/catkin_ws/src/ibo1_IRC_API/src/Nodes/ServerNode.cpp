@@ -37,138 +37,142 @@ void communicationLogic(int bufferSizeData, IRCServer *server, Users *users, ros
     
     cout << "CLIENT COMMAND is:" << (int)(server->getClientCommand()) << endl;
 
-    switch (server->getClientCommand())
-    {
-        case CMD_LOGIN: {
-            IRCServerNodeHelper::cmdUserLogin(receivedData, server, users, answer);
-        }
-
-        case CMD_CREATEUSER:
-            // Still needs to be implemented.
-            break;
-        
-
-        case CMD_GETCHESSENGINES:{
-            IRCServerNodeHelper::forwarderChessWrapper(receivedData, CMD_GETCHESSENGINES, server_pub);
-
-            BYTE returnedCommand;
-            vector<BYTE> expectedReturn;
-            expectedReturn.push_back(CMD_GETCHESSENGINES);
-
-            bool foundExpectedCmd = false;
-
-            while(!foundExpectedCmd){
-                foundExpectedCmd = IRCServerNodeHelper::receiverChessWrapper(returnedProtocol, returnedCommand, answer, expectedReturn);
-                ros::spinOnce();
+    if(bufferSizeData >= 0){
+        switch (server->getClientCommand())
+        {
+            case CMD_LOGIN: {
+                IRCServerNodeHelper::cmdUserLogin(receivedData, server, users, answer);
             }
 
-            returnedProtocol.cmd = (BYTE)0x00;
-            break;
-        }
-        
-        case CMD_STARTCHESSENGINE:{
-            IRCServerNodeHelper::forwarderChessWrapper(receivedData, CMD_STARTCHESSENGINE, server_pub);
+            case CMD_CREATEUSER:
+                // Still needs to be implemented.
+                break;
+            
 
-            BYTE returnedCommand;
-            vector<BYTE> expectedReturn;
-            expectedReturn.push_back(CMD_STARTCHESSENGINE);
-            expectedReturn.push_back(ERROR_CMD_CHESSENGINEDOESNTEXIST);
+            case CMD_GETCHESSENGINES:{
+                IRCServerNodeHelper::forwarderChessWrapper(receivedData, CMD_GETCHESSENGINES, server_pub);
 
-            bool foundExpectedCmd = false;
+                BYTE returnedCommand;
+                vector<BYTE> expectedReturn;
+                expectedReturn.push_back(CMD_GETCHESSENGINES);
 
-            while(!foundExpectedCmd){
-                foundExpectedCmd = IRCServerNodeHelper::receiverChessWrapper(returnedProtocol, returnedCommand, answer, expectedReturn);
-                ros::spinOnce();
+                bool foundExpectedCmd = false;
+
+                while(!foundExpectedCmd){
+                    foundExpectedCmd = IRCServerNodeHelper::receiverChessWrapper(returnedProtocol, returnedCommand, answer, expectedReturn);
+                    ros::spinOnce();
+                }
+
+                returnedProtocol.cmd = (BYTE)0x00;
+                break;
+            }
+            
+            case CMD_STARTCHESSENGINE:{
+                IRCServerNodeHelper::forwarderChessWrapper(receivedData, CMD_STARTCHESSENGINE, server_pub);
+
+                BYTE returnedCommand;
+                vector<BYTE> expectedReturn;
+                expectedReturn.push_back(CMD_STARTCHESSENGINE);
+                expectedReturn.push_back(ERROR_CMD_CHESSENGINEDOESNTEXIST);
+
+                bool foundExpectedCmd = false;
+
+                while(!foundExpectedCmd){
+                    foundExpectedCmd = IRCServerNodeHelper::receiverChessWrapper(returnedProtocol, returnedCommand, answer, expectedReturn);
+                    ros::spinOnce();
+                }
+
+                returnedProtocol.cmd = (BYTE)0x00;
+                server->setClientCommand(returnedCommand);
+                break;
+            }
+            
+            case CMD_STOPCHESSENGINE:{
+                IRCServerNodeHelper::forwarderChessWrapper(receivedData, CMD_STOPCHESSENGINE, server_pub);
+
+                BYTE returnedCommand;
+                vector<BYTE> expectedReturn;
+                expectedReturn.push_back(CMD_STOPCHESSENGINE);
+                expectedReturn.push_back(ERROR_CMD_NOCHESSENGINERUNNING);
+
+                bool foundExpectedCmd = false;
+
+                while(!foundExpectedCmd){
+                    foundExpectedCmd = IRCServerNodeHelper::receiverChessWrapper(returnedProtocol, returnedCommand, answer, expectedReturn);
+                    ros::spinOnce();
+                }
+
+                returnedProtocol.cmd = (BYTE)0x00;
+                server->setClientCommand(returnedCommand);
+                break;
             }
 
-            returnedProtocol.cmd = (BYTE)0x00;
-            server->setClientCommand(returnedCommand);
-            break;
-        }
-        
-        case CMD_STOPCHESSENGINE:{
-            IRCServerNodeHelper::forwarderChessWrapper(receivedData, CMD_STOPCHESSENGINE, server_pub);
+            case CMD_PLAYERMOVE:{
+                IRCServerNodeHelper::forwarderChessWrapper(receivedData, CMD_PLAYERMOVE, server_pub);
 
-            BYTE returnedCommand;
-            vector<BYTE> expectedReturn;
-            expectedReturn.push_back(CMD_STOPCHESSENGINE);
-            expectedReturn.push_back(ERROR_CMD_NOCHESSENGINERUNNING);
+                BYTE returnedCommand;
+                vector<BYTE> expectedReturn;
+                expectedReturn.push_back(CMD_PLAYERMOVE);
+                expectedReturn.push_back(ERROR_CMD_NOCHESSENGINERUNNING);
 
-            bool foundExpectedCmd = false;
+                expectedReturn.push_back(ERROR_CMD_PAWNCOLLIDEDSTRAIGHT);
+                expectedReturn.push_back(ERROR_CMD_PAWNCOLLIDEDDIAGONALOREMPTYCELL);
+                expectedReturn.push_back(ERROR_CMD_STARTINGCELLEMPTY);
+                expectedReturn.push_back(ERROR_CMD_NOTTHATCOLORSTURN);
+                expectedReturn.push_back(ERROR_CMD_MOVEINVALIDORBLOCKEDBYSAMECOLOR);
+                expectedReturn.push_back(ERROR_CMD_CANNOTCASTLEKINGSIDE);
+                expectedReturn.push_back(ERROR_CMD_CANNOTCASTLEQUEENSIDE);
+                expectedReturn.push_back(ERROR_CMD_INVALIDMOVEFORMAT);
 
-            while(!foundExpectedCmd){
-                foundExpectedCmd = IRCServerNodeHelper::receiverChessWrapper(returnedProtocol, returnedCommand, answer, expectedReturn);
-                ros::spinOnce();
+                bool foundExpectedCmd = false;
+
+                while(!foundExpectedCmd){
+                    foundExpectedCmd = IRCServerNodeHelper::receiverChessWrapper(returnedProtocol, returnedCommand, answer, expectedReturn);
+                    ros::spinOnce();
+                }
+
+                returnedProtocol.cmd = (BYTE)0x00;
+                server->setClientCommand(returnedCommand);
+                break;
+
             }
 
-            returnedProtocol.cmd = (BYTE)0x00;
-            server->setClientCommand(returnedCommand);
-            break;
-        }
+            case CMD_CHESSENGINEMOVE:{
+                IRCServerNodeHelper::forwarderChessWrapper(receivedData, CMD_CHESSENGINEMOVE, server_pub);
 
-        case CMD_PLAYERMOVE:{
-            IRCServerNodeHelper::forwarderChessWrapper(receivedData, CMD_PLAYERMOVE, server_pub);
+                BYTE returnedCommand;
+                vector<BYTE> expectedReturn;
+                expectedReturn.push_back(CMD_CHESSENGINEMOVE);
+                expectedReturn.push_back(ERROR_CMD_NOCHESSENGINERUNNING);
+                expectedReturn.push_back(ERROR_CMD_PAWNCOLLIDEDSTRAIGHT);
+                expectedReturn.push_back(ERROR_CMD_PAWNCOLLIDEDDIAGONALOREMPTYCELL);
+                expectedReturn.push_back(ERROR_CMD_STARTINGCELLEMPTY);
+                expectedReturn.push_back(ERROR_CMD_NOTTHATCOLORSTURN);
+                expectedReturn.push_back(ERROR_CMD_MOVEINVALIDORBLOCKEDBYSAMECOLOR);
+                expectedReturn.push_back(ERROR_CMD_CANNOTCASTLEKINGSIDE);
+                expectedReturn.push_back(ERROR_CMD_CANNOTCASTLEQUEENSIDE);
+                expectedReturn.push_back(ERROR_CMD_INVALIDMOVEFORMAT);
 
-            BYTE returnedCommand;
-            vector<BYTE> expectedReturn;
-            expectedReturn.push_back(CMD_PLAYERMOVE);
-            expectedReturn.push_back(ERROR_CMD_NOCHESSENGINERUNNING);
+                bool foundExpectedCmd = false;
 
-            expectedReturn.push_back(ERROR_CMD_PAWNCOLLIDEDSTRAIGHT);
-            expectedReturn.push_back(ERROR_CMD_PAWNCOLLIDEDDIAGONALOREMPTYCELL);
-            expectedReturn.push_back(ERROR_CMD_STARTINGCELLEMPTY);
-            expectedReturn.push_back(ERROR_CMD_NOTTHATCOLORSTURN);
-            expectedReturn.push_back(ERROR_CMD_MOVEINVALIDORBLOCKEDBYSAMECOLOR);
-            expectedReturn.push_back(ERROR_CMD_CANNOTCASTLEKINGSIDE);
-            expectedReturn.push_back(ERROR_CMD_CANNOTCASTLEQUEENSIDE);
-            expectedReturn.push_back(ERROR_CMD_INVALIDMOVEFORMAT);
+                while(!foundExpectedCmd){
+                    foundExpectedCmd = IRCServerNodeHelper::receiverChessWrapper(returnedProtocol, returnedCommand, answer, expectedReturn);
+                    ros::spinOnce();
+                }
 
-            bool foundExpectedCmd = false;
+                returnedProtocol.cmd = (BYTE)0x00;
+                server->setClientCommand(returnedCommand);
+                break;
 
-            while(!foundExpectedCmd){
-                foundExpectedCmd = IRCServerNodeHelper::receiverChessWrapper(returnedProtocol, returnedCommand, answer, expectedReturn);
-                ros::spinOnce();
             }
+            
 
-            returnedProtocol.cmd = (BYTE)0x00;
-            server->setClientCommand(returnedCommand);
-            break;
-
+            default:
+                break;
         }
-
-        case CMD_CHESSENGINEMOVE:{
-            IRCServerNodeHelper::forwarderChessWrapper(receivedData, CMD_CHESSENGINEMOVE, server_pub);
-
-            BYTE returnedCommand;
-            vector<BYTE> expectedReturn;
-            expectedReturn.push_back(CMD_CHESSENGINEMOVE);
-            expectedReturn.push_back(ERROR_CMD_NOCHESSENGINERUNNING);
-            expectedReturn.push_back(ERROR_CMD_PAWNCOLLIDEDSTRAIGHT);
-            expectedReturn.push_back(ERROR_CMD_PAWNCOLLIDEDDIAGONALOREMPTYCELL);
-            expectedReturn.push_back(ERROR_CMD_STARTINGCELLEMPTY);
-            expectedReturn.push_back(ERROR_CMD_NOTTHATCOLORSTURN);
-            expectedReturn.push_back(ERROR_CMD_MOVEINVALIDORBLOCKEDBYSAMECOLOR);
-            expectedReturn.push_back(ERROR_CMD_CANNOTCASTLEKINGSIDE);
-            expectedReturn.push_back(ERROR_CMD_CANNOTCASTLEQUEENSIDE);
-            expectedReturn.push_back(ERROR_CMD_INVALIDMOVEFORMAT);
-
-            bool foundExpectedCmd = false;
-
-            while(!foundExpectedCmd){
-                foundExpectedCmd = IRCServerNodeHelper::receiverChessWrapper(returnedProtocol, returnedCommand, answer, expectedReturn);
-                ros::spinOnce();
-            }
-
-            returnedProtocol.cmd = (BYTE)0x00;
-            server->setClientCommand(returnedCommand);
-            break;
-
-        }
-        
-
-        default:
-            break;
     }
+
+    
 
 
     server->sendAnswer(answer);

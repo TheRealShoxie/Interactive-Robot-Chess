@@ -42,9 +42,9 @@ Further the reply will always consist of the command sent to check for the corre
 |   0x06    |   0               |   none            |   0x06            |   0               |   none            |   stop chess Engine.
 |   0x07    |   0               |   none            |   0x07            |   n               |   UTF-8 encoding  |   get chess engine options. Data consists of <code>Unknown</code>
 |   0x08    |   n               |   UTF-8 encoding  |   0x08            |   0               |   none            |   set chess engine option. Data consists of <code>Unknown</code>
-|   0x09    |   n               |   UTF-8 encoding  |   0x09            |   0               |   none            |   set search option. Data consists of <code>Unknown</code>
-|   0x0A    |   n               |   UTF-8 encoding  |   0x0A            |   0               |   none            |   Chess Player move send Command <code>ChessMove</code> example: D2D4, A2A4,.....
-|   0x0B    |   0               |   none            |   0x0B            |   n               |   UTF-8 encoding  |   Chess Chessengine move return Command <code>ChessMove</code> example: D2D4, A2A4,.....
+|   0x09    |   n               |   UTF-8 encoding  |   0x09            |   0               |   none            |   Chess Player move send Command <code>ChessMove</code> example: D2D4, A2A4,.....
+|   0x0A    |   0               |   none            |   0x0A            |   n               |   UTF-8 encoding  |   Chess Chessengine move return Command <code>ChessMove</code> example: D2D4, A2A4,.....
+|   0x0B    |   n               |   UTF-8 encoding  |   0x0B            |   0               |   none            |   set search option. Data consists of <code>Unknown</code>
 
 
 ## Error Codes
@@ -68,3 +68,4 @@ Further the reply will always consist of the command sent to check for the corre
 |   0xF0    |   Cannot Castle King side
 |   0xEF    |   Cannot Castle Queen side
 |   0xEE    |   Move format invalid
+|   0xEE    |   Search option doesn't exist

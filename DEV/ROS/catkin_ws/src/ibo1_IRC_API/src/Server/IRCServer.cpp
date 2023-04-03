@@ -202,6 +202,15 @@ int IRCServer::commandExtraction(){
 
         case CMD_STOPCHESSENGINE:
             clientCommand = CMD_STOPCHESSENGINE;
+            break;
+
+        case CMD_GETCHESSENGINEOPTIONS:
+            clientCommand = CMD_GETCHESSENGINEOPTIONS;
+            break;
+
+        case CMD_SETCHESSENGINEOPTIONS:
+            clientCommand = CMD_SETCHESSENGINEOPTIONS;
+            break;
 
         case CMD_PLAYERMOVE:
             clientCommand = CMD_PLAYERMOVE;
@@ -209,6 +218,10 @@ int IRCServer::commandExtraction(){
 
         case CMD_CHESSENGINEMOVE:
             clientCommand = CMD_CHESSENGINEMOVE;
+            break;
+
+        case CMD_SETSEARCHOPTIONS:
+            clientCommand = CMD_SETSEARCHOPTIONS;
             break;
 
         // Checking if command is to disconnect.
@@ -246,12 +259,6 @@ int IRCServer::sendAnswer(vector<BYTE> replyData){
     replyCmd = clientCommand;
 
     replyData.insert(replyData.begin(), replyCmd);
-
-
-    /*cout << "Following message will be sent: " << endl;
-    for(auto item : replyData){
-        cout << (int)item << endl;
-    }*/
 
     sendBuffer(replyData);
     

@@ -190,7 +190,7 @@ public class ChessBoard {
 
             try{
                 chessEngine.makePlayerMove(ircClient, move.toString());
-                processMove(move.toString());
+
             } catch(Exception e){
                 System.err.println(e.getMessage());
                 return;
@@ -199,6 +199,7 @@ public class ChessBoard {
             try{
                 String chessEngineMove = chessEngine.makeChessEngineMove(ircClient);
                 System.err.println(chessEngineMove);
+                processMove(move.toString());
                 processMove(chessEngineMove);
             } catch(Exception e){
                 System.err.println(e.getMessage());

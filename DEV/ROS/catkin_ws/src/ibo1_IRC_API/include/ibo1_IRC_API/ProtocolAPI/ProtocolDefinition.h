@@ -15,9 +15,9 @@ typedef uint8_t BYTE;
 #define CMD_STOPCHESSENGINE                         (BYTE)0x06
 #define CMD_GETCHESSENGINEOPTIONS                   (BYTE)0x07
 #define CMD_SETCHESSENGINEOPTIONS                   (BYTE)0x08
-#define CMD_SETSEARCHOPTIONS                        (BYTE)0x09
-#define CMD_PLAYERMOVE                              (BYTE)0x0a
-#define CMD_CHESSENGINEMOVE                         (BYTE)0x0b
+#define CMD_PLAYERMOVE                              (BYTE)0x09
+#define CMD_CHESSENGINEMOVE                         (BYTE)0x0a
+#define CMD_SETSEARCHOPTIONS                        (BYTE)0x0b
 
 
 // Error Codes:
@@ -39,3 +39,4 @@ typedef uint8_t BYTE;
 #define ERROR_CMD_CANNOTCASTLEKINGSIDE              (BYTE)0xf0
 #define ERROR_CMD_CANNOTCASTLEQUEENSIDE             (BYTE)0xef
 #define ERROR_CMD_INVALIDMOVEFORMAT                 (BYTE)0xee
+#define ERROR_CMD_SEARCH_OPTION_DOESNT_EXIST        (BYTE)0xed

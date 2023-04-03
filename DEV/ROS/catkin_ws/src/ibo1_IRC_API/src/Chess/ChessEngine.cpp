@@ -110,6 +110,7 @@
         string currentFENPosition = chessBoard->toFENString();
 
         cout << "ChessEngineMove Try make the chessEngine move! "<< endl;
+        cout << "UCIHandler memory address: " << &uciHandler << endl;
 
         // Making the ChessEngine make the move.
         uciHandler.makeMove(currentFENPosition, searchOptions, chessEngineMove);
@@ -126,6 +127,7 @@
     }
 
     void ChessEngine::startNewGame(){
+        cout << "UCIHandler memory address: " << &uciHandler << endl;
         if(!(uciHandler.startNewGame())) throw runtime_error("Couldn't start a fresh game!");
         chessBoard = new ChessBoard();
     }
@@ -135,6 +137,7 @@
     }
 
     string ChessEngine::getChessBoardFENString(){
+
         return chessBoard->toFENString();
     }
 

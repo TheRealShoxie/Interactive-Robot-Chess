@@ -767,6 +767,7 @@
         fenPos += to_string(wholeMoves);
         fenPos.erase(0,1);
 
+
         return fenPos;
     }
 

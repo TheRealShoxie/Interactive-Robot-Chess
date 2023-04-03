@@ -31,9 +31,11 @@ public class ChessEngine {
     final static byte cmdByteStopChessEngine = (byte)0x06;
     final static byte cmdByteGetChessEngineOptions = (byte)0x07;
     final static byte cmdByteSetChessEngineOption = (byte)0x08;
-    final static byte cmdByteSetSearchEngineOption = (byte)0x09;
-    final static byte cmdBytePlayerMove = (byte)0x0A;
-    final static byte cmdByteChessEngineMove = (byte)0x0B;
+    final static byte cmdBytePlayerMove = (byte)0x09;
+    final static byte cmdByteChessEngineMove = (byte)0x0A;
+    final static byte cmdByteSetSearchEngineOption = (byte)0x0B;
+
+
     final static byte chessEngineNotFound = (byte)0xF9;
     final static byte chessEngineNotStarted = (byte)0xF8;
     final static byte chessEngineNotRunning = (byte)0xF7;

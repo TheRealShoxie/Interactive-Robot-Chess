@@ -8,7 +8,7 @@
 
 static string chessEnginesFilePathName = "/home/omar/Uni/Major_Project/Interactive-Robot-Chess/DEV/ROS/catkin_ws/src/ibo1_IRC_API/data/Chess/chessEngines.txt";
 static ibo1_IRC_API::Protocol returnedProtocol;
-static ChessEngine *chessEnginePointer;
+ChessEngine *chessEnginePointer;
 
 /*
 ---------------------------------------------------------------------------------------------------------------------------------

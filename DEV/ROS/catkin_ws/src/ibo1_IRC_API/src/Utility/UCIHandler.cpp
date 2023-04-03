@@ -83,11 +83,18 @@
         string startOfData = "bestmove ";
         bool isFinished = false;
 
+        cout << "I get here inside make Move UCIHandler!" << endl;
+        cout << "Memory address of subProcessHandler: " << &subProcessHandler << endl; 
+
         // Setting currentPosition
         subProcessHandler.write("position fen " + fenPosition);
 
+        cout << "I wrote the position" << endl;
+
         // Searching for answer from the chess engine
         subProcessHandler.write("go " +searchSettings);
+
+        cout << "I wrote go" << endl;
 
         // Keep reading till we find the best move, then extract the move and return that
         while(!isFinished){
