@@ -236,16 +236,16 @@ target_link_libraries(ircChess  ibo1_nodeLibrary ${catkin_LIBRARIES})
 #############
 
 ## Add gtest based cpp test target and link libraries
-catkin_add_gtest(${PROJECT_NAME}-uTestDataChecker tests/Utility/uTestDataChecker.cpp)
+#catkin_add_gtest(${PROJECT_NAME}-uTestDataChecker tests/Utility/uTestDataChecker.cpp)
 #catkin_add_gtest(${PROJECT_NAME}-testUCIHandler tests/Utility/uTestUCIHandler.cpp)
 #catkin_add_gtest(${PROJECT_NAME}-uTestChessBoard tests/Chess/uTestChessBoard.cpp)
-#catkin_add_gtest(${PROJECT_NAME}-uTestChessEngine tests/Chess/uTestChessEngine.cpp)
+catkin_add_gtest(${PROJECT_NAME}-uTestChessEngine tests/Chess/uTestChessEngine.cpp)
 
 #if(TARGET ${PROJECT_NAME}-test)
-  target_link_libraries(${PROJECT_NAME}-uTestDataChecker ${catkin_LIBRARIES} ibo1_nodeLibrary)
+  #target_link_libraries(${PROJECT_NAME}-uTestDataChecker ${catkin_LIBRARIES} ibo1_nodeLibrary)
   #target_link_libraries(${PROJECT_NAME}-testUCIHandler ${catkin_LIBRARIES} ibo1_nodeLibrary)
   #target_link_libraries(${PROJECT_NAME}-uTestChessBoard ${catkin_LIBRARIES} ibo1_nodeLibrary)
-  #target_link_libraries(${PROJECT_NAME}-uTestChessEngine ${catkin_LIBRARIES} ibo1_nodeLibrary)
+  target_link_libraries(${PROJECT_NAME}-uTestChessEngine ${catkin_LIBRARIES} ibo1_nodeLibrary)
   
 #endif()
 

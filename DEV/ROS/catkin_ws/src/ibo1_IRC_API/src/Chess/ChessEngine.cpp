@@ -50,18 +50,30 @@
             break;
 
         case -8:
-            returnByte = ERROR_CMD_PIECETOPROMOTEISNOTPAWN; 
+            returnByte = ERROR_CMD_OWNKINGINCHECK;
             break;
 
         case -9:
-            returnByte = ERROR_CMD_PAWNNOTMOVINGTOENDOFBOARD; 
+            returnByte = ERROR_CMD_OTHERKINGINCHECKMATE;
             break;
 
         case -10:
-            returnByte = ERROR_CMD_INVALIDPIECENAMETOPROMOTEINTO; 
+            returnByte = ERROR_CMD_PAWNNOTALLOWEDNOTPROMOTIONMOVE;
             break;
 
         case -11:
+            returnByte = ERROR_CMD_PIECETOPROMOTEISNOTPAWN; 
+            break;
+
+        case -12:
+            returnByte = ERROR_CMD_PAWNNOTMOVINGTOENDOFBOARD; 
+            break;
+
+        case -13:
+            returnByte = ERROR_CMD_INVALIDPIECENAMETOPROMOTEINTO; 
+            break;
+
+        case -14:
             returnByte = ERROR_CMD_INVALIDMOVEFORMAT; 
             break;
         
@@ -86,10 +98,6 @@
 
     void ChessEngine::getChessEngineOptions(vector<EngineOption> &chessEngineOptions){
         chessEngineOptions = engineOptions;
-    }
-
-    void ChessEngine::setChessEngineOptions(string const &optionName, string const &value){
-        uciHandler.setEngineOptions(optionName, value);
     }
 
     // ///////////////////// //
@@ -131,6 +139,10 @@
             
             getProtocolCode(returnedMoveCode, CMD_CHESSENGINEMOVE, returnedProtocolByte);
         }
+    }
+
+    void ChessEngine::setChessEngineOption(string const &optionName, string const &value){
+        uciHandler.setEngineOption(optionName, value);
     }
 
     void ChessEngine::startNewGame(){

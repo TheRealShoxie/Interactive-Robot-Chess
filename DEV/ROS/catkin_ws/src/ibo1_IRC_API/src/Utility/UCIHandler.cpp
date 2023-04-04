@@ -112,7 +112,7 @@
         }
     }
 
-    void UCIHandler::setEngineOptions(string const &optionName, string const &value){
+    void UCIHandler::setEngineOption(string const &optionName, string const &value){
         subProcessHandler.write("set " +optionName +" value " +value);
     }
 

@@ -207,6 +207,19 @@ TEST(ChessBoard, MoveValidFromFenPosValidBishopMoveDiagonal){
     ASSERT_EQ(returned, expectedReturn);
 }
 
+//Testing chessBoard move from FenPosition valid bishop diagonal taking knight
+TEST(ChessBoard, MoveValidFromFenPosValidBishopMoveDiagonalTakeKnight){
+    string fenPos = "rn1qkbnr/p1pp1pp1/2P1p1b1/P6p/3P4/1p4P1/1P2PP1P/RNBQKBNR b KQkq - 0 10";
+    ChessBoard chessBoard = ChessBoard(fenPos);
+
+    string movement = "G6B1";
+    int expectedReturn = 0;
+
+    int returned = chessBoard.move(movement);
+
+    ASSERT_EQ(returned, expectedReturn);
+}
+
 //Testing chessBoard move from FenPosition invalid rook move up
 TEST(ChessBoard, MoveValidFromFenPosInValidRookMoveUp){
     string fenPos = "rnbqkbnr/p1pp1ppp/4p3/P7/8/1p1P4/1PP1PPPP/RNBQKBNR w KQkq - 0 5";
@@ -219,6 +232,7 @@ TEST(ChessBoard, MoveValidFromFenPosInValidRookMoveUp){
 
     ASSERT_EQ(returned, expectedReturn);
 }
+
 //Testing chessBoard move from FenPosition invalid rook2 move up
 TEST(ChessBoard, MoveValidFromFenPosInValidRookMoveUp2){
     string fenPos = "rnbqkbnr/p1pp1ppp/4p3/P7/8/1p1P4/1PP1PPPP/RNBQKBNR w KQkq - 0 5";
@@ -312,6 +326,262 @@ TEST(ChessBoard, CastleWhiteKingSideFromFenPositionInValidMissingCastleRights){
 
     ASSERT_EQ(returned, expectedReturn);
 }
+
+//Testing chessBoard promotion from fenpos allowed into a queen
+TEST(ChessBoard, PawnPromotionFromFenPositionValidIntoQueen){
+    string fenPosStart = "1k2rbnr/p2Ppppp/Pp1p4/2p2b2/8/4P3/2PP1PPP/RNBQKBNR w KQ - 1 11";
+    int expectedReturn = 0;
+    ChessBoard chessBoard = ChessBoard(fenPosStart);
+
+    string movement = "d7d8q";
+
+    int returned = chessBoard.move(movement);
+
+    ASSERT_EQ(returned, expectedReturn);
+}
+
+//Testing chessBoard promotion from fenpos not allowed blocked by piece
+TEST(ChessBoard, PawnPromotionFromFenPositionInValidBlockedByPiece){
+    string fenPosStart = "1k1r1bnr/p2Ppp1p/Pp1p2p1/2p2b2/8/4P3/2PP1PPP/RNBQKBNR w KQ - 0 11";
+    int expectedReturn = -1;
+    ChessBoard chessBoard = ChessBoard(fenPosStart);
+
+    string movement = "d7d8q";
+
+    int returned = chessBoard.move(movement);
+
+
+    ASSERT_EQ(returned, expectedReturn);
+}
+
+//Testing chessBoard promotion from fenpos allowed into Knight
+TEST(ChessBoard, PawnPromotionFromFenPositionValidIntoKnight){
+    string fenPosStart = "1k2rbnr/p2Ppppp/Pp1p4/2p2b2/8/4P3/2PP1PPP/RNBQKBNR w KQ - 1 11";
+    int expectedReturn = 0;
+    ChessBoard chessBoard = ChessBoard(fenPosStart);
+
+    string movement = "d7d8n";
+
+    int returned = chessBoard.move(movement);
+
+
+    ASSERT_EQ(returned, expectedReturn);
+}
+
+//Testing chessBoard promotion from fenpos allowed into Rook
+TEST(ChessBoard, PawnPromotionFromFenPositionValidIntoRook){
+    string fenPosStart = "1k2rbnr/p2Ppppp/Pp1p4/2p2b2/8/4P3/2PP1PPP/RNBQKBNR w KQ - 1 11";
+    int expectedReturn = 0;
+    ChessBoard chessBoard = ChessBoard(fenPosStart);
+
+    string movement = "d7d8r";
+
+    int returned = chessBoard.move(movement);
+
+    ASSERT_EQ(returned, expectedReturn);
+}
+
+//Testing chessBoard promotion from fenpos allowed into Bishop
+TEST(ChessBoard, PawnPromotionFromFenPositionValidIntoBishop){
+    string fenPosStart = "1k2rbnr/p2Ppppp/Pp1p4/2p2b2/8/4P3/2PP1PPP/RNBQKBNR w KQ - 1 11";
+    int expectedReturn = 0;
+    ChessBoard chessBoard = ChessBoard(fenPosStart);
+
+    string movement = "d7d8b";
+
+    int returned = chessBoard.move(movement);
+
+    ASSERT_EQ(returned, expectedReturn);
+}
+
+//Testing chessBoard promotion from fenpos not allowed invalid Piece
+TEST(ChessBoard, PawnPromotionFromFenPositionInValidIntoNotAllowedPiece){
+    string fenPosStart = "1k2rbnr/p2Ppppp/Pp1p4/2p2b2/8/4P3/2PP1PPP/RNBQKBNR w KQ - 1 11";
+    int expectedReturn = -12;
+    ChessBoard chessBoard = ChessBoard(fenPosStart);
+
+    string movement = "d7d8k";
+
+    int returned = chessBoard.move(movement);
+
+
+    ASSERT_EQ(returned, expectedReturn);
+}
+
+//Testing chessBoard promotion from fenpos not allowed not end Position
+TEST(ChessBoard, PawnPromotionFromFenPositionInValidNotEndPosition){
+    string fenPosStart = "1k2rbnr/p2Ppppp/Pp1p4/2p2b2/8/4P3/2PP1PPP/RNBQKBNR w KQ - 1 11";
+    int expectedReturn = -11;
+    ChessBoard chessBoard = ChessBoard(fenPosStart);
+
+    string movement = "c2c3n";
+
+    int returned = chessBoard.move(movement);
+
+    ASSERT_EQ(returned, expectedReturn);
+}
+
+//Testing chessBoard promotion from fenpos not allowed not a pawn
+TEST(ChessBoard, PromotionFromFenPositionInvalidNotPawnPiece){
+    string fenPosStart = "1k2rbnr/p1RPp1pp/Pp3p2/5b2/3p4/4P3/2PP1PPP/1NBQKBNR w K - 0 14";
+    int expectedReturn = -10;
+    ChessBoard chessBoard = ChessBoard(fenPosStart);
+
+    string movement = "c7c8n";
+
+    int returned = chessBoard.move(movement);
+
+    ASSERT_EQ(returned, expectedReturn);
+}
+
+//Testing chessBoard promotion from fenpos allowed black pawn into a queen
+TEST(ChessBoard, BlackPawnPromotionFromFenPositionValidIntoQueen){
+    string fenPosStart = "1k2rbnr/p1RPp1pp/Pp3p2/8/4P1b1/B1N2P2/2pP2PP/3QKBNR b K - 3 17";
+    int expectedReturn = 0;
+    ChessBoard chessBoard = ChessBoard(fenPosStart);
+
+    string movement = "c2c1q";
+
+    int returned = chessBoard.move(movement);
+
+    ASSERT_EQ(returned, expectedReturn);
+}
+
+//Testing chessBoard promotion from fenpos allowed black pawn into a queen while taking
+TEST(ChessBoard, BlackPawnPromotionFromFenPositionTakeValidIntoQueen){
+    string fenPosStart = "1k2rbnr/p1RPp1pp/Pp3p2/8/4P1b1/B1N2P2/2pP2PP/3QKBNR b K - 3 17";
+    int expectedReturn = 0;
+    ChessBoard chessBoard = ChessBoard(fenPosStart);
+
+    string movement = "c2d1q";
+
+    int returned = chessBoard.move(movement);
+
+    ASSERT_EQ(returned, expectedReturn);
+}
+
+//Testing chessBoard promotion from fenpos not black allowed blocked by piece
+TEST(ChessBoard, BlackPawnPromotionFromFenPositionInValidBlockedByPiece){
+    string fenPosStart = "1k2rbnr/p1RPp1pp/Pp3p2/8/4PPb1/2N5/2pP2PP/2BQKBNR b K - 0 17";
+    int expectedReturn = -1;
+    ChessBoard chessBoard = ChessBoard(fenPosStart);
+
+    string movement = "c2c1q";
+
+    int returned = chessBoard.move(movement);
+
+
+    ASSERT_EQ(returned, expectedReturn);
+}
+
+//Testing chessBoard promotion from fenpos black pawn allowed into Knight
+TEST(ChessBoard, BlackPawnPromotionFromFenPositionValidIntoKnight){
+    string fenPosStart = "1k2rbnr/p1RPp1pp/Pp3p2/8/4P1b1/B1N2P2/2pP2PP/3QKBNR b K - 3 17";
+    int expectedReturn = 0;
+    ChessBoard chessBoard = ChessBoard(fenPosStart);
+
+    string movement = "c2c1n";
+
+    int returned = chessBoard.move(movement);
+
+
+    ASSERT_EQ(returned, expectedReturn);
+}
+
+//Testing chessBoard promotion from fenpos black pawn allowed into Rook
+TEST(ChessBoard, BlackPawnPromotionFromFenPositionValidIntoRook){
+    string fenPosStart = "1k2rbnr/p1RPp1pp/Pp3p2/8/4P1b1/B1N2P2/2pP2PP/3QKBNR b K - 3 17";
+    int expectedReturn = 0;
+    ChessBoard chessBoard = ChessBoard(fenPosStart);
+
+    string movement = "c2c1r";
+
+    int returned = chessBoard.move(movement);
+
+    ASSERT_EQ(returned, expectedReturn);
+}
+
+//Testing chessBoard promotion from fenpos black pawn allowed into Bishop
+TEST(ChessBoard, BlackPawnPromotionFromFenPositionValidIntoBishop){
+    string fenPosStart = "1k2rbnr/p1RPp1pp/Pp3p2/8/4P1b1/B1N2P2/2pP2PP/3QKBNR b K - 3 17";
+    int expectedReturn = 0;
+    ChessBoard chessBoard = ChessBoard(fenPosStart);
+
+    string movement = "c2c1b";
+
+    int returned = chessBoard.move(movement);
+
+    ASSERT_EQ(returned, expectedReturn);
+}
+
+//Testing chessBoard promotion from fenpos black pawn not allowed invalid Piece
+TEST(ChessBoard, BlackPawnPromotionFromFenPositionInValidIntoNotAllowedPiece){
+    string fenPosStart = "1k2rbnr/p1RPp1pp/Pp3p2/8/4P1b1/B1N2P2/2pP2PP/3QKBNR b K - 3 17";
+    int expectedReturn = -12;
+    ChessBoard chessBoard = ChessBoard(fenPosStart);
+
+    string movement = "c2c1k";
+
+    int returned = chessBoard.move(movement);
+
+
+    ASSERT_EQ(returned, expectedReturn);
+}
+
+//Testing chessBoard promotion from fenpos black pawn not allowed not end Position
+TEST(ChessBoard, BlackPawnPromotionFromFenPositionInValidNotEndPosition){
+    string fenPosStart = "1k2rbnr/p1RPp1pp/Pp3p2/8/4P1b1/B1N2P2/2pP2PP/3QKBNR b K - 3 17";
+    int expectedReturn = -11;
+    ChessBoard chessBoard = ChessBoard(fenPosStart);
+
+    string movement = "b6b5n";
+
+    int returned = chessBoard.move(movement);
+
+    ASSERT_EQ(returned, expectedReturn);
+}
+
+//Testing chessBoard promotion from fenpos black pawn not allowed not a pawn
+TEST(ChessBoard, BlackPromotionFromFenPositionInvalidNotPawnPiece){
+    string fenPosStart = "1k2rbnr/p1RPp1pp/Pp3p2/8/4P1b1/B1N2P2/2pP2PP/3QKBNR b K - 3 17";
+    int expectedReturn = -10;
+    ChessBoard chessBoard = ChessBoard(fenPosStart);
+
+    string movement = "g4h3n";
+
+    int returned = chessBoard.move(movement);
+
+    ASSERT_EQ(returned, expectedReturn);
+}
+
+//Testing chessBoard white pawn move not allowed not a promotion move
+TEST(ChessBoard, PawnMoveFromFenPositionInvalidNotPromotionMove){
+    string fenPosStart = "1k2rbnr/p1RPp2p/Pp3pp1/8/4PP2/2N4b/1BpP2PP/3QKBNR w K - 0 19";
+    int expectedReturn = -9;
+    ChessBoard chessBoard = ChessBoard(fenPosStart);
+
+    string movement = "d7d8";
+
+    int returned = chessBoard.move(movement);
+
+    ASSERT_EQ(returned, expectedReturn);
+}
+
+
+//Testing chessBoard white pawn move not allowed not a promotion move
+TEST(ChessBoard, WhiteKingCheckStartPos){
+    string fenPosStart = "rnbqk1nr/pp3ppp/2p1p3/Q2p2B1/8/N1PPb1P1/PP2PP1P/R3KBNR w KQkq - 0 8";
+    int expectedReturn = 0;
+    ChessBoard chessBoard = ChessBoard(fenPosStart);
+
+    int startPos = 60;
+    int endPos = 59;
+    
+    int returned = chessBoard.kingCheck(startPos, endPos, true);
+
+    ASSERT_EQ(returned, expectedReturn);
+}
+
 
 int main(int argc, char **argv){
     testing::InitGoogleTest(&argc, argv);

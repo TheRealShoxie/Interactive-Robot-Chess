@@ -30,6 +30,7 @@
     void SubProcessHandler::getLine(string &returnedLine){
         if(subProcess.child_pid == -1) return;
         getline(subProcess.stdout, returnedLine);
+        //if(returnedLine.length() > 0) cout << returnedLine << endl;
     }
 
     void SubProcessHandler::write(string const &message){

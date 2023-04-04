@@ -49,11 +49,14 @@ public class ChessEngine {
     final static byte chessEngineMoveInvalidOrBlockedBySameColor = (byte)0xF0;
     final static byte chessEngineCannotCastleKingSide = (byte)0xEF;
     final static byte chessEngineCannotCastleQueenSide = (byte)0xEE;
-    final static byte chessEnginePieceToPromoteNotPawn = (byte)0xED;
-    final static byte chessEnginePawnNotMovingIntoEndPos = (byte)0xEC;
-    final static byte chessEngineInvalidNameForPieceToPromote = (byte)0xEB;
-    final static byte chessEngineCreatedNoMove = (byte)0xEA;
-    final static byte chessEngineMoveFormatInvalid = (byte)0xE9;
+    final static byte chessEngineOwnKingInCheck = (byte)0xED;
+    final static byte chessEngineOtherKingInCheckMate = (byte)0xEC;
+    final static byte chessEnginePawnNotAllowedIntoPositionNoPromotionMove = (byte)0xEB;
+    final static byte chessEnginePieceToPromoteNotPawn = (byte)0xEA;
+    final static byte chessEnginePawnNotMovingIntoEndPos = (byte)0xE9;
+    final static byte chessEngineInvalidNameForPieceToPromoteInto = (byte)0xE8;
+    final static byte chessEngineCreatedNoMove = (byte)0xE7;
+    final static byte chessEngineMoveFormatInvalid = (byte)0xE6;
     final static byte unrecognizableCmd = (byte)0xFE;
 
     // //////////////// //
@@ -202,31 +205,53 @@ public class ChessEngine {
                 break;
             case chessEngineNotRunning:
                 throw new ProtocolException(ProtocolErrors.CHESSENGINE_NOT_RUNNING.toString());
+
             case chessEnginePawnCollidedStraight:
                 throw new ProtocolException(ProtocolErrors.CHESSENGINE_PAWN_COLLIDED_STRAIGHT.toString());
+
             case chessEnginePawnCollidedDiagonalOrEmptySpace:
                 throw new ProtocolException(ProtocolErrors.CHESSENGINE_PAWN_COLLIDED_DIAGONAL_OREMPTYCELLTHERE.toString());
+
             case chessEngineEmptyStartingCell:
                 throw new ProtocolException(ProtocolErrors.CHESSENGINE_STARTING_CELL_EMPTY.toString());
+
             case chessEngineNotThatColorsTurn:
                 throw new ProtocolException(ProtocolErrors.CHESSENGINE_NOT_THAT_COLORS_TURN.toString());
+
             case chessEngineMoveInvalidOrBlockedBySameColor:
                 throw new ProtocolException(ProtocolErrors.CHESSENGINE_MOVE_INVALID_OR_BLOCKED_BY_OWN_COLOR.toString());
+
             case chessEngineCannotCastleKingSide:
                 throw new ProtocolException(ProtocolErrors.CHESSENGINE_CANNOT_CASTLE_KING_SIDE.toString());
+
             case chessEngineCannotCastleQueenSide:
                 throw new ProtocolException(ProtocolErrors.CHESSENGINE_CANNOT_CASTLE_QUEEN_SIDE.toString());
+
+            case chessEngineOwnKingInCheck:
+                throw new ProtocolException(ProtocolErrors.CHESSENGINE_OWN_KING_IN_CHECK.toString());
+
+            case chessEngineOtherKingInCheckMate:
+                throw new java.net.ProtocolException(ProtocolErrors.CHESSENGINE_OTHER_KING_IN_CHECK_MATE.toString());
+
+            case chessEnginePawnNotAllowedIntoPositionNoPromotionMove:
+                throw new ProtocolException(ProtocolErrors.CHESSENGINE_PAWN_NOT_ALLOWED_NOT_PROMOTION_MOVE.toString());
+
             case chessEnginePieceToPromoteNotPawn:
                 throw new ProtocolException(ProtocolErrors.CHESSENGINE_PIECE_TO_PROMOTE_NOT_PAWN.toString());
+
             case chessEnginePawnNotMovingIntoEndPos:
                 throw new ProtocolException(ProtocolErrors.CHESSENGINE_PAWN_NOT_MOVING_INTO_END_POS.toString());
-            case chessEngineInvalidNameForPieceToPromote:
+
+            case chessEngineInvalidNameForPieceToPromoteInto:
                 throw new ProtocolException(ProtocolErrors.CHESSENGINE_INVALID_NAME_FOR_PIECE_TO_PROMOTE_INTO.toString());
+
             case chessEngineMoveFormatInvalid:
                 throw new ProtocolException(ProtocolErrors.CHESSENGINE_MOVE_FORMAT_INVALID.toString());
+
                 // Command was not recognizable
             case unrecognizableCmd :
                 throw new ProtocolException(ProtocolErrors.UNRECOGNIZABLE_CMD.toString());
+
                 // Does not match expected return
             default:
                 throw new ProtocolException(ProtocolErrors.UNEXPECTED_RETURN_CMD.toString());
@@ -258,35 +283,59 @@ public class ChessEngine {
         switch (receivedCommandByte){
             case cmdByteChessEngineMove:
                 return new String(receivedProtocol.getData(), StandardCharsets.UTF_8);
+
             case chessEngineNotRunning:
                 throw new ProtocolException(ProtocolErrors.CHESSENGINE_NOT_RUNNING.toString());
+
             case chessEnginePawnCollidedStraight:
                 throw new ProtocolException(ProtocolErrors.CHESSENGINE_PAWN_COLLIDED_STRAIGHT.toString());
+
             case chessEnginePawnCollidedDiagonalOrEmptySpace:
                 throw new ProtocolException(ProtocolErrors.CHESSENGINE_PAWN_COLLIDED_DIAGONAL_OREMPTYCELLTHERE.toString());
+
             case chessEngineEmptyStartingCell:
                 throw new ProtocolException(ProtocolErrors.CHESSENGINE_STARTING_CELL_EMPTY.toString());
+
             case chessEngineNotThatColorsTurn:
                 throw new ProtocolException(ProtocolErrors.CHESSENGINE_NOT_THAT_COLORS_TURN.toString());
+
             case chessEngineMoveInvalidOrBlockedBySameColor:
                 throw new ProtocolException(ProtocolErrors.CHESSENGINE_MOVE_INVALID_OR_BLOCKED_BY_OWN_COLOR.toString());
+
             case chessEngineCannotCastleKingSide:
                 throw new ProtocolException(ProtocolErrors.CHESSENGINE_CANNOT_CASTLE_KING_SIDE.toString());
+
             case chessEngineCannotCastleQueenSide:
                 throw new ProtocolException(ProtocolErrors.CHESSENGINE_CANNOT_CASTLE_QUEEN_SIDE.toString());
+
+            case chessEngineOwnKingInCheck:
+                throw new ProtocolException(ProtocolErrors.CHESSENGINE_OWN_KING_IN_CHECK.toString());
+
+            case chessEngineOtherKingInCheckMate:
+                throw new java.net.ProtocolException(ProtocolErrors.CHESSENGINE_OTHER_KING_IN_CHECK_MATE.toString());
+
+            case chessEnginePawnNotAllowedIntoPositionNoPromotionMove:
+                throw new ProtocolException(ProtocolErrors.CHESSENGINE_PAWN_NOT_ALLOWED_NOT_PROMOTION_MOVE.toString());
+
             case chessEnginePieceToPromoteNotPawn:
                 throw new ProtocolException(ProtocolErrors.CHESSENGINE_PIECE_TO_PROMOTE_NOT_PAWN.toString());
+
             case chessEnginePawnNotMovingIntoEndPos:
                 throw new ProtocolException(ProtocolErrors.CHESSENGINE_PAWN_NOT_MOVING_INTO_END_POS.toString());
-            case chessEngineInvalidNameForPieceToPromote:
+
+            case chessEngineInvalidNameForPieceToPromoteInto:
                 throw new ProtocolException(ProtocolErrors.CHESSENGINE_INVALID_NAME_FOR_PIECE_TO_PROMOTE_INTO.toString());
+
             case chessEngineCreatedNoMove:
                 throw new ProtocolException(ProtocolErrors.CHESSENGINE_CREATED_NO_MOVE.toString());
+
             case chessEngineMoveFormatInvalid:
                 throw new ProtocolException(ProtocolErrors.CHESSENGINE_MOVE_FORMAT_INVALID.toString());
+
                 // Command was not recognizable
             case unrecognizableCmd :
                 throw new ProtocolException(ProtocolErrors.UNRECOGNIZABLE_CMD.toString());
+
                 // Does not match expected return
             default:
                 throw new ProtocolException(ProtocolErrors.UNEXPECTED_RETURN_CMD.toString());

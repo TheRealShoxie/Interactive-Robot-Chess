@@ -26,6 +26,8 @@ class ChessBoard{
         string toFENString();
         string toString();
 
+        int kingCheck(int startPos, int endPos, bool colorToCheckWhite,  bool checkForCheckMate, vector<Cell> chessBoardToCopy);
+
         // ////////////////////// //
         // Read/Write properties. //
         // ////////////////////// //
@@ -39,8 +41,9 @@ class ChessBoard{
         // ////////////// //
         // Class methods. //
         // ////////////// //
-        int pawnMoveValid(Cell &startCell, Cell &endCell);
+        int pawnMoveValid(Cell &startCell, Cell &endCell, vector<Cell> &chessBoardToCheck);
         int castleMoveValid(Cell &startCell, Cell &endCell);
+        //int kingCheck(int startPos, int endPos, bool colorToCheckWhite,  bool checkForCheckMate);
         void castle(string const &moveKing, string const &moveRook, int &startPos, int &endPos, int &isMoveValidCode);
         int isMoveValid(int startPos, int endPos);
         void getVecPosFromMove(string const &move, int &startPos, int &endPos);
@@ -69,6 +72,8 @@ class ChessBoard{
             * [0][0] = black queen side
         */
         bool castleRights[2][2];
+        bool whiteKingInCheck;
+        bool blackKingInCheck;
 
     
 };

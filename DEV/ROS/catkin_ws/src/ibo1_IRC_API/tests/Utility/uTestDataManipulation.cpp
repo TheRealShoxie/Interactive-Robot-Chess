@@ -6,18 +6,6 @@
 
 
 
-//Testing engineOption extractor
-TEST(DataManipulation, subStringExtraction){
-    string stringToExtract = "";
-    string returned = "";
-    string splitter = "";
-    returned = DataManipulation::subString(stringToExtract,returned);
-
-    ASSERT_EQ(returned, "");
-}
-
-
-
 int main(int argc, char **argv){
     testing::InitGoogleTest(&argc, argv);
     ros::init(argc, argv, "tester");

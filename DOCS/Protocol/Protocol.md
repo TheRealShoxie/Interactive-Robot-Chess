@@ -69,8 +69,11 @@ Further the reply will always consist of the command sent to check for the corre
 |   0xF0    |   Move Invalid or blocked by own color
 |   0xEF    |   Cannot Castle King side
 |   0xEE    |   Cannot Castle Queen side
-|   0xED    |   Piece to promote is not a pawn
-|   0xEC    |   Pawn is not moving into endPosition and cannot be used for promotion
-|   0xEB    |   Invalid name for piece to promote into
-|   0xEA    |   Chess engine created no move
-|   0xE9    |   Move format invalid
+|   0xED    |   Own King in Check
+|   0xEC    |   Other King in CheckMate
+|   0xEB    |   Pawn not allowed there because it needs to be promotion move
+|   0xEA    |   Piece to promote is not a pawn
+|   0xE9    |   Pawn not moving into endPos for promotion move
+|   0xE8    |   Invalid Piece to promote into
+|   0xE7    |   Chess Engine created no move
+|   0xE6    |   Invalid Move format

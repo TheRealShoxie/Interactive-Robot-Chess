@@ -165,6 +165,9 @@ void communicationLogic(int bufferSizeData, IRCServer &server, Users &users, ros
                 expectedReturn.push_back(ERROR_CMD_MOVEINVALIDORBLOCKEDBYSAMECOLOR);
                 expectedReturn.push_back(ERROR_CMD_CANNOTCASTLEKINGSIDE);
                 expectedReturn.push_back(ERROR_CMD_CANNOTCASTLEQUEENSIDE);
+                expectedReturn.push_back(ERROR_CMD_OWNKINGINCHECK);
+                expectedReturn.push_back(ERROR_CMD_OTHERKINGINCHECKMATE);
+                expectedReturn.push_back(ERROR_CMD_PAWNNOTALLOWEDNOTPROMOTIONMOVE);
                 expectedReturn.push_back(ERROR_CMD_PIECETOPROMOTEISNOTPAWN);
                 expectedReturn.push_back(ERROR_CMD_PAWNNOTMOVINGTOENDOFBOARD);
                 expectedReturn.push_back(ERROR_CMD_INVALIDPIECENAMETOPROMOTEINTO);
@@ -208,6 +211,9 @@ void communicationLogic(int bufferSizeData, IRCServer &server, Users &users, ros
                 expectedReturn.push_back(ERROR_CMD_MOVEINVALIDORBLOCKEDBYSAMECOLOR);
                 expectedReturn.push_back(ERROR_CMD_CANNOTCASTLEKINGSIDE);
                 expectedReturn.push_back(ERROR_CMD_CANNOTCASTLEQUEENSIDE);
+                expectedReturn.push_back(ERROR_CMD_OWNKINGINCHECK);
+                expectedReturn.push_back(ERROR_CMD_OTHERKINGINCHECKMATE);
+                expectedReturn.push_back(ERROR_CMD_PAWNNOTALLOWEDNOTPROMOTIONMOVE);
                 expectedReturn.push_back(ERROR_CMD_PIECETOPROMOTEISNOTPAWN);
                 expectedReturn.push_back(ERROR_CMD_PAWNNOTMOVINGTOENDOFBOARD);
                 expectedReturn.push_back(ERROR_CMD_INVALIDPIECENAMETOPROMOTEINTO);

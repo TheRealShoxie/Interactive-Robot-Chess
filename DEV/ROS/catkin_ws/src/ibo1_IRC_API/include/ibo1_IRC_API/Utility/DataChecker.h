@@ -34,7 +34,7 @@ class DataChecker{
 
         static bool isCorrectMoveFormatPromotion(string const &moveString){
 
-            if(moveString.length() > 4) return false;
+            if(moveString.length() > 5) return false;
             
             regex r("[a-h][1-8][a-h][1-8][a-z]");
             smatch match;

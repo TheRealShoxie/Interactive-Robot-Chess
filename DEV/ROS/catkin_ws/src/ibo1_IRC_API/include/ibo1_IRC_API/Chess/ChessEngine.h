@@ -39,9 +39,11 @@ class ChessEngine{
         // //////// //
         void playerMove(BYTE &returnedProtocolByte, string &move);
         void chessEngineMove(BYTE &returnedProtocolByte, string &chessEngineMove);
+        void setChessEngineOption(string const &optionName, string const &value);
         void startNewGame();
         string getChessBoardFENString();
         string getChessBoardString();
+        
 
 
         ChessEngine& operator= (ChessEngine&&){ return *this; }
@@ -52,7 +54,6 @@ class ChessEngine{
         void setSearchOptions(string const &setSearchOptions);
         void getSearchOptions(string &getSearchOptions);
         void getChessEngineOptions(vector<EngineOption> &engineOptions);
-        void setChessEngineOptions(string const &optionName, string const &value);
 
         // ///////////////////// //
         // Read-only properties. //

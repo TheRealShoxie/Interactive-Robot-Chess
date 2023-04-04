@@ -30,7 +30,7 @@ class UCIHandler{
         bool startUCI(vector<EngineOption> &engineOptions);
 
         void makeMove(string const &fenPosition, string const &searchSettings, string &chessEngineMove);
-        void setEngineOptions(string const &optionName, string const &value);
+        void setEngineOption(string const &optionName, string const &value);
         bool startNewGame();
         ~UCIHandler();
 

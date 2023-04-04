@@ -41,7 +41,7 @@ class Knight: public ChessPiece{
             moveSets.push_back(KNIGHT_DOWN_RIGHT);
 
             moveSets.push_back(KNIGHT_LEFT_UP);
-            moveSets.push_back(KNIGHT_RIGT_UP);
+            moveSets.push_back(KNIGHT_RIGHT_UP);
             moveSets.push_back(KNIGHT_LEFT_DOWN);
             moveSets.push_back(KNIGHT_RIGHT_DOWN);
 

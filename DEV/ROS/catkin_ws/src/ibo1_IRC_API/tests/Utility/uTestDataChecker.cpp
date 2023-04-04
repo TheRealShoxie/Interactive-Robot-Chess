@@ -6,17 +6,32 @@
 
 
 
-//Testing engineOption extractor
-TEST(DataChecker, correctMove){
+//Testing if correct move format
+TEST(DataChecker, correctMoveFormat){
     string move = "e2e1";
 
     ASSERT_TRUE(DataChecker::isCorrectMoveFormat(move));
 }
 
-TEST(DataChecker, correctPromotion){
+// Checking if incorrect move format
+TEST(DataChecker, inCorrectMoveFormat){
+    string move = "h2j1";
+
+    ASSERT_FALSE(DataChecker::isCorrectMoveFormat(move));
+}
+
+// Test if correct Promotion format
+TEST(DataChecker, correctPromotionFormat){
     string move = "e2e1q";
 
     ASSERT_TRUE(DataChecker::isCorrectMoveFormatPromotion(move));
+}
+
+// Test if incorrect Promotion format
+TEST(DataChecker, inCorrectPromotionFormat){
+    string move = "e2e1";
+
+    ASSERT_FALSE(DataChecker::isCorrectMoveFormatPromotion(move));
 }
 
 

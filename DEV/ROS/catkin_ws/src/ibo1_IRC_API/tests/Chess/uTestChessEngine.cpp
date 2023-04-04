@@ -11,9 +11,10 @@
 
 
 
-//Testing chessEngine Move return
+// //Testing chessEngine Move return
 TEST(Chess, chessEngineCreation){
     ChessEngine* chessEngine = new ChessEngine("/home/omar/Uni/Major_Project/Interactive-Robot-Chess/DEV/ROS/catkin_ws/src/ibo1_IRC_API/data/Chess/stockfish/src/stockfish");
+    //ChessEngine* chessEngine = new ChessEngine("/home/omar/Uni/Major_Project/Interactive-Robot-Chess/DEV/ROS/catkin_ws/src/ibo1_IRC_API/data/Chess/komodo/komodo-14.1-linux");
     string chessEngineMove = "";
     string playerMove = "D2D4";
     BYTE returnedProtocol;
@@ -31,6 +32,34 @@ TEST(Chess, chessEngineCreation){
     delete chessEngine;
 
 }
+
+//Testing chessEngine Move return
+// TEST(Chess, chessEngineCreation){
+//     //ChessEngine* chessEngine = new ChessEngine("/home/omar/Uni/Major_Project/Interactive-Robot-Chess/DEV/ROS/catkin_ws/src/ibo1_IRC_API/data/Chess/stockfish/src/stockfish");
+//     ChessEngine* chessEngine = new ChessEngine("/home/omar/Uni/Major_Project/Interactive-Robot-Chess/DEV/ROS/catkin_ws/src/ibo1_IRC_API/data/Chess/komodo/komodo-14.1-linux");
+    
+//     string chessEngineMove = "";
+//     string playerMove = "D2D4";
+//     BYTE returnedProtocol;
+//     vector<EngineOption> engineOptions; 
+
+//     chessEngine->getChessEngineOptions(engineOptions);
+
+//     for(EngineOption &co : engineOptions){
+//         cout << "Name: " <<co.name << endl;
+//         cout << "Type Of: " <<co.typeOfValue << endl;
+//         cout << "Default: " <<co.defaultValue << endl;
+//         cout << "Min Value: " <<co.minValue << endl;
+//         cout << "Max Value: " <<co.maxValue << endl;
+//         cout << "Rest Value: " <<co.restValues << endl;
+//         cout << "-------------------------------------------------" << endl;
+//     }
+
+//     delete chessEngine;
+
+// }
+
+
 
 
 
