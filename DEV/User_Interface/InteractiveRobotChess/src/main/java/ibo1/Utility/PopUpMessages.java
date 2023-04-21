@@ -146,4 +146,8 @@ public abstract class PopUpMessages {
     public static String showChoiceDialogChessEngine(List<String> choices){
         return createAndShowChoiceDialog("Chess Engine Picker","Select the chess engine to use:","ChessEngine:", choices);
     }
+
+    public static String showChoiceDialogPromotion(List<String> choices){
+        return createAndShowChoiceDialog("Promotion picker","Select the chess piece to promote into:","Chess Piece:", choices);
+    }
 }

@@ -50,4 +50,9 @@ public class Knight extends ChessPiece {
     // Methods. //
     // //////// //}
     public String getName(){return "knight";}
+
+    public String toString(){
+        if(isWhite) return "N";
+        else return "n";
+    }
 }

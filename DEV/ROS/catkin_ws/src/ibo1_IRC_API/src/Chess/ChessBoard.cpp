@@ -452,18 +452,14 @@
             -1 King in check
             -2 King in checkMate
     */
-    int ChessBoard::kingCheck(int startPos, int endPos, bool colorToCheckWhite, bool checkForCheckMate, vector<Cell> chessBoardToCopy){
+    int ChessBoard::kingCheck(int startPos, int endPos, bool colorToCheckWhite){
 
-        vector<Cell> chessBoardCopy = chessBoardToCopy;
+        vector<Cell> chessBoardCopy = chessBoard;
 
         // Doing the move on the copy to then check if the king will go into check
         chessBoardCopy.at(endPos).setChessPiece( chessBoardCopy.at(startPos).releaseChessPiece() );
 
-        int amountOfNotInCheck = 0;
 
-        bool checkForWhite = colorToCheckWhite;
-
-        if(checkForCheckMate) checkForWhite = !colorToCheckWhite;
 
         // Going through every cell in the board
         for(int cellPos = 0; cellPos < 63; cellPos++){
@@ -472,7 +468,7 @@
 
 
             // Checking if cell is Occupied and the color of the piece is the same as for the king we are checking
-            if(currentCell.isOccupied() && currentCell.getChessPieceColor() != checkForWhite){
+            if(currentCell.isOccupied() && currentCell.getChessPieceColor() != colorToCheckWhite){
                 
                 //Getting that chesspieces moveSet
                 vector<MoveSet> moveSets = currentCell.getChessPiece()->getMoveSet();
@@ -509,49 +505,38 @@
 
 
 
-
                         // Checking if we are out of bounds
                         if(stretchedMove < 0 || stretchedMove > 63) break;
 
                         // Getting a copy of the looked at cell
                         Cell tempCell = chessBoardCopy.at(stretchedMove);
 
-                        if(checkForCheckMate){
-                            int ourKingInCheckMate = kingCheck(currentCell.getPosition(), tempCell.getPosition(), colorToCheckWhite, false, chessBoardCopy);
 
-                            //_________________________________________________________________________________________________________________________________________________________________________
-                            if(ourKingInCheckMate == 0){
-                                cout << "Amount of not in Check: " << amountOfNotInCheck << endl;
-                                amountOfNotInCheck++;
+                        // Checking if the cell is occupied
+                        if(tempCell.isOccupied()){
+
+                            // Checking if the cell we look at is same color as ours. If yes then we have collided and cant move in that direction
+                            if(tempCell.getChessPieceColor() == currentCell.getChessPieceColor()){
+                                hasCollided = true;
+                                break;
                             }
 
-                        }else{
-                            // Checking if the cell is occupied
-                            if(tempCell.isOccupied()){
+                            // Checking if the cell we look at is not same color and we are not looking at the king, If yes then we have collided
+                            if(tempCell.getChessPieceColor() != currentCell.getChessPieceColor() && tolower(tempCell.getChessPieceName()) != 'k'){
+                                hasCollided = true;
+                                break;
+                            }
 
-                                // Checking if the cell we look at is same color as ours. If yes then we have collided and cant move in that direction
-                                if(tempCell.getChessPieceColor() == currentCell.getChessPieceColor()){
-                                    hasCollided = true;
-                                    break;
-                                }
+                            // Checking if the cell we look at is not same color and we are looking at the king
+                            if(tempCell.getChessPieceColor() != currentCell.getChessPieceColor() && tolower(tempCell.getChessPieceName()) == 'k'){
 
-                                // Checking if the cell we look at is not same color and we are not looking at the king, If yes then we have collided
-                                if(tempCell.getChessPieceColor() != currentCell.getChessPieceColor() && tolower(tempCell.getChessPieceName()) != 'k'){
-                                    hasCollided = true;
-                                    break;
-                                }
+                                // Checking if pawnMoveValid
+                                int returnedPawnMoveValid = pawnMoveValid(currentCell, tempCell, chessBoardCopy);
 
-                                // Checking if the cell we look at is not same color and we are looking at the king
-                                if(tempCell.getChessPieceColor() != currentCell.getChessPieceColor() && tolower(tempCell.getChessPieceName()) == 'k'){
+                                //If we do not have a valid pawn move then break out of this for loop
+                                if(returnedPawnMoveValid != 0) break;
 
-                                    // Checking if pawnMoveValid
-                                    int returnedPawnMoveValid = pawnMoveValid(currentCell, tempCell, chessBoardCopy);
-
-                                    //If we do not have a valid pawn move then break out of this for loop
-                                    if(returnedPawnMoveValid != 0) break;
-
-                                    return -1;
-                                }
+                                return -1;
                             }
                         }
                     }
@@ -559,8 +544,6 @@
 
             }
         }
-
-        if(checkForCheckMate && amountOfNotInCheck == 0) return -2; 
         
         // Otherwise king is not in Check
         return 0;
@@ -698,20 +681,20 @@
                     if(returnedCastleMoveValid != 0) return returnedCastleMoveValid; 
 
                     //Checking if we set our own king in check
-                    int returnedOwnKingInCheck = kingCheck(startCell.getPosition(), endCell.getPosition(), startCell.getChessPieceColor(), false, chessBoard);
+                    int returnedOwnKingInCheck = kingCheck(startCell.getPosition(), endCell.getPosition(), startCell.getChessPieceColor());
 
                     if(returnedOwnKingInCheck == -1){
                         return -8;
                     }
 
                     //Checking if we set the other king in check
-                    int returnedOppositeKingInCheck = kingCheck(startCell.getPosition(), endCell.getPosition(), !startCell.getChessPieceColor(), false, chessBoard);
+                    int returnedOppositeKingInCheck = kingCheck(startCell.getPosition(), endCell.getPosition(), !startCell.getChessPieceColor());
 
                     if(returnedOppositeKingInCheck == -1){
 
                         // Need to check if he is in check mate!
-                        int inCheckMate = kingCheck(startCell.getPosition(), endCell.getPosition(), !startCell.getChessPieceColor(), true, chessBoard);
-
+                        //int inCheckMate = kingCheck(startCell.getPosition(), endCell.getPosition(), !startCell.getChessPieceColor(), true, chessBoard);
+                        int inCheckMate = 0;
                         if(inCheckMate == -2){
                             return -9;
                         }

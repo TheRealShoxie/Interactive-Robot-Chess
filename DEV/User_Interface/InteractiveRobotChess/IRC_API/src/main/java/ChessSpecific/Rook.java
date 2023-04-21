@@ -50,4 +50,8 @@ public class Rook extends ChessPiece {
     // Methods. //
     // //////// //
     public String getName(){return "rook";}
+    public String toString(){
+        if(isWhite) return "R";
+        else return "r";
+    }
 }

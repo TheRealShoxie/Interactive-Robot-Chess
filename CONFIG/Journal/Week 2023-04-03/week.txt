@@ -10,3 +10,6 @@ Tuesday:
     - Realized that I have a problem with pieces overlapping 
     - Need to implement that I am not in checkmate if I can block or take a piece and that then gets me out of checkmate
     - If pawn gets promoted I dont do king or checkmate checking
+
+Wednesday:
+    - Checkmate still not completely working. Needs to be revised.

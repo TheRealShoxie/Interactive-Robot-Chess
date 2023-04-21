@@ -144,6 +144,7 @@ void wrapperLogic(vector<ChessEngineDefinitionStruct>& chessEngines, ros::Publis
                 cout << "To return CmdByte: " << (int)toReturnProtocolCmd << endl;
                 cout << "ChessEngine movement: " << chessEngineMove << endl;
                 cout << "Current Board state as FEN: " << chessEnginePointer->getChessBoardFENString() << endl;
+                cout << chessEnginePointer->getChessBoardString() << endl;
 
                 sendProtocol.cmd = toReturnProtocolCmd;
                 sendProtocol.data = response;

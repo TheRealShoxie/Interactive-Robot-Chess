@@ -50,4 +50,9 @@ public class Bishop extends ChessPiece {
     // Methods. //
     // //////// //
     public String getName(){return "bishop";}
+
+    public String toString(){
+        if(isWhite) return "B";
+        else return "b";
+    }
 }

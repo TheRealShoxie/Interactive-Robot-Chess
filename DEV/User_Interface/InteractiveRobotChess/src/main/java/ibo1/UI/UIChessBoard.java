@@ -10,7 +10,11 @@ import ChessSpecific.*;
 import Client.IRCClient;
 import Protocol.ChessEngine;
 import ibo1.UIElements.Space;
+import ibo1.Utility.PopUpMessages;
 import javafx.scene.layout.GridPane;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * ClassName - ClassDescription initial
@@ -33,11 +37,9 @@ public class UIChessBoard extends GridPane{
     // ////////////// //
 
     private void updateBoardState(){
-        Cell[][] cells = chessBoard.getCells();
-
-        for(int x = 0; x < cells[0].length; x++){
-            for(int y = 0; y < cells[1].length; y++) {
-                spaces[x][y].setCell(cells[x][y]);
+        for(int x = 0; x < 8; x++){
+            for(int y = 0; y < 8; y++) {
+                spaces[x][y].setCell(chessBoard.getCellAtPosition(x,y));
             }
         }
     }
@@ -57,13 +59,10 @@ public class UIChessBoard extends GridPane{
 
     private void chessEngineMove(){
 
-        int cellPositions[] = this.chessBoard.chessEngineMove();
+        this.chessBoard.chessEngineMove();
 
-        if(cellPositions.length == 4){
-            //updateSpaces(cellPositions[0], cellPositions[1], cellPositions[2], cellPositions[3]);
-            updateBoardState();
-            this.setDisable(false);
-        }
+        updateBoardState();
+        this.setDisable(false);
     }
 
     /**
@@ -134,16 +133,57 @@ public class UIChessBoard extends GridPane{
             int clickedCellX = clickedSpace.getCell().getXPos();
             int clickedCellY = clickedSpace.getCell().getYPos();
 
-            boolean madeMove = this.chessBoard.playerMove(activeCellX, activeCellY,
-                    clickedCellX, clickedCellY);
+            boolean madeMove;
+
+            if(activeSpace.getCell().getChessPiece().getName().toLowerCase().charAt(0) == 'p'
+                && (activeSpace.getCell().getYPos() == 1 || activeSpace.getCell().getYPos() == 6)
+                && (clickedSpace.getCell().getYPos() == 0 || clickedSpace.getCell().getYPos() == 7)) {
+
+                List<String> promotion = new ArrayList<>();
+                promotion.add("Queen");
+                promotion.add("Knight");
+                promotion.add("Rook");
+                promotion.add("Bishop");
+
+                String selectedPromotion = PopUpMessages.showChoiceDialogPromotion(promotion);
+
+                char toPromoteInto;
+
+                switch (selectedPromotion){
+                    case "Queen":
+                        toPromoteInto = 'q';
+                        break;
+                    case "Rook":
+                        toPromoteInto = 'r';
+                        break;
+                    case "Knight":
+                        toPromoteInto = 'n';
+                        break;
+                    case "Bishop":
+                        toPromoteInto = 'b';
+                        break;
+                    default:
+                        toPromoteInto = 'a';
+                        break;
+                }
+
+                madeMove = this.chessBoard.playerMove(activeCellX, activeCellY,
+                        clickedCellX, clickedCellY, toPromoteInto);
+            }
+            else{
+                madeMove = this.chessBoard.playerMove(activeCellX, activeCellY,
+                        clickedCellX, clickedCellY, ' ');
+            }
+
+
 
 
             if(!madeMove) return;
 
-            updateSpaces(activeCellX, activeCellY, clickedCellX, clickedCellY);
+            updateBoardState();
 
             this.setActiveSpace(null);
-            this.setDisable(false);
+            this.setDisable(true);
 
             this.chessEngineMove();
         }

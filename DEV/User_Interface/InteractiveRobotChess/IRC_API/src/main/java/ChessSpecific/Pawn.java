@@ -52,4 +52,8 @@ public class Pawn extends ChessPiece {
     // Methods. //
     // //////// //
     public String getName(){return "pawn";}
+    public String toString(){
+        if(isWhite) return "P";
+        else return "p";
+    }
 }

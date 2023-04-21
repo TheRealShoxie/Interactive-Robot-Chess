@@ -100,7 +100,7 @@ public class ChessBoard {
         sb.append(String.valueOf(moveCmd));
     }
 
-    private int[] convertToMoveFormat(String move){
+    private int[] convertFromMoveFormat(String move){
         char[] moveCmd = move.toLowerCase().toCharArray();
 
         int oldCellX = 0;
@@ -128,6 +128,81 @@ public class ChessBoard {
         returnedInt[3] = newCellY;
 
         return returnedInt;
+
+    }
+
+    private void castleMove(String moveFormat){
+
+
+        System.out.println("CastleMove: " +moveFormat);
+        if(moveFormat.equals("e1g1")){
+            int cellPosRook[] = convertFromMoveFormat("h1f1");
+
+            ChessPiece tempChessPieceRook = this.cells[cellPosRook[0]][cellPosRook[1]].releaseChessPiece();
+            this.cells[cellPosRook[2]][cellPosRook[3]].setChessPiece(tempChessPieceRook );
+        }
+        else if(moveFormat.equals("e1c1")){
+            int cellPosRook[] = convertFromMoveFormat("a1d1");
+
+            ChessPiece tempChessPieceRook = this.cells[cellPosRook[0]][cellPosRook[1]].releaseChessPiece();
+            this.cells[cellPosRook[2]][cellPosRook[3]].setChessPiece(tempChessPieceRook );
+
+        }
+        else if(moveFormat.equals("e8g8")){
+            int cellPosRook[] = convertFromMoveFormat("h8f8");
+
+            ChessPiece tempChessPieceRook = this.cells[cellPosRook[0]][cellPosRook[1]].releaseChessPiece();
+            this.cells[cellPosRook[2]][cellPosRook[3]].setChessPiece(tempChessPieceRook );
+
+        }
+        else if(moveFormat.equals("e8c8")){
+            int cellPosRook[] = convertFromMoveFormat("a8d8");
+
+            ChessPiece tempChessPieceRook = this.cells[cellPosRook[0]][cellPosRook[1]].releaseChessPiece();
+            this.cells[cellPosRook[2]][cellPosRook[3]].setChessPiece(tempChessPieceRook );
+        }
+    }
+
+
+    private void promotion(String moveFormat){
+
+        if(moveFormat.length() != 5) return;
+
+        String move = moveFormat.substring(0,4);
+
+        int cellPos[] = convertFromMoveFormat(move);
+
+        char toPromoteTo = moveFormat.toLowerCase().charAt(4);
+
+        ChessPiece chessPiecePromoted;
+
+        switch(toPromoteTo){
+            case 'r':
+                if(cells[cellPos[0]][cellPos[1]].getChessPiece().isWhite) chessPiecePromoted = new Rook(true);
+                else chessPiecePromoted = new Rook(false);
+                break;
+
+            case 'n':
+                if(cells[cellPos[0]][cellPos[1]].getChessPiece().isWhite) chessPiecePromoted = new Knight(true);
+                else chessPiecePromoted = new Knight(false);
+                break;
+
+            case 'b':
+                if(cells[cellPos[0]][cellPos[1]].getChessPiece().isWhite) chessPiecePromoted = new Bishop(true);
+                else chessPiecePromoted = new Bishop(false);
+                break;
+
+            case 'q':
+                if(cells[cellPos[0]][cellPos[1]].getChessPiece().isWhite) chessPiecePromoted = new Queen(true);
+                else chessPiecePromoted = new Queen(false);
+                break;
+
+            default:
+                return;
+        }
+
+        this.cells[cellPos[0]][cellPos[1]].releaseChessPiece();
+        this.cells[cellPos[2]][cellPos[3]].setChessPiece( chessPiecePromoted );
 
     }
 
@@ -185,10 +260,14 @@ public class ChessBoard {
         return this.cells[x][y];
     }
 
-    public boolean playerMove(int activeCellX, int activeCellY, int clickedCellX, int clickedCellY){
+    public boolean playerMove(int activeCellX, int activeCellY, int clickedCellX, int clickedCellY, char toPromoteInto){
 
         StringBuilder move = new StringBuilder();
-        convertToMoveFormat(cells[activeCellX][activeCellY], cells[clickedCellX][clickedCellY], move);
+        convertToMoveFormat(this.cells[activeCellX][activeCellY], this.cells[clickedCellX][clickedCellY], move);
+        if(toPromoteInto != ' '){
+            move.append(toPromoteInto);
+        }
+
 
         System.out.println("__________________________________");
         System.out.println("Sending move command: " +move);
@@ -201,8 +280,15 @@ public class ChessBoard {
             return false;
         }
 
-        ChessPiece tempChessPiece = cells[activeCellX][activeCellY].releaseChessPiece();
-        cells[clickedCellX][clickedCellY].setChessPiece(tempChessPiece );
+        System.out.println("Length of move play: " +move.toString().length());
+        if(move.toString().length() == 4){
+            castleMove(move.toString());
+            ChessPiece tempChessPiece = this.cells[activeCellX][activeCellY].releaseChessPiece();
+            this.cells[clickedCellX][clickedCellY].setChessPiece(tempChessPiece );
+        }
+        else if(move.toString().length() == 5){
+            promotion(move.toString());
+        }
 
         return true;
     }
@@ -222,12 +308,20 @@ public class ChessBoard {
         System.out.println("Received move command: " +chessEngineMoved);
         System.out.println("__________________________________");
 
-        int cellPos[] = convertToMoveFormat(chessEngineMoved);
 
-        ChessPiece tempChessPiece = cells[cellPos[0]][cellPos[1]].releaseChessPiece();
-        cells[cellPos[2]][cellPos[3]].setChessPiece(tempChessPiece );
+        if(chessEngineMoved.length() == 4){
+            int cellPos[] = convertFromMoveFormat(chessEngineMoved);
 
-        return cellPos;
+            castleMove(chessEngineMoved);
+            ChessPiece tempChessPiece = this.cells[cellPos[0]][cellPos[1]].releaseChessPiece();
+            this.cells[cellPos[2]][cellPos[3]].setChessPiece(tempChessPiece );
+        }
+        else if(chessEngineMoved.length() == 5){
+            promotion(chessEngineMoved);
+        }
+
+
+        return new int[0];
 
     }
 

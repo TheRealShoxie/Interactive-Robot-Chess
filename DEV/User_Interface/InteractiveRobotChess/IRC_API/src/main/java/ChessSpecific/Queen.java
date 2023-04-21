@@ -51,4 +51,8 @@ public class Queen extends ChessPiece {
     // //////// //
 
     public String getName(){return "queen";}
+    public String toString(){
+        if(isWhite) return "Q";
+        else return "q";
+    }
 }

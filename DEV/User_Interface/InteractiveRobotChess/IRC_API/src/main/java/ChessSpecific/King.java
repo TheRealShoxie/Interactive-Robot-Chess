@@ -50,4 +50,9 @@ public class King extends ChessPiece {
     // Methods. //
     // //////// //
     public String getName(){return "king";}
+
+    public String toString(){
+        if(isWhite) return "K";
+        else return "k";
+    }
 }
