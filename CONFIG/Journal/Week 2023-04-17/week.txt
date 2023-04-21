@@ -1,0 +1,5 @@
+Friday:
+    - Started on creating gazebo
+        - Added a chess board
+            - Chess Board model: https://sketchfab.com/3d-models/chess-a115419222b84d698c83964a92fc27e0
+        - Added Robotic Arm  

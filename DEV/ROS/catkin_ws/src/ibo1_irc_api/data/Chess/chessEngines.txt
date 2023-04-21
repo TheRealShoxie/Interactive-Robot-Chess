@@ -1,0 +1,4 @@
+<ChessEngines>
+    <name=stockfish;filepath=/home/omar/Uni/Major_Project/Interactive-Robot-Chess/DEV/ROS/catkin_ws/src/ibo1_IRC_API/data/Chess/stockfish/src/stockfish>
+    <name=komodo;filepath=/home/omar/Uni/Major_Project/Interactive-Robot-Chess/DEV/ROS/catkin_ws/src/ibo1_IRC_API/data/Chess/komodo/komodo-14.1-linux>
+<ChessEngines>
