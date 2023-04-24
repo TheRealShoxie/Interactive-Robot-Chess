@@ -6,6 +6,8 @@
         <static>true</static>
     </gazebo>
 
+    <!-- Base link to the world and creating a box model for the camera-->
+
     <link name="world" />
     <joint name="ec_world_to_root" type="fixed">
         <child link="ec_base_link" />
@@ -34,6 +36,8 @@
         </inertial>
     </link>
 
+    <!-- Creating the camera link needed and the frames where the depth and color sensor will sit-->
+
 
     <joint name="ec_camera_module" type="fixed">
         <origin xyz="0 0 -0.0125" rpy="0 ${pi/2} 0" />
@@ -59,7 +63,7 @@
     <link name="ec_color_frame" />
 
 
-    <!-- Cameras 3.14159265358979 1.57079632-->
+    <!-- Cameras-->
 
     <xacro:property name="deg_to_rad" value="0.01745329251994329577" />
 
