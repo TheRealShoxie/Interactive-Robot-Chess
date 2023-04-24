@@ -1,0 +1,11 @@
+Monday:
+    - Started looking into how to get the external camera into the transform tree
+        - Got all my cameras into transform tree
+        - Placed all the objects into gazebo
+        - Had problems with where the depth camera transforms its image to
+        - I had to make sure that the link the camera is attached to has x forward as in gazebo coordinates
+        - Then had to create a intermidiate frame/link to convert that into a image
+        - Based of: https://www.youtube.com/watch?v=A3nw2M47K50&t=1108s
+    - Using openCV for edge detection. There is a edgeDetection launch file inside opencv_apps launch files
+        - That worked now checking on how to get the cells that I need and check how I can show a image of that so i have a better
+          way of debugging it

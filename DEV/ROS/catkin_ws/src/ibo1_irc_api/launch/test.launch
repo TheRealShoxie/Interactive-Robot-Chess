@@ -1,9 +1,0 @@
-<launch>
-
-	<!-- Defines chessEngineFilePathName with which it should be started-->
-	<arg name="chessEngineFilePathName" default="" doc="Filepath of the chessengine which should be used and started."/>
-
-	<!-- Starting the ircChess_node and passing through the chessEngineFilePathName -->
-	<node pkg="ibo1_irc_api" type="ircChess" name="ircChess" output="screen" args="$(arg chessEngineFilePathName)"/>
-
-</launch>

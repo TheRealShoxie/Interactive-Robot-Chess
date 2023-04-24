@@ -277,6 +277,8 @@ int main (int argc, char **argv){
 
     ros::Rate rate(10);
 
+    cout << "I get to the waiting stage" << endl;
+
     while(server_pub.getNumSubscribers() == 0){
         rate.sleep();
     }

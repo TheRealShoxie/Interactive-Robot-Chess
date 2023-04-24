@@ -10,8 +10,10 @@ add_compile_options(-std=c++11)
 find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   roscpp
+  rospy
   std_msgs
   message_generation
+  opencv_apps
 )
 
 ## System dependencies are found with CMake's conventions
@@ -154,6 +156,7 @@ add_library(ibo1_nodeLibrary
 # add_executable(${PROJECT_NAME}_node src/ibo1_IRC_API_node.cpp)
 add_executable(ircServer src/Nodes/ServerNode.cpp)
 add_executable(ircChess src/Nodes/ChessWrapperNode.cpp)
+add_executable(ircTest src/Nodes/testNode.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -171,6 +174,8 @@ add_executable(ircChess src/Nodes/ChessWrapperNode.cpp)
 # )
 target_link_libraries(ircServer ibo1_nodeLibrary ${catkin_LIBRARIES})
 target_link_libraries(ircChess  ibo1_nodeLibrary ${catkin_LIBRARIES})
+target_link_libraries(ircTest  ${catkin_LIBRARIES})
+
 
 # Add roslaunch checking
 

@@ -3,3 +3,19 @@ Friday:
         - Added a chess board
             - Chess Board model: https://sketchfab.com/3d-models/chess-a115419222b84d698c83964a92fc27e0
         - Added Robotic Arm  
+
+Saturday:
+    - Had to fresh install linux distro
+    - Reconfiguring all needed files
+    - Started adding the ros kortex github repository to the package
+    - spawned the gen3 robot model
+    - Started trying to add camera to the model
+        - https://deebuls.github.io/devblog/robotics/2022/01/19/Add-Realsense-Camera-Kinova-Gen3-Gazebo.html
+        - Using this for gazebo plugin: https://github.com/pal-robotics/realsense_gazebo_plugin
+        - used this tutorial to get it to work in gazebo: https://github.com/pal-robotics/realsense_gazebo_plugin/issues/7
+    - Scratched the intelrealsense due to move_it problems because it has its own collision
+        - so I added a depth and normal camera using this:
+            https://classic.gazebosim.org/tutorials?tut=ros_gzplugins
+
+    - Started looking into adding a chessboard into the world
+        - Took chessboard models from: https://gitioc.upc.edu/rostutorials/gazebo_sensors_tutorial/-/tree/ab3ed9f585e19d5899b1a1fd356a4746b57ff68f/models

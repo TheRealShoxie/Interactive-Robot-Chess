@@ -13,8 +13,8 @@
 
 // //Testing chessEngine Move return
 TEST(Chess, chessEngineCreation){
-    ChessEngine* chessEngine = new ChessEngine("/home/omar/Uni/Major_Project/Interactive-Robot-Chess/DEV/ROS/catkin_ws/src/ibo1_IRC_API/data/Chess/stockfish/src/stockfish");
-    //ChessEngine* chessEngine = new ChessEngine("/home/omar/Uni/Major_Project/Interactive-Robot-Chess/DEV/ROS/catkin_ws/src/ibo1_IRC_API/data/Chess/komodo/komodo-14.1-linux");
+    ChessEngine* chessEngine = new ChessEngine("/home/omar/Uni/Major_Project/Interactive-Robot-Chess/DEV/ROS/catkin_ws/src/ibo1_irc_api/data/Chess/stockfish/src/stockfish");
+    //ChessEngine* chessEngine = new ChessEngine("/home/omar/Uni/Major_Project/Interactive-Robot-Chess/DEV/ROS/catkin_ws/src/ibo1_irc_api/data/Chess/komodo/komodo-14.1-linux");
     string chessEngineMove = "";
     string playerMove = "D2D4";
     BYTE returnedProtocol;
@@ -35,8 +35,8 @@ TEST(Chess, chessEngineCreation){
 
 //Testing chessEngine Move return
 // TEST(Chess, chessEngineCreation){
-//     //ChessEngine* chessEngine = new ChessEngine("/home/omar/Uni/Major_Project/Interactive-Robot-Chess/DEV/ROS/catkin_ws/src/ibo1_IRC_API/data/Chess/stockfish/src/stockfish");
-//     ChessEngine* chessEngine = new ChessEngine("/home/omar/Uni/Major_Project/Interactive-Robot-Chess/DEV/ROS/catkin_ws/src/ibo1_IRC_API/data/Chess/komodo/komodo-14.1-linux");
+//     //ChessEngine* chessEngine = new ChessEngine("/home/omar/Uni/Major_Project/Interactive-Robot-Chess/DEV/ROS/catkin_ws/src/ibo1_irc_api/data/Chess/stockfish/src/stockfish");
+//     ChessEngine* chessEngine = new ChessEngine("/home/omar/Uni/Major_Project/Interactive-Robot-Chess/DEV/ROS/catkin_ws/src/ibo1_irc_api/data/Chess/komodo/komodo-14.1-linux");
     
 //     string chessEngineMove = "";
 //     string playerMove = "D2D4";
