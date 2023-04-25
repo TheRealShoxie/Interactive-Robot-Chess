@@ -10,14 +10,15 @@ add_compile_options(-std=c++11)
 find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   roscpp
-  rospy
   std_msgs
   message_generation
-  opencv_apps
+  cv_bridge
+  image_transport
+  tf2_ros
 )
 
 ## System dependencies are found with CMake's conventions
-# find_package(Boost REQUIRED COMPONENTS system)
+find_package(OpenCV)
 
 
 ## Uncomment this if the package has a setup.py. This macro ensures
@@ -108,6 +109,8 @@ generate_messages(
 catkin_package(
   INCLUDE_DIRS include
   CATKIN_DEPENDS message_runtime
+  cv_bridge
+  image_transport
   #LIBRARIES ibo1_IRC_API
 #  CATKIN_DEPENDS geometry_msgs roscpp
   #DEPENDS system_lib
@@ -122,24 +125,26 @@ catkin_package(
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
+  ${OpenCV_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
 
 add_library(ibo1_nodeLibrary
-  #Server Libraries
+  #-----Server Libraries-----
   src/Server/IRCServer.cpp
   src/Server/IRCServerNodeHelper.cpp
   src/User/Users.cpp
   src/User/User.cpp
-  #ChessWrapper Libraries
+  #-----ChessWrapper Libraries-----
   src/Utility/SubProcessHandler.cpp
   src/Chess/ChessEngine.cpp
   src/Chess/ChessBoard.cpp
-  #Utility Libraries
+  #-----Utility Libraries-----
   src/Utility/UCIHandler.cpp
   src/Utility/DataCreator.cpp
   src/Utility/FileHandler.cpp
+
 )
 
 
@@ -156,7 +161,7 @@ add_library(ibo1_nodeLibrary
 # add_executable(${PROJECT_NAME}_node src/ibo1_IRC_API_node.cpp)
 add_executable(ircServer src/Nodes/ServerNode.cpp)
 add_executable(ircChess src/Nodes/ChessWrapperNode.cpp)
-add_executable(ircTest src/Nodes/testNode.cpp)
+add_executable(ircCellDetection src/Nodes/cellDetectionNode.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -174,7 +179,7 @@ add_executable(ircTest src/Nodes/testNode.cpp)
 # )
 target_link_libraries(ircServer ibo1_nodeLibrary ${catkin_LIBRARIES})
 target_link_libraries(ircChess  ibo1_nodeLibrary ${catkin_LIBRARIES})
-target_link_libraries(ircTest  ${catkin_LIBRARIES})
+target_link_libraries(ircCellDetection  ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
 
 # Add roslaunch checking

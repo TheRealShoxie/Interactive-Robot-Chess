@@ -6,6 +6,18 @@ Monday:
         - I had to make sure that the link the camera is attached to has x forward as in gazebo coordinates
         - Then had to create a intermidiate frame/link to convert that into a image
         - Based of: https://www.youtube.com/watch?v=A3nw2M47K50&t=1108s
-    - Using openCV for edge detection. There is a edgeDetection launch file inside opencv_apps launch files
-        - That worked now checking on how to get the cells that I need and check how I can show a image of that so i have a better
-          way of debugging it
+    - Used this webside for possible open_cv image processing algorithms that come with opencv: http://wiki.ros.org/opencv_apps#goodfeature_track
+        - Using openCV for edge detection. There is a edgeDetection launch file inside opencv_apps launch files
+            - That worked now checking on how to get the cells that I need and check how I can show a image of that so i have a better
+            way of debugging it
+        - Got typ in meeting to try out opencv_goodfeature_track which tells me points
+        - Played around with hough_lines.launch which seems to do well but after using contour moments some cells dont get chosen properly
+            - more research or look more into using goodfeature_track as another possible solution
+
+Tuesday:
+    - Used goodfeatures again to try to access the points and see if I can write some logic to detect the squares.
+      Problem with hough lines into contour moments was that strangely enough some squares didnt get used properly.
+      But before I look into goodfeatures I will try to figure out to work with hugh_lines again.
+        - Changed to a unordered set for selecting the cells: https://www.geeksforgeeks.org/how-to-create-an-unordered_set-of-user-defined-class-or-struct-in-c/
+    - On the this webside: https://www.fide.com/FIDE/handbook/Standards_of_Chess_Equipment_and_tournament_venue.pdf
+        - On point 2.2 height and weight are defined for standards

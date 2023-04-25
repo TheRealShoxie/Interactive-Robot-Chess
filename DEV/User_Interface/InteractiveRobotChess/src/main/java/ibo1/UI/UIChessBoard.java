@@ -24,7 +24,7 @@ import java.util.List;
  * @version 0.1 ( Initial development ).
  */
 public class UIChessBoard extends GridPane{
-// ////////// //
+    // ////////// //
     // Constants. //
     // ////////// //
 

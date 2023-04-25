@@ -1,0 +1,3 @@
+gradle runMain with args through terminal command 
+or look into creating binary 
+look into running with javac
