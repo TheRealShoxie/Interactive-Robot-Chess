@@ -19,5 +19,16 @@ Tuesday:
       Problem with hough lines into contour moments was that strangely enough some squares didnt get used properly.
       But before I look into goodfeatures I will try to figure out to work with hugh_lines again.
         - Changed to a unordered set for selecting the cells: https://www.geeksforgeeks.org/how-to-create-an-unordered_set-of-user-defined-class-or-struct-in-c/
+        - Decided to work with set sorted works the best to get rid of cells.
+        - Was able to extract the cells perfectly
+        - All based on assumptions that the board is directly underneath the camera, the board doesn't move.
+        - To calculate if a cell is occupied I look at all the pixel values for that depth. Then I calc the avarage depth and if the single depth
+            is shorter than a required minimum we have a piece there.
+        - To calculate what color the piece is I take the center of the x and y values for the depth which should represent the chesspieces center
+        - THen I look at the color at that pixel and calculate a singleDigit RGB value and set a cutoff point of white or black
+
     - On the this webside: https://www.fide.com/FIDE/handbook/Standards_of_Chess_Equipment_and_tournament_venue.pdf
         - On point 2.2 height and weight are defined for standards
+
+    - After spawning in all pawns my current way of using hugh lines doesn't work as the cells arent correctly created anymore due to
+        view angles. Will need to look into good features again and see if I cen find a way to deal with
