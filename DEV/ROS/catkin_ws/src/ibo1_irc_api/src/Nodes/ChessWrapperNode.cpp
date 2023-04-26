@@ -2,12 +2,22 @@
 
 #include <ibo1_irc_api/Utility/FileHandler.h>
 
-#include <std_msgs/String.h>
 #include <ibo1_irc_api/Protocol.h>
 
-
+/*
+---------------------------------------------------------------------------------------------------------------------------------
+*/
+    // ////////////////// //
+    //  Global variables. //
+    // ////////////////// //
+    
 static string chessEnginesFilePathName = "/home/omar/Uni/Major_Project/Interactive-Robot-Chess/DEV/ROS/catkin_ws/src/ibo1_irc_api/data/Chess/chessEngines.txt";
-static ibo1_irc_api::Protocol returnedProtocol;
+
+// For ros subscribers & publisher
+ibo1_irc_api::Protocol returnedProtocol;
+ros::Publisher* commandExecuter_pub_ptr;
+
+// For ChessEngine
 ChessEngine *chessEnginePointer;
 
 /*
@@ -18,10 +28,11 @@ ChessEngine *chessEnginePointer;
     // Callbacks. //
     // ////////// //
 
-void serverMessageReceived(const ibo1_irc_api::Protocol& msg){
+void chessWrapperMessageReceived(const ibo1_irc_api::Protocol& msg){
     returnedProtocol = msg;
     cout << "----------------------------------------------------------" << endl;
-    cout << "I received following on chessWrapper from server: " << endl;
+    cout << "I received following on chessWrapper: " << endl;
+    cout << "I received from: " << (int)returnedProtocol.sender << endl;
     cout << "CmdByte: " << (int)returnedProtocol.cmd << endl;
     cout << "----------------------------------------------------------" << endl;
 }
@@ -35,30 +46,48 @@ void serverMessageReceived(const ibo1_irc_api::Protocol& msg){
     // Internal Functions.  //
     // //////////////////// //
 
+// Function to publish to a specific sender with a supplied Protocol
+void sendToSender(BYTE sender, const ibo1_irc_api::Protocol& sendProtocol){
 
-void wrapperLogic(vector<ChessEngineDefinitionStruct>& chessEngines, ros::Publisher *chessWrapper_pub){
+    // Checking which sender it should return to
+    switch (sender)
+    {
+        case SENDER_COMMANDEXECUTER:{
+            commandExecuter_pub_ptr->publish(sendProtocol);
+            break;
+        }
+        
+        default:
+            break;
+    }
+}
+
+
+// Main Logic for wrapper
+void wrapperLogic(vector<ChessEngineDefinitionStruct>& chessEngines){
     vector<BYTE> response;
     ibo1_irc_api::Protocol sendProtocol;
 
     BYTE gotCMD = returnedProtocol.cmd;
 
-    switch (gotCMD)
-    {
+    switch(gotCMD){
         //Get chess engine names
-        case CMD_GETCHESSENGINES:{
+        case CMD_INTERNAL_GETCHESSENGINES:{
             string chessEngineNames = "";
             for(ChessEngineDefinitionStruct ce : chessEngines){
                 chessEngineNames += ce.name;
                 chessEngineNames += "\u241f";
             }
             copy(chessEngineNames.begin(), chessEngineNames.end(), std::back_inserter(response));
-            sendProtocol.cmd = CMD_GETCHESSENGINES;
+            sendProtocol.cmd = CMD_INTERNAL_GETCHESSENGINES;
+            sendProtocol.sender = SENDER_CHESSWRAPPER;
             sendProtocol.data = response;
-            chessWrapper_pub->publish(sendProtocol);
+            sendToSender(returnedProtocol.sender, sendProtocol);
 
             break;
         }
-        case CMD_STARTCHESSENGINE:{
+
+        case CMD_INTERNAL_STARTCHESSENGINE:{
             string toStartChessEngineName = "";
             string toStartChessEngineFilePathName;
             DataCreator::convertBytesToString(returnedProtocol.data, toStartChessEngineName);
@@ -74,7 +103,7 @@ void wrapperLogic(vector<ChessEngineDefinitionStruct>& chessEngines, ros::Publis
             cout << toStartChessEngineFilePathName << endl;
 
             if(toStartChessEngineFilePathName.empty()){
-                sendProtocol.cmd = ERROR_CMD_CHESSENGINEDOESNTEXIST;
+                sendProtocol.cmd = ERROR_INTERNAL_CMD_CHESSENGINEDOESNTEXIST;
                 sendProtocol.data = response;
                 cout << "Couldnt find Chess Engine Name!" << endl;
             }else{
@@ -85,31 +114,33 @@ void wrapperLogic(vector<ChessEngineDefinitionStruct>& chessEngines, ros::Publis
                 }
 
                 chessEnginePointer = new ChessEngine(toStartChessEngineFilePathName);
-                sendProtocol.cmd = CMD_STARTCHESSENGINE;
+                sendProtocol.cmd = CMD_INTERNAL_STARTCHESSENGINE;
                 cout << "Started Chess Engine!" << endl;
             }
 
+            sendProtocol.sender = SENDER_CHESSWRAPPER;
             sendProtocol.data = response;
-            chessWrapper_pub->publish(sendProtocol);
+            sendToSender(returnedProtocol.sender, sendProtocol);
             break;
         }
 
-        case CMD_STOPCHESSENGINE:{
+        case CMD_INTERNAL_STOPCHESSENGINE:{
             if(chessEnginePointer == 0){
-                sendProtocol.cmd == ERROR_CMD_NOCHESSENGINERUNNING;
+                sendProtocol.cmd == ERROR_INTERNAL_CMD_NOCHESSENGINERUNNING;
             }else{
                 delete chessEnginePointer;
                 chessEnginePointer = 0;
-                sendProtocol.cmd == CMD_STOPCHESSENGINE;
+                sendProtocol.cmd == CMD_INTERNAL_STOPCHESSENGINE;
             }
+            sendProtocol.sender = SENDER_CHESSWRAPPER;
             sendProtocol.data = response;
-            chessWrapper_pub->publish(sendProtocol);
+            sendToSender(returnedProtocol.sender, sendProtocol);
             break;
         }
 
-        case CMD_PLAYERMOVE:{
+        case CMD_INTERNAL_PLAYERMOVE:{
             if(chessEnginePointer == 0){
-                sendProtocol.cmd == ERROR_CMD_NOCHESSENGINERUNNING;
+                sendProtocol.cmd == ERROR_INTERNAL_CMD_NOCHESSENGINERUNNING;
             }else{
                 string moveCommand = "";
                 DataCreator::convertBytesToString(returnedProtocol.data, moveCommand);
@@ -124,15 +155,16 @@ void wrapperLogic(vector<ChessEngineDefinitionStruct>& chessEngines, ros::Publis
 
 
                 sendProtocol.cmd = toReturnProtocolCmd;
+                sendProtocol.sender = SENDER_CHESSWRAPPER;
                 sendProtocol.data = response;
-                chessWrapper_pub->publish(sendProtocol);
+                sendToSender(returnedProtocol.sender, sendProtocol);
                 break;
             }
         }
 
-        case CMD_CHESSENGINEMOVE:{
+        case CMD_INTERNAL_CHESSENGINEMOVE:{
             if(chessEnginePointer == NULL){
-                sendProtocol.cmd == ERROR_CMD_NOCHESSENGINERUNNING;
+                sendProtocol.cmd == ERROR_INTERNAL_CMD_NOCHESSENGINERUNNING;
             }else{
                 string chessEngineMove = "";
                 BYTE toReturnProtocolCmd;
@@ -147,8 +179,9 @@ void wrapperLogic(vector<ChessEngineDefinitionStruct>& chessEngines, ros::Publis
                 cout << chessEnginePointer->getChessBoardString() << endl;
 
                 sendProtocol.cmd = toReturnProtocolCmd;
+                sendProtocol.sender = SENDER_CHESSWRAPPER;
                 sendProtocol.data = response;
-                chessWrapper_pub->publish(sendProtocol);
+                sendToSender(returnedProtocol.sender, sendProtocol);
                 break;
             }
         }
@@ -157,7 +190,7 @@ void wrapperLogic(vector<ChessEngineDefinitionStruct>& chessEngines, ros::Publis
             break;
     }
 
-    returnedProtocol.cmd = (BYTE)0x00;
+    returnedProtocol.cmd = (BYTE)0x00; 
 
 }
 
@@ -172,8 +205,11 @@ int main (int argc, char **argv){
     ros:: AsyncSpinner spinner(1);
     spinner.start();
 
-    ros::Publisher chessWrapper_pub = nh.advertise<ibo1_irc_api::Protocol>("chessWrapper_messages", 10);
-    ros::Subscriber server_sub = nh.subscribe("/ircServer_messages", 10, &serverMessageReceived);
+    ros::Subscriber server_sub = nh.subscribe("/ircChessWrapper", 1, &chessWrapperMessageReceived);
+
+    ros::Publisher commandExecuter_pub = nh.advertise<ibo1_irc_api::Protocol>("ircCommandExecuter", 10);
+
+    commandExecuter_pub_ptr = &commandExecuter_pub;
 
     vector<ChessEngineDefinitionStruct> chessEngines = FileHandler::readChessEngines(chessEnginesFilePathName);
 
@@ -182,13 +218,13 @@ int main (int argc, char **argv){
     ros::Rate rate(10);
 
     //Waiting till ros system subscribers are activated
-    while(chessWrapper_pub.getNumSubscribers() == 0){
-        rate.sleep();
-    }
+    // while(chessWrapper_pub.getNumSubscribers() == 0){
+    //     rate.sleep();
+    // }
 
     while(ros::ok()){
 
-        wrapperLogic(chessEngines, &chessWrapper_pub);
+        wrapperLogic(chessEngines);
 
         ros::spinOnce();
         rate.sleep();

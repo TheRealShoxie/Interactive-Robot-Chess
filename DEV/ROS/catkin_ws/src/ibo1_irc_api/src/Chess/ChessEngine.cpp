@@ -22,59 +22,59 @@
         switch (moveCode)
         {
         case -1:
-            returnByte = ERROR_CMD_PAWNCOLLIDEDSTRAIGHT; 
+            returnByte = ERROR_INTERNAL_CMD_PAWNCOLLIDEDSTRAIGHT; 
             break;
 
         case -2:
-            returnByte = ERROR_CMD_PAWNCOLLIDEDDIAGONALOREMPTYCELL; 
+            returnByte = ERROR_INTERNAL_CMD_PAWNCOLLIDEDDIAGONALOREMPTYCELL; 
             break;
 
         case -3:
-            returnByte = ERROR_CMD_STARTINGCELLEMPTY; 
+            returnByte = ERROR_INTERNAL_CMD_STARTINGCELLEMPTY; 
             break;
 
         case -4:
-            returnByte = ERROR_CMD_NOTTHATCOLORSTURN; 
+            returnByte = ERROR_INTERNAL_CMD_NOTTHATCOLORSTURN; 
             break;
 
         case -5:
-            returnByte = ERROR_CMD_MOVEINVALIDORBLOCKEDBYSAMECOLOR; 
+            returnByte = ERROR_INTERNAL_CMD_MOVEINVALIDORBLOCKEDBYSAMECOLOR; 
             break;
 
         case -6:
-            returnByte = ERROR_CMD_CANNOTCASTLEKINGSIDE; 
+            returnByte = ERROR_INTERNAL_CMD_CANNOTCASTLEKINGSIDE; 
             break;
 
         case -7:
-            returnByte = ERROR_CMD_CANNOTCASTLEQUEENSIDE; 
+            returnByte = ERROR_INTERNAL_CMD_CANNOTCASTLEQUEENSIDE; 
             break;
 
         case -8:
-            returnByte = ERROR_CMD_OWNKINGINCHECK;
+            returnByte = ERROR_INTERNAL_CMD_OWNKINGINCHECK;
             break;
 
         case -9:
-            returnByte = ERROR_CMD_OTHERKINGINCHECKMATE;
+            returnByte = ERROR_INTERNAL_CMD_OTHERKINGINCHECKMATE;
             break;
 
         case -10:
-            returnByte = ERROR_CMD_PAWNNOTALLOWEDNOTPROMOTIONMOVE;
+            returnByte = ERROR_INTERNAL_CMD_PAWNNOTALLOWEDNOTPROMOTIONMOVE;
             break;
 
         case -11:
-            returnByte = ERROR_CMD_PIECETOPROMOTEISNOTPAWN; 
+            returnByte = ERROR_INTERNAL_CMD_PIECETOPROMOTEISNOTPAWN; 
             break;
 
         case -12:
-            returnByte = ERROR_CMD_PAWNNOTMOVINGTOENDOFBOARD; 
+            returnByte = ERROR_INTERNAL_CMD_PAWNNOTMOVINGTOENDOFBOARD; 
             break;
 
         case -13:
-            returnByte = ERROR_CMD_INVALIDPIECENAMETOPROMOTEINTO; 
+            returnByte = ERROR_INTERNAL_CMD_INVALIDPIECENAMETOPROMOTEINTO; 
             break;
 
         case -14:
-            returnByte = ERROR_CMD_INVALIDMOVEFORMAT; 
+            returnByte = ERROR_INTERNAL_CMD_INVALIDMOVEFORMAT; 
             break;
         
         default:
@@ -117,7 +117,7 @@
 
         BYTE returnedCommand;
         
-        getProtocolCode(returnedMoveCode, CMD_PLAYERMOVE, returnedProtocolByte);
+        getProtocolCode(returnedMoveCode, CMD_INTERNAL_PLAYERMOVE, returnedProtocolByte);
     }
 
     void ChessEngine::chessEngineMove(BYTE &returnedProtocolByte, string &chessEngineMove){
@@ -131,13 +131,13 @@
 
         // Checking if chessEngine did not find a move otherwise return chess engine created no move
         if(chessEngineMove.compare("moveNotFound!") == 0){
-            returnedProtocolByte = ERROR_CMD_CHESSENGINECREATEDNOMOVE;
+            returnedProtocolByte = ERROR_INTERNAL_CMD_CHESSENGINECREATEDNOMOVE;
         }else{
             // Setting the move of the chessEngine to the internal board.
             int returnedMoveCode = chessBoard.move(chessEngineMove);
 
             
-            getProtocolCode(returnedMoveCode, CMD_CHESSENGINEMOVE, returnedProtocolByte);
+            getProtocolCode(returnedMoveCode, CMD_INTERNAL_CHESSENGINEMOVE, returnedProtocolByte);
         }
     }
 

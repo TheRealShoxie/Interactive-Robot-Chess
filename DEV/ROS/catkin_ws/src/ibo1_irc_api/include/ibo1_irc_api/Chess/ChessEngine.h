@@ -7,7 +7,7 @@
 
 #include <ibo1_irc_api/Utility/UCIHandler.h>
 #include <ibo1_irc_api/Chess/ChessBoard.h>
-#include <ibo1_irc_api/ProtocolAPI/ProtocolDefinition.h>
+#include <ibo1_irc_api/ProtocolAPI/InternalProtocolDefinition.h>
 
     // ////////// //
     // Structs.   //

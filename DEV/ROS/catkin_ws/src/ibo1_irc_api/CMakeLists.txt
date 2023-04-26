@@ -54,6 +54,8 @@ find_package(OpenCV)
 add_message_files(
   FILES
   Protocol.msg
+  ChessCell.msg
+  ChessCells.msg
 )
 
 ## Generate services in the 'srv' folder
@@ -111,8 +113,8 @@ catkin_package(
   CATKIN_DEPENDS message_runtime
   cv_bridge
   image_transport
-  #LIBRARIES ibo1_IRC_API
-#  CATKIN_DEPENDS geometry_msgs roscpp
+  #LIBRARIES ibo1_irc_api
+  #CATKIN_DEPENDS geometry_msgs roscpp
   #DEPENDS system_lib
 )
 
@@ -133,7 +135,6 @@ include_directories(
 add_library(ibo1_nodeLibrary
   #-----Server Libraries-----
   src/Server/IRCServer.cpp
-  src/Server/IRCServerNodeHelper.cpp
   src/User/Users.cpp
   src/User/User.cpp
   #-----ChessWrapper Libraries-----
@@ -144,7 +145,6 @@ add_library(ibo1_nodeLibrary
   src/Utility/UCIHandler.cpp
   src/Utility/DataCreator.cpp
   src/Utility/FileHandler.cpp
-
 )
 
 
@@ -158,10 +158,11 @@ add_library(ibo1_nodeLibrary
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/ibo1_IRC_API_node.cpp)
+#add_executable(${PROJECT_NAME}_node src/ibo1_irc_api_node.cpp)
 add_executable(ircServer src/Nodes/ServerNode.cpp)
 add_executable(ircChess src/Nodes/ChessWrapperNode.cpp)
-add_executable(ircCellDetection src/Nodes/cellDetectionNode.cpp)
+add_executable(ircChessCellDetection src/Nodes/ChessBoardCellDetectionNode.cpp)
+add_executable(ircCommandExecuter src/Nodes/CommandExecuterNode.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -179,7 +180,8 @@ add_executable(ircCellDetection src/Nodes/cellDetectionNode.cpp)
 # )
 target_link_libraries(ircServer ibo1_nodeLibrary ${catkin_LIBRARIES})
 target_link_libraries(ircChess  ibo1_nodeLibrary ${catkin_LIBRARIES})
-target_link_libraries(ircCellDetection  ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+target_link_libraries(ircChessCellDetection  ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+target_link_libraries(ircCommandExecuter  ${catkin_LIBRARIES})
 
 
 # Add roslaunch checking

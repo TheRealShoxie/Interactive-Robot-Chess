@@ -10,14 +10,54 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
-
 // ImageCell header include
 #include <ibo1_irc_api/ImageProcessing/CellExtration.h>
 
 // General c++ imports
 #include <iostream>
-#include <fstream>
 #include <set>
+
+// Test
+#include <fstream>
+
+
+/*
+---------------------------------------------------------------------------------------------------------------------------------
+*/
+    // ////////// //
+    // Structs.   //
+    // ////////// //
+    struct ImageChessBoardCell{
+        int x = 0;
+        int y = 0;
+        int length = 0;
+        int area = 0;
+
+        inline bool operator==(const ImageChessBoardCell& e) const{
+            return (x == e.x && y == e.y);
+        }
+
+        inline bool operator<(const ImageChessBoardCell& e) const{
+            if(x == e.x){
+                //if(y == e.y) return false;
+                return y < e.y;
+            }
+            return x < e.x;
+        }
+    };
+
+    struct ImageChessPiece{
+        int x = 0;
+        int y = 0;
+        float depth = 0;
+        bool isOccupied = false;
+    };
+
+    struct ImageChessPieceWithColor{
+        ImageChessPiece imageChessPiece;
+        bool isWhite = false;
+    };
+
 
 static const std::string OPENCV_WINDOW = "Image window";
 static const std::string OPENCV_WINDOW_Cells = "ChessBoard Cell window";
@@ -27,7 +67,7 @@ static const int y_max = 720;
 static const int x_max_half = x_max/2;
 static const int y_max_half = y_max/2;
 
-static const int offSetCenter = 2;
+static const int offSetCenter = 0;
 static const float minimumPieceHeight = 0.02;
 static const float emptyCellDepth = 0.95;
 
@@ -39,6 +79,9 @@ static const int lowThresholdArea = 800;
 static const int highThresholdArea = 1050;
 
 static const int colorChessPieceCuttOfPoint = 8388607;
+
+
+
 
 
 /*
@@ -161,6 +204,8 @@ void imageCb(const sensor_msgs::ImageConstPtr& msg) {
     cv::waitKey(3);
 }
 
+
+
 // Callback for getting the depth values and checking if the cell is empty or not
 void imageCbDepth(const sensor_msgs::ImageConstPtr& msg) {
     imageChessPiecesWithColors.clear();
@@ -175,6 +220,9 @@ void imageCbDepth(const sensor_msgs::ImageConstPtr& msg) {
         ROS_ERROR("cv_bridge exception: %s", e.what());
         return;
     }
+
+
+    ofstream MyFile();
 
     // Iterating through each selected Chessboard cell
     for(auto &imageChessBoardCell : chosenImageChessBoardCellS){
@@ -243,12 +291,15 @@ int main (int argc, char **argv){
     spinner.start();
 
     ros::Publisher chessWrapper_pub = nh.advertise<std_msgs::String>("cellDetection_messages", 10);
+    ros::Subscriber corners_sub = nh.subscribe("/ec_goodfeature_filter/corners", 1, &cornersMessageReceived);
     ros::Subscriber moments_sub = nh.subscribe("/contour_moments_edge_detection/moments", 10, &momentsMessageReceived);
     image_transport::ImageTransport it(nh);
     image_transport::Subscriber depth_sub = it.subscribe("/external_camera_overhead/ec_depth/image_raw", 5, imageCb);
 
     image_transport::ImageTransport depth(nh);
-    image_transport::Subscriber depth_sub2 = it.subscribe("/external_camera_overhead/ec_depth/depth/image_raw", 5, imageCbDepth);
+    image_transport::Subscriber depth_sub2 = depth.subscribe("/external_camera_overhead/ec_depth/depth/image_raw", 5, imageCbDepth);
+
+
     cv::namedWindow(OPENCV_WINDOW);
     cv::namedWindow(OPENCV_WINDOW_Cells);
 

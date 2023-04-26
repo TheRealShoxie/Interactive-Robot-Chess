@@ -1,13 +1,18 @@
 #include <ibo1_irc_api/Server/IRCServerNodeHelper.h>
+#include<ibo1_irc_api/Utility/NodeHelper.h>
 
-#include <std_msgs/String.h>
 
-
-    // ////////// //
-    // Constants. //
-    // ////////// //
+/*
+---------------------------------------------------------------------------------------------------------------------------------
+*/
+    // ////////////////// //
+    //  Global variables. //
+    // ////////////////// //
 static string usersFilePathName = "/home/omar/Uni/Major_Project/Interactive-Robot-Chess/DEV/ROS/catkin_ws/src/ibo1_irc_api/data/Users/users.txt";
+
+// For ros subscribers & publisher
 ibo1_irc_api::Protocol returnedProtocol;
+ros::Publisher* commandExecuter_pub_ptr;
 
 /*
 ---------------------------------------------------------------------------------------------------------------------------------
@@ -16,12 +21,14 @@ ibo1_irc_api::Protocol returnedProtocol;
     // ////////// //
     // Callbacks. //
     // ////////// //
-void chessEngineMessageReceived(const ibo1_irc_api::Protocol& msg){
+void serverMessageReceived(const ibo1_irc_api::Protocol& msg){
     returnedProtocol = msg;
-    cout << "I received following on server from chessWrapper: " << endl;
+    cout << "I received following on server: " << endl;
+    cout << "I received from: " << (int)returnedProtocol.sender << endl;
     cout << "CmdByte: " << (int)returnedProtocol.cmd << endl;
 
 }
+
 
 
 
@@ -29,7 +36,7 @@ void chessEngineMessageReceived(const ibo1_irc_api::Protocol& msg){
 ---------------------------------------------------------------------------------------------------------------------------------
 */
 
-void communicationLogic(int bufferSizeData, IRCServer &server, Users &users, ros::Publisher &server_pub){
+void communicationLogic(int bufferSizeData, IRCServer &server, Users &users){
     vector<BYTE> receivedData;
     vector<BYTE> answer;
 
@@ -38,10 +45,13 @@ void communicationLogic(int bufferSizeData, IRCServer &server, Users &users, ros
     cout << "CLIENT COMMAND is:" << (int)(server.getClientCommand()) << endl;
 
     if(bufferSizeData >= 0){
+
+        cout << "I get here!" << endl;
         switch (server.getClientCommand())
         {
             case CMD_LOGIN: {
                 IRCServerNodeHelper::cmdUserLogin(receivedData, server, users, answer);
+                break;
             }
 
             case CMD_CREATEUSER:
@@ -56,28 +66,13 @@ void communicationLogic(int bufferSizeData, IRCServer &server, Users &users, ros
                     cout << (char)(int(b));
                 }
                 cout << endl;
-
-                IRCServerNodeHelper::forwarderChessWrapper(receivedData, CMD_GETCHESSENGINES, server_pub);
-
                 BYTE returnedCommand;
-                vector<BYTE> expectedReturn;
-                expectedReturn.push_back(CMD_GETCHESSENGINES);
 
-                bool foundExpectedCmd = false;
+                NodeHelper::forwarder(returnedProtocol, receivedData, CMD_INTERNAL_GETCHESSENGINES, SENDER_SERVER, SENDER_COMMANDEXECUTER, answer, returnedCommand, commandExecuter_pub_ptr);
 
-                while(!foundExpectedCmd){
-                    foundExpectedCmd = IRCServerNodeHelper::receiverChessWrapper(returnedProtocol, returnedCommand, answer, expectedReturn);
-                    ros::spinOnce();
-                }
-
-
-                cout << "Data to return: ";
-                for(auto &b : answer){
-                    cout << (char)(int(b));
-                }
-                cout << endl;
-                cout << "Command to send back: " << (int)foundExpectedCmd << endl;
+                cout << "Command to send back: " << (int)returnedCommand << endl;
                 cout << "-------------------------";
+                
 
                 returnedProtocol.cmd = (BYTE)0x00;
                 break;
@@ -90,23 +85,15 @@ void communicationLogic(int bufferSizeData, IRCServer &server, Users &users, ros
                     cout << (char)(int(b));
                 }
                 cout << endl;
-
-                IRCServerNodeHelper::forwarderChessWrapper(receivedData, CMD_STARTCHESSENGINE, server_pub);
-
                 BYTE returnedCommand;
-                vector<BYTE> expectedReturn;
-                expectedReturn.push_back(CMD_STARTCHESSENGINE);
-                expectedReturn.push_back(ERROR_CMD_CHESSENGINEDOESNTEXIST);
 
-                bool foundExpectedCmd = false;
+                NodeHelper::forwarder(returnedProtocol, receivedData, CMD_INTERNAL_STARTCHESSENGINE, SENDER_SERVER, SENDER_COMMANDEXECUTER, answer, returnedCommand, commandExecuter_pub_ptr);
 
-                while(!foundExpectedCmd){
-                    foundExpectedCmd = IRCServerNodeHelper::receiverChessWrapper(returnedProtocol, returnedCommand, answer, expectedReturn);
-                    ros::spinOnce();
-                }
 
-                cout << "Command to send back: " << (int)foundExpectedCmd << endl;
+            
+                cout << "Command to send back: " << (int)returnedCommand << endl;
                 cout << "-------------------------";
+
 
                 returnedProtocol.cmd = (BYTE)0x00;
                 server.setClientCommand(returnedCommand);
@@ -120,22 +107,13 @@ void communicationLogic(int bufferSizeData, IRCServer &server, Users &users, ros
                     cout << (char)(int(b));
                 }
                 cout << endl;
-
-                IRCServerNodeHelper::forwarderChessWrapper(receivedData, CMD_STOPCHESSENGINE, server_pub);
-
                 BYTE returnedCommand;
-                vector<BYTE> expectedReturn;
-                expectedReturn.push_back(CMD_STOPCHESSENGINE);
-                expectedReturn.push_back(ERROR_CMD_NOCHESSENGINERUNNING);
 
-                bool foundExpectedCmd = false;
+                NodeHelper::forwarder(returnedProtocol, receivedData, CMD_INTERNAL_STOPCHESSENGINE, SENDER_SERVER, SENDER_COMMANDEXECUTER, answer, returnedCommand, commandExecuter_pub_ptr);
 
-                while(!foundExpectedCmd){
-                    foundExpectedCmd = IRCServerNodeHelper::receiverChessWrapper(returnedProtocol, returnedCommand, answer, expectedReturn);
-                    ros::spinOnce();
-                }
 
-                cout << "Command to send back: " << (int)foundExpectedCmd << endl;
+            
+                cout << "Command to send back: " << (int)returnedCommand << endl;
                 cout << "-------------------------";
 
                 returnedProtocol.cmd = (BYTE)0x00;
@@ -151,36 +129,11 @@ void communicationLogic(int bufferSizeData, IRCServer &server, Users &users, ros
                 }
                 cout << endl;
 
-                IRCServerNodeHelper::forwarderChessWrapper(receivedData, CMD_PLAYERMOVE, server_pub);
-
                 BYTE returnedCommand;
-                vector<BYTE> expectedReturn;
-                expectedReturn.push_back(CMD_PLAYERMOVE);
-                expectedReturn.push_back(ERROR_CMD_NOCHESSENGINERUNNING);
 
-                expectedReturn.push_back(ERROR_CMD_PAWNCOLLIDEDSTRAIGHT);
-                expectedReturn.push_back(ERROR_CMD_PAWNCOLLIDEDDIAGONALOREMPTYCELL);
-                expectedReturn.push_back(ERROR_CMD_STARTINGCELLEMPTY);
-                expectedReturn.push_back(ERROR_CMD_NOTTHATCOLORSTURN);
-                expectedReturn.push_back(ERROR_CMD_MOVEINVALIDORBLOCKEDBYSAMECOLOR);
-                expectedReturn.push_back(ERROR_CMD_CANNOTCASTLEKINGSIDE);
-                expectedReturn.push_back(ERROR_CMD_CANNOTCASTLEQUEENSIDE);
-                expectedReturn.push_back(ERROR_CMD_OWNKINGINCHECK);
-                expectedReturn.push_back(ERROR_CMD_OTHERKINGINCHECKMATE);
-                expectedReturn.push_back(ERROR_CMD_PAWNNOTALLOWEDNOTPROMOTIONMOVE);
-                expectedReturn.push_back(ERROR_CMD_PIECETOPROMOTEISNOTPAWN);
-                expectedReturn.push_back(ERROR_CMD_PAWNNOTMOVINGTOENDOFBOARD);
-                expectedReturn.push_back(ERROR_CMD_INVALIDPIECENAMETOPROMOTEINTO);
-                expectedReturn.push_back(ERROR_CMD_INVALIDMOVEFORMAT);
+                NodeHelper::forwarder(returnedProtocol, receivedData, CMD_INTERNAL_PLAYERMOVE, SENDER_SERVER, SENDER_COMMANDEXECUTER, answer, returnedCommand, commandExecuter_pub_ptr);
 
-                bool foundExpectedCmd = false;
-
-                while(!foundExpectedCmd){
-                    foundExpectedCmd = IRCServerNodeHelper::receiverChessWrapper(returnedProtocol, returnedCommand, answer, expectedReturn);
-                    ros::spinOnce();
-                }
-
-                cout << "Command to send back: " << (int)foundExpectedCmd << endl;
+                cout << "Command to send back: " << (int)returnedCommand << endl;
                 cout << "-------------------------";
 
                 returnedProtocol.cmd = (BYTE)0x00;
@@ -197,42 +150,16 @@ void communicationLogic(int bufferSizeData, IRCServer &server, Users &users, ros
                 }
                 cout << endl;
 
-                IRCServerNodeHelper::forwarderChessWrapper(receivedData, CMD_CHESSENGINEMOVE, server_pub);
-
                 BYTE returnedCommand;
-                vector<BYTE> expectedReturn;
-                expectedReturn.push_back(CMD_CHESSENGINEMOVE);
-                expectedReturn.push_back(ERROR_CMD_NOCHESSENGINERUNNING);
 
-                expectedReturn.push_back(ERROR_CMD_PAWNCOLLIDEDSTRAIGHT);
-                expectedReturn.push_back(ERROR_CMD_PAWNCOLLIDEDDIAGONALOREMPTYCELL);
-                expectedReturn.push_back(ERROR_CMD_STARTINGCELLEMPTY);
-                expectedReturn.push_back(ERROR_CMD_NOTTHATCOLORSTURN);
-                expectedReturn.push_back(ERROR_CMD_MOVEINVALIDORBLOCKEDBYSAMECOLOR);
-                expectedReturn.push_back(ERROR_CMD_CANNOTCASTLEKINGSIDE);
-                expectedReturn.push_back(ERROR_CMD_CANNOTCASTLEQUEENSIDE);
-                expectedReturn.push_back(ERROR_CMD_OWNKINGINCHECK);
-                expectedReturn.push_back(ERROR_CMD_OTHERKINGINCHECKMATE);
-                expectedReturn.push_back(ERROR_CMD_PAWNNOTALLOWEDNOTPROMOTIONMOVE);
-                expectedReturn.push_back(ERROR_CMD_PIECETOPROMOTEISNOTPAWN);
-                expectedReturn.push_back(ERROR_CMD_PAWNNOTMOVINGTOENDOFBOARD);
-                expectedReturn.push_back(ERROR_CMD_INVALIDPIECENAMETOPROMOTEINTO);
-                expectedReturn.push_back(ERROR_CMD_CHESSENGINECREATEDNOMOVE);
-                expectedReturn.push_back(ERROR_CMD_INVALIDMOVEFORMAT);
-
-                bool foundExpectedCmd = false;
-
-                while(!foundExpectedCmd){
-                    foundExpectedCmd = IRCServerNodeHelper::receiverChessWrapper(returnedProtocol, returnedCommand, answer, expectedReturn);
-                    ros::spinOnce();
-                }
+                NodeHelper::forwarder(returnedProtocol, receivedData, CMD_INTERNAL_CHESSENGINEMOVE, SENDER_SERVER, SENDER_COMMANDEXECUTER, answer, returnedCommand, commandExecuter_pub_ptr);
 
                 cout << "Data to return: ";
                 for(auto &b : answer){
                     cout << (char)(int(b));
                 }
                 cout << endl;
-                cout << "Command to send back: " << (int)foundExpectedCmd << endl;
+                cout << "Command to send back: " << (int)returnedCommand << endl;
                 cout << "-------------------------";
 
                 returnedProtocol.cmd = (BYTE)0x00;
@@ -266,20 +193,18 @@ int main (int argc, char **argv){
     ros:: AsyncSpinner spinner(1);
     spinner.start();
 
-    ros::Publisher server_pub = nh.advertise<ibo1_irc_api::Protocol>("ircServer_messages", 10);
-    ros::Subscriber chessEngineWrapper_sub = nh.subscribe("/chessWrapper_messages", 10, &chessEngineMessageReceived);
-    
+    ros::Subscriber server_sub = nh.subscribe("/ircServer", 1, &serverMessageReceived);
 
-    std_msgs::String messageToSendToChessEngine;
-    messageToSendToChessEngine.data = "engineStart";
-    server_pub.publish(messageToSendToChessEngine);
-    ros::spinOnce();
+    ros::Publisher commandExecuter_pub = nh.advertise<ibo1_irc_api::Protocol>("ircCommandExecuter", 10);
+
+    commandExecuter_pub_ptr = &commandExecuter_pub;
+    
 
     ros::Rate rate(10);
 
-    while(server_pub.getNumSubscribers() == 0){
-        rate.sleep();
-    }
+    // while(server_pub.getNumSubscribers() == 0){
+    //     rate.sleep();
+    // }
 
 
     Users users(usersFilePathName);
@@ -303,7 +228,7 @@ int main (int argc, char **argv){
         }
 
         cout << "Size of to come Data: " << bufferSizeData << endl;
-        communicationLogic(bufferSizeData, server, users, server_pub);
+        communicationLogic(bufferSizeData, server, users);
 
         cout << "\n--------------------------------------------------------" << endl;
 

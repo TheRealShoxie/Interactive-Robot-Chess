@@ -4,20 +4,23 @@
 using namespace std;
    
 
+/*
+---------------------------------------------------------------------------------------------------------------------------------
+*/
     // ////////// //
     // Structs.   //
     // ////////// //
-    struct ImageChessBoardCell{
+
+    // Struct used for creating a set of x and y coordinates
+    struct Image2dPoints{
         int x = 0;
         int y = 0;
-        int length = 0;
-        int area = 0;
 
-        inline bool operator==(const ImageChessBoardCell& e) const{
+        inline bool operator==(const Image2dPoints& e) const{
             return (x == e.x && y == e.y);
         }
 
-        inline bool operator<(const ImageChessBoardCell& e) const{
+        inline bool operator<(const Image2dPoints& e) const{
             if(x == e.x){
                 //if(y == e.y) return false;
                 return y < e.y;
@@ -26,16 +29,48 @@ using namespace std;
         }
     };
 
-    struct ImageChessPiece{
+    // Struct used for creating the rectangle which represents the chessboard square
+    struct ImageSquares{
+        int x1 = 0;
+        int y1 = 0;
+        int x2 = 0;
+        int y2 = 0;
+
+        inline bool operator==(const ImageSquares& e) const{
+            return (x1 == e.x1 && y1 == e.y1);
+        }
+
+        inline bool operator<(const ImageSquares& e) const{
+            if(x1 == e.x1){
+                //if(y == e.y) return false;
+                return y1 < e.y1;
+            }
+            return x1 < e.x1;
+        }
+    };
+
+    // Struct used to represent the chessPiece information taken from the depthSensor 
+    struct ImageChessPieceDepth{
         int x = 0;
         int y = 0;
         float depth = 0;
         bool isOccupied = false;
+
+        inline bool operator==(const ImageChessPieceDepth& e) const{
+            return (x == e.x && y == e.y);
+        }
+
     };
 
-    struct ImageChessPieceWithColor{
-        ImageChessPiece imageChessPiece;
+    //Struct used to represent the chessPiece information from the image
+    struct ImageChessCell{
+        ImageChessPieceDepth chessPieceDepth;
         bool isWhite = false;
+
+        inline bool operator==(const ImageChessCell& e) const{
+            return (chessPieceDepth == e.chessPieceDepth);
+        }
+
     };
    
-#endif //IMAGECELL_H
+#endif //CELLEXTRACTION_H

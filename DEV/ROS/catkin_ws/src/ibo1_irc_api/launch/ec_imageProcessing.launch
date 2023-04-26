@@ -1,0 +1,19 @@
+<launch>
+    <!-- Specify the image input from the camera -->
+    <arg name="input_image" value="/external_camera_overhead/ec_depth/image_raw"/>
+
+	<!--Additional args to enable debug and enable max_corners to look for max corners to look for is 100-->
+	<arg name="input_max_corners" default="100"/>
+	<arg name="debug" default="true"/>
+
+	<include file="$(find opencv_apps)/launch/goodfeature_track.launch">
+        <arg name="node_name" value="goodfeature_filter"/>
+        <arg name="image" value="$(arg input_image)"/>
+		<arg name="max_corners" value="$(arg input_max_corners)" />
+		<arg name="debug_view" value="$(arg debug)" />
+    </include>
+
+    <!-- Starting the ircCellDetection_node -->
+	<node pkg="ibo1_irc_api" type="ircChessCellDetection" name="ircChessCellDetection" output="screen" />
+	
+</launch>

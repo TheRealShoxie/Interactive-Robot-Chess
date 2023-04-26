@@ -32,3 +32,23 @@ Tuesday:
 
     - After spawning in all pawns my current way of using hugh lines doesn't work as the cells arent correctly created anymore due to
         view angles. Will need to look into good features again and see if I cen find a way to deal with
+
+Wednesday:
+    - Started looking into good_features and how to use the points to create the squares with an algorithm
+    - Starting working on a primitive algorithm to extract the information
+    - Extracted information by creating a set of the points which allows me to filter out duplicates and also allows me to order the points
+    - Then create rectangles within a certain threshold between points
+        - these rectangles represent the chessboard cells and squares
+        - Using that I scan the whole cell to get the depth value for the piece if there is open_cv
+        - This then gets used to get the color of the chesspieces
+        - This now will be published using a rostopic
+
+    - Now need to work on creating a state machine
+        - SeverNode and ChessWrapperNode are directly connected rn.
+            - This has to be seperated.
+            - Insted of ServerNode publishing we make the nodes themselves listen to their respectevile own topic and make the other 
+              topics publish to it instead of it publishing to the others
+            - Had to rewrite how the communicate now will go back to testing integration manually if it works so far
+            - Created a NodeHelper class because both ServerNode and CommandExecuterNode share forwarding of messages.
+            - Thus created a helper class which defines forwarding in a generalized term such that it can be used by any node that needs 
+              to forward messages and waits for a specific sender if needed. 
