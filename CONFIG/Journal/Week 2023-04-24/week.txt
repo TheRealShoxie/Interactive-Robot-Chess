@@ -51,4 +51,8 @@ Wednesday:
             - Had to rewrite how the communicate now will go back to testing integration manually if it works so far
             - Created a NodeHelper class because both ServerNode and CommandExecuterNode share forwarding of messages.
             - Thus created a helper class which defines forwarding in a generalized term such that it can be used by any node that needs 
-              to forward messages and waits for a specific sender if needed. 
+              to forward messages and waits for a specific sender if needed.
+
+    - Started working on Creating the Target
+        - takes a FEN Move single part and selects the target cells
+        - Need to keep in mind that targets should be set before robot arm moves

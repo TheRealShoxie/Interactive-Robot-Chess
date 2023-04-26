@@ -14,6 +14,12 @@ typedef uint8_t BYTE;
 
 
 // Protocol Commands
+//CreateTarget Cmds
+#define CMD_INTERNAL_SETTARGET                                      (BYTE)0x01
+#define CMD_INTERNAL_CLEARTARGET                                    (BYTE)0x02
+
+
+// Chess CMDs
 #define CMD_INTERNAL_GETCHESSENGINES                                (BYTE)0x04
 #define CMD_INTERNAL_STARTCHESSENGINE                               (BYTE)0x05
 #define CMD_INTERNAL_STOPCHESSENGINE                                (BYTE)0x06
@@ -26,6 +32,8 @@ typedef uint8_t BYTE;
 
 // Error Codes:
 #define ERROR_INTERNAL_CMD_UNRECOGNIZABLE                           (BYTE)0xfe
+
+//Chess Errors
 #define ERROR_INTERNAL_CMD_CHESSENGINEDOESNTEXIST                   (BYTE)0xf9
 #define ERROR_INTERNAL_CMD_CHESSENGINENOTSTARTED                    (BYTE)0xf8
 #define ERROR_INTERNAL_CMD_NOCHESSENGINERUNNING                     (BYTE)0xf7
@@ -46,3 +54,7 @@ typedef uint8_t BYTE;
 #define ERROR_INTERNAL_CMD_INVALIDPIECENAMETOPROMOTEINTO            (BYTE)0xe8
 #define ERROR_INTERNAL_CMD_CHESSENGINECREATEDNOMOVE                 (BYTE)0xe7
 #define ERROR_INTERNAL_CMD_INVALIDMOVEFORMAT                        (BYTE)0xe6
+
+//Create Target errors
+
+

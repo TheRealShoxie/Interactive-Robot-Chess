@@ -146,7 +146,6 @@ void stateMachineLogicSimulation(){
 
 
     returnedProtocol.cmd = (BYTE)0x00; 
-
 }
 
 /*

@@ -163,6 +163,7 @@ add_executable(ircServer src/Nodes/ServerNode.cpp)
 add_executable(ircChess src/Nodes/ChessWrapperNode.cpp)
 add_executable(ircChessCellDetection src/Nodes/ChessBoardCellDetectionNode.cpp)
 add_executable(ircCommandExecuter src/Nodes/CommandExecuterNode.cpp)
+add_executable(ircCreateTarget src/Nodes/CreateTargetNode.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -182,6 +183,7 @@ target_link_libraries(ircServer ibo1_nodeLibrary ${catkin_LIBRARIES})
 target_link_libraries(ircChess  ibo1_nodeLibrary ${catkin_LIBRARIES})
 target_link_libraries(ircChessCellDetection  ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 target_link_libraries(ircCommandExecuter  ${catkin_LIBRARIES})
+target_link_libraries(ircCreateTarget  ${catkin_LIBRARIES})
 
 
 # Add roslaunch checking
