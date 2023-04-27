@@ -48,19 +48,19 @@
     <link name="ec_camera_link"/>
 
     
-    <joint name="ec_depth_module" type="fixed">
-        <origin xyz="0 0.0125 0" rpy="${-pi/2} 0 ${-pi/2}" />
-        <parent link="ec_camera_link" />
-        <child  link="ec_depth_frame" />
-    </joint>
-    <link name="ec_depth_frame"/>
-    
     <joint name="ec_color_module" type="fixed">
         <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}" />
         <parent link="ec_camera_link" />
         <child  link="ec_color_frame" />
     </joint>
     <link name="ec_color_frame" />
+
+    <joint name="ec_depth_module" type="fixed">
+        <origin xyz="0 0.0125 0" rpy="${-pi/2} 0 ${-pi/2}" />
+        <parent link="ec_camera_link" />
+        <child  link="ec_depth_frame" />
+    </joint>
+    <link name="ec_depth_frame"/>
 
 
     <!-- Cameras-->

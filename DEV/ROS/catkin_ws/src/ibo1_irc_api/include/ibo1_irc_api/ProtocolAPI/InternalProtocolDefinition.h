@@ -7,7 +7,7 @@ typedef uint8_t BYTE;
 
 
 // Receiver
-#define SENDER_COMMANDEXECUTER                                      (BYTE)0x00
+#define SENDER_SYSTEMSTATEMACHINE                                   (BYTE)0x00
 #define SENDER_SERVER                                               (BYTE)0x01
 #define SENDER_CHESSWRAPPER                                         (BYTE)0x02
 #define SENDER_CREATETARGET                                         (BYTE)0x03
@@ -17,6 +17,7 @@ typedef uint8_t BYTE;
 //CreateTarget Cmds
 #define CMD_INTERNAL_SETTARGET                                      (BYTE)0x01
 #define CMD_INTERNAL_CLEARTARGET                                    (BYTE)0x02
+#define CMD_INTERNAL_ROBOTARMMOVE                                   (BYTE)0x03
 
 
 // Chess CMDs

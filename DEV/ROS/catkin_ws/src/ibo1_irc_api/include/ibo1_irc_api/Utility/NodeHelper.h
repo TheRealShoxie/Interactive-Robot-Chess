@@ -133,8 +133,6 @@ class NodeHelper{
 
             case CMD_INTERNAL_CHESSENGINEMOVE:{
 
-                    //Declaring expectedReturn
-                    vector<BYTE> expectedReturn;
                     expectedReturn.push_back(CMD_INTERNAL_CHESSENGINEMOVE);
                     expectedReturn.push_back(ERROR_INTERNAL_CMD_NOCHESSENGINERUNNING);
 
@@ -154,6 +152,15 @@ class NodeHelper{
 
                     return expectedReturn;
                 }
+
+            case CMD_INTERNAL_SETTARGET:{
+                expectedReturn.push_back(CMD_INTERNAL_SETTARGET);
+                expectedReturn.push_back(ERROR_INTERNAL_CMD_INVALIDMOVEFORMAT);
+            }
+
+            case CMD_INTERNAL_CLEARTARGET:{
+                expectedReturn.push_back(CMD_INTERNAL_CLEARTARGET);
+            }
 
             default:
                 return expectedReturn;

@@ -2,7 +2,9 @@
 #define CELLEXTRACTION_H
 
 using namespace std;
-   
+
+
+int pixelOffSet = 5;
 
 /*
 ---------------------------------------------------------------------------------------------------------------------------------
@@ -41,8 +43,8 @@ using namespace std;
         }
 
         inline bool operator<(const ImageSquares& e) const{
-            if(x1 == e.x1){
-                //if(y == e.y) return false;
+            // Checking if the pixel is within a range of another then we sort by y
+            if((x1-pixelOffSet <= e.x1 && x1+pixelOffSet >= e.x1)){
                 return y1 < e.y1;
             }
             return x1 < e.x1;

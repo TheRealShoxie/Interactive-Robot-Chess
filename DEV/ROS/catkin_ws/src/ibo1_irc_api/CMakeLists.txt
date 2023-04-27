@@ -15,6 +15,10 @@ find_package(catkin REQUIRED COMPONENTS
   cv_bridge
   image_transport
   tf2_ros
+  moveit_msgs
+  moveit_core
+  moveit_ros_planning
+  moveit_ros_planning_interface
 )
 
 ## System dependencies are found with CMake's conventions
@@ -143,7 +147,6 @@ add_library(ibo1_nodeLibrary
   src/Chess/ChessBoard.cpp
   #-----Utility Libraries-----
   src/Utility/UCIHandler.cpp
-  src/Utility/DataCreator.cpp
   src/Utility/FileHandler.cpp
 )
 
@@ -162,8 +165,9 @@ add_library(ibo1_nodeLibrary
 add_executable(ircServer src/Nodes/ServerNode.cpp)
 add_executable(ircChess src/Nodes/ChessWrapperNode.cpp)
 add_executable(ircChessCellDetection src/Nodes/ChessBoardCellDetectionNode.cpp)
-add_executable(ircCommandExecuter src/Nodes/CommandExecuterNode.cpp)
+add_executable(ircSystemStateMachine src/Nodes/SystemStateMachineNode.cpp)
 add_executable(ircCreateTarget src/Nodes/CreateTargetNode.cpp)
+add_executable(ircRobotArmStateMachine src/Nodes/RobotArmStateMachineNode.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -182,8 +186,10 @@ add_executable(ircCreateTarget src/Nodes/CreateTargetNode.cpp)
 target_link_libraries(ircServer ibo1_nodeLibrary ${catkin_LIBRARIES})
 target_link_libraries(ircChess  ibo1_nodeLibrary ${catkin_LIBRARIES})
 target_link_libraries(ircChessCellDetection  ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
-target_link_libraries(ircCommandExecuter  ${catkin_LIBRARIES})
+target_link_libraries(ircSystemStateMachine  ${catkin_LIBRARIES})
 target_link_libraries(ircCreateTarget  ${catkin_LIBRARIES})
+target_link_libraries(ircRobotArmStateMachine  ${catkin_LIBRARIES})
+
 
 
 # Add roslaunch checking

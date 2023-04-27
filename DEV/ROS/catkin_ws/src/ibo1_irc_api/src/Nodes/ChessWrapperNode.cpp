@@ -15,7 +15,7 @@ static string chessEnginesFilePathName = "/home/omar/Uni/Major_Project/Interacti
 
 // For ros subscribers & publisher
 ibo1_irc_api::Protocol returnedProtocol;
-ros::Publisher* commandExecuter_pub_ptr;
+ros::Publisher* systemStateMachine_pub_ptr;
 
 // For ChessEngine
 ChessEngine *chessEnginePointer;
@@ -52,8 +52,8 @@ void sendToSender(BYTE sender, const ibo1_irc_api::Protocol& sendProtocol){
     // Checking which sender it should return to
     switch (sender)
     {
-        case SENDER_COMMANDEXECUTER:{
-            commandExecuter_pub_ptr->publish(sendProtocol);
+        case SENDER_SYSTEMSTATEMACHINE:{
+            systemStateMachine_pub_ptr->publish(sendProtocol);
             break;
         }
         
@@ -207,9 +207,9 @@ int main (int argc, char **argv){
 
     ros::Subscriber server_sub = nh.subscribe("/ircChessWrapper", 1, &chessWrapperMessageReceived);
 
-    ros::Publisher commandExecuter_pub = nh.advertise<ibo1_irc_api::Protocol>("ircCommandExecuter", 10);
+    ros::Publisher systemStateMachine_pub = nh.advertise<ibo1_irc_api::Protocol>("ircSystemStateMachine", 10);
 
-    commandExecuter_pub_ptr = &commandExecuter_pub;
+    systemStateMachine_pub_ptr = &systemStateMachine_pub;
 
     vector<ChessEngineDefinitionStruct> chessEngines = FileHandler::readChessEngines(chessEnginesFilePathName);
 

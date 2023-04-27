@@ -12,7 +12,7 @@ static string usersFilePathName = "/home/omar/Uni/Major_Project/Interactive-Robo
 
 // For ros subscribers & publisher
 ibo1_irc_api::Protocol returnedProtocol;
-ros::Publisher* commandExecuter_pub_ptr;
+ros::Publisher* systemStateMachine_pub_ptr;
 
 /*
 ---------------------------------------------------------------------------------------------------------------------------------
@@ -68,12 +68,14 @@ void communicationLogic(int bufferSizeData, IRCServer &server, Users &users){
                 cout << endl;
                 BYTE returnedCommand;
 
-                NodeHelper::forwarder(returnedProtocol, receivedData, CMD_INTERNAL_GETCHESSENGINES, SENDER_SERVER, SENDER_COMMANDEXECUTER, answer, returnedCommand, commandExecuter_pub_ptr);
+                cout << "I get before here!" << endl;
+                NodeHelper::forwarder(returnedProtocol, receivedData, CMD_INTERNAL_GETCHESSENGINES, SENDER_SERVER, SENDER_SYSTEMSTATEMACHINE, answer, returnedCommand, systemStateMachine_pub_ptr);
+
+                cout << "I get here!" << endl;
 
                 cout << "Command to send back: " << (int)returnedCommand << endl;
                 cout << "-------------------------";
                 
-
                 returnedProtocol.cmd = (BYTE)0x00;
                 break;
             }
@@ -87,7 +89,7 @@ void communicationLogic(int bufferSizeData, IRCServer &server, Users &users){
                 cout << endl;
                 BYTE returnedCommand;
 
-                NodeHelper::forwarder(returnedProtocol, receivedData, CMD_INTERNAL_STARTCHESSENGINE, SENDER_SERVER, SENDER_COMMANDEXECUTER, answer, returnedCommand, commandExecuter_pub_ptr);
+                NodeHelper::forwarder(returnedProtocol, receivedData, CMD_INTERNAL_STARTCHESSENGINE, SENDER_SERVER, SENDER_SYSTEMSTATEMACHINE, answer, returnedCommand, systemStateMachine_pub_ptr);
 
 
             
@@ -109,7 +111,7 @@ void communicationLogic(int bufferSizeData, IRCServer &server, Users &users){
                 cout << endl;
                 BYTE returnedCommand;
 
-                NodeHelper::forwarder(returnedProtocol, receivedData, CMD_INTERNAL_STOPCHESSENGINE, SENDER_SERVER, SENDER_COMMANDEXECUTER, answer, returnedCommand, commandExecuter_pub_ptr);
+                NodeHelper::forwarder(returnedProtocol, receivedData, CMD_INTERNAL_STOPCHESSENGINE, SENDER_SERVER, SENDER_SYSTEMSTATEMACHINE, answer, returnedCommand, systemStateMachine_pub_ptr);
 
 
             
@@ -131,7 +133,7 @@ void communicationLogic(int bufferSizeData, IRCServer &server, Users &users){
 
                 BYTE returnedCommand;
 
-                NodeHelper::forwarder(returnedProtocol, receivedData, CMD_INTERNAL_PLAYERMOVE, SENDER_SERVER, SENDER_COMMANDEXECUTER, answer, returnedCommand, commandExecuter_pub_ptr);
+                NodeHelper::forwarder(returnedProtocol, receivedData, CMD_INTERNAL_PLAYERMOVE, SENDER_SERVER, SENDER_SYSTEMSTATEMACHINE, answer, returnedCommand, systemStateMachine_pub_ptr);
 
                 cout << "Command to send back: " << (int)returnedCommand << endl;
                 cout << "-------------------------";
@@ -152,7 +154,7 @@ void communicationLogic(int bufferSizeData, IRCServer &server, Users &users){
 
                 BYTE returnedCommand;
 
-                NodeHelper::forwarder(returnedProtocol, receivedData, CMD_INTERNAL_CHESSENGINEMOVE, SENDER_SERVER, SENDER_COMMANDEXECUTER, answer, returnedCommand, commandExecuter_pub_ptr);
+                NodeHelper::forwarder(returnedProtocol, receivedData, CMD_INTERNAL_CHESSENGINEMOVE, SENDER_SERVER, SENDER_SYSTEMSTATEMACHINE, answer, returnedCommand, systemStateMachine_pub_ptr);
 
                 cout << "Data to return: ";
                 for(auto &b : answer){
@@ -195,9 +197,9 @@ int main (int argc, char **argv){
 
     ros::Subscriber server_sub = nh.subscribe("/ircServer", 1, &serverMessageReceived);
 
-    ros::Publisher commandExecuter_pub = nh.advertise<ibo1_irc_api::Protocol>("ircCommandExecuter", 10);
+    ros::Publisher systemStateMachine_pub = nh.advertise<ibo1_irc_api::Protocol>("ircSystemStateMachine", 10);
 
-    commandExecuter_pub_ptr = &commandExecuter_pub;
+    systemStateMachine_pub_ptr = &systemStateMachine_pub;
     
 
     ros::Rate rate(10);

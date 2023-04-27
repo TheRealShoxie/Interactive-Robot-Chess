@@ -4,4 +4,20 @@
 	
 	<!-- Starting the ircChess_node-->
 	<node pkg="ibo1_irc_api" type="ircChess" name="ircChess" output="screen" />
+
+	<!-- Starting the ircSystemStateMachine_node-->
+	<node pkg="ibo1_irc_api" type="ircSystemStateMachine" name="ircSystemStateMachine" output="screen" />
+
+	<!-- Starting the CreateTarget_node-->
+	<node pkg="ibo1_irc_api" type="ircCreateTarget" name="ircCreateTarget" output="screen" />
+
+	<!-- Group for imageProcessing-->
+    <group ns="imageProcessing">
+
+        <!--Including launch file for external camera imageProcessing -->
+        <include file="$(find ibo1_irc_api)/launch/ec_imageProcessing.launch">
+            <arg name="input_max_corners" value="100"/>
+            <arg name="debug" value="${arg debug}"/>
+        </include>
+    </group>
 </launch>

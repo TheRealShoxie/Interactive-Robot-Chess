@@ -45,7 +45,7 @@
     </include>
 
     <!-- Delay before homing the arm -->
-    <arg name="start_delay_seconds" default="10"/>
+    <arg name="start_delay_seconds" default="5"/>
 
     <group ns="external_camera">
         <!-- Load the description for the robot -->
@@ -62,6 +62,8 @@
             <remap from="robot_description" to="external_camera_description" />
         </node>
     </group>
+
+    
 
     <!--Robot Arm launching -->
     <!--_______________________________________________________________________________________________________________________________________________________________________________________-->

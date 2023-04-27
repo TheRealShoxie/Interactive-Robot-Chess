@@ -56,3 +56,38 @@ Wednesday:
     - Started working on Creating the Target
         - takes a FEN Move single part and selects the target cells
         - Need to keep in mind that targets should be set before robot arm moves
+
+Thursday:
+    - Continue work on setting target
+        - Realized taht the squares arent ordered as there is sometimes a mismatch by a few pixesl.
+        - This was fixed by making the squares a set and allowing for some threshold when comparing squares
+    - Setting target finished. Using a ChessMove to convert into Cell position and then continiously publishing that cell
+    - Reworked internal communication to the state where it is generalized
+        - This had to be done to pass information through the Command Executer to the needed nodes.
+        - And back to the server
+        - It now functions as a hub and executes a stateMachine for the chess Engine move
+    - ChessEngine move state machine work started
+        - First getting the chessEngine move
+        - Setting the targets works
+        - Work started on robotic arm moving to the target and doing its own logic
+
+    - Reworked CommandExecuter into a stateMachine for ease of use to expand in the future. And making it possible to create a interrupter for 
+        example if the robot arm needs to stop due to collision
+
+    - Robot arm
+        - First started by creating a planning phase to make sure the robot arm doesnt move into the ground or hits the chessboard
+            - The chessboard will have a variable for its dimensions and position such that in the future it can be chagned and 
+            isnt hard coded into the program
+        - Deleting of planning_scene_objects not possible unsure why
+
+        - Working on basic movement
+            - So I had a lot of trouble starting the MoveGroupInterface, this took me around 5/6 hrs.
+            - Understanding what it is trying to do and then how to fix it
+            - So because the robot_description is published under a namespace my_gen3 it cannot find the robot model
+            - If i remove the namespace from the robotGazebo.launch file it finds the robot_description but not its sematics
+            - After googling didnt help at all I thought about how to fix it. First I checked if their gazebo launch has the same problem
+                and it does. So next idea was to remove the namespace from their original file too which also didn't help. The huge problem
+                that I had was that their example is python only I could choose to switch to python which I was about to do but then I Realized
+                that in their python example they set a namespace so I looked into how to set a namespace for C++ but couldnt really find anything
+                so my workaround was to just launch the node inside a launch file and wrap that node in the launch file around a namespace
+                the namespace my_gen3. That did the trick and it worked. Took me 5-6hrs in total to figure it out

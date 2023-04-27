@@ -1,0 +1,71 @@
+Number: 0 |X=490|Y=208
+Number: 1 |X=494|Y=250
+Number: 2 |X=494|Y=285
+Number: 3 |X=494|Y=323
+Number: 4 |X=494|Y=358
+Number: 5 |X=494|Y=393
+Number: 6 |X=494|Y=433
+Number: 7 |X=494|Y=466
+
+Number: 8 |X=529|Y=213
+Number: 9 |X=532|Y=251
+Number: 10|X=532|Y=284
+Number: 11|X=532|Y=324
+Number: 12|X=532|Y=357
+Number: 13|X=529|Y=394
+Number: 14|X=532|Y=430
+Number: 15|X=529|Y=467
+
+Number: 16|X=568|Y=213
+Number: 17|X=565|Y=251
+Number: 18|X=565|Y=284
+Number: 19|X=565|Y=324
+Number: 20|X=565|Y=357
+Number: 21|X=565|Y=396
+Number: 22|X=565|Y=430
+Number: 23|X=565|Y=469
+
+Number: 24|X=601|Y=213
+Number: 25|X=601|Y=248
+Number: 26|X=601|Y=287
+Number: 27|X=602|Y=321
+Number: 28|X=601|Y=360
+Number: 29|X=602|Y=394
+Number: 30|X=602|Y=432
+Number: 31|X=602|Y=467
+
+Number: 32|X=641|Y=213
+Number: 33|X=638|Y=250
+Number: 34|X=638|Y=284
+Number: 35|X=638|Y=323
+Number: 36|X=641|Y=360
+Number: 37|X=638|Y=396
+Number: 38|X=641|Y=433
+Number: 39|X=641|Y=466
+
+Number: 40|X=674|Y=213
+Number: 41|X=674|Y=248
+Number: 42|X=674|Y=287
+Number: 43|X=674|Y=321
+Number: 44|X=674|Y=360
+Number: 45|X=674|Y=393
+Number: 46|X=674|Y=433
+Number: 47|X=674|Y=466
+
+Number: 48|X=714|Y=213
+Number: 49|X=711|Y=250
+Number: 50|X=711|Y=285
+Number: 51|X=711|Y=323
+Number: 52|X=711|Y=357
+Number: 53|X=711|Y=396
+Number: 54|X=711|Y=430
+Number: 55|X=711|Y=469
+
+Number: 56|X=747|Y=213
+Number: 57|X=750|Y=251
+Number: 58|X=750|Y=284
+Number: 59|X=747|Y=321
+Number: 60|X=750|Y=357
+Number: 61|X=747|Y=394
+Number: 62|X=747|Y=433
+Number: 63|X=747|Y=466

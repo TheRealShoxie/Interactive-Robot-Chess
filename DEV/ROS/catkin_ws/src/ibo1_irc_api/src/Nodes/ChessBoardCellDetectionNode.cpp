@@ -45,7 +45,7 @@ static const int xSquareMaxDistance = 45;
 static const int ySquareMinDistance = 30;
 static const int ySquareMaxDistance = 45;
 set<Image2dPoints> sortedPoints;
-vector<ImageSquares> imageSquares;
+set<ImageSquares> imageSquares;
 
 
 // Chess Piece variables
@@ -120,11 +120,10 @@ void cornersMessageReceived(const opencv_apps::Point2DArrayStamped msg){
                     imgSquare.y1 = currentY;
                     imgSquare.x2 = nextX;
                     imgSquare.y2 = nextY;
-                    imageSquares.push_back(imgSquare);
+                    imageSquares.insert(imgSquare);
                     break;
                 }
             }
-
         }
     }
 
@@ -152,6 +151,8 @@ void imageCb(const sensor_msgs::ImageConstPtr& msg) {
     int counterCellNumber = 0;
     int chessPieceX = 0;
     int chessPieceY = 0;
+    int emptyCellCenterX = 0;
+    int emptyCellCenterY = 0;
     int singleRGBValue = 0;
     ImageChessCell chessCell;
     
@@ -191,6 +192,9 @@ void imageCb(const sensor_msgs::ImageConstPtr& msg) {
         }
         // Otherwise set isWhite automatically to false
         else{
+            emptyCellCenterX = imageChessPiecesDepths.at(counterCellNumber).x;
+            emptyCellCenterY = imageChessPiecesDepths.at(counterCellNumber).y;
+            cv::circle(cv_ptr->image, cv::Point(emptyCellCenterX, emptyCellCenterY), 3, CV_RGB(0,0,255));
             chessCell.isWhite = false;
         }
 
@@ -239,10 +243,20 @@ void imageCbDepth(const sensor_msgs::ImageConstPtr& msg) {
     int numberOfPixelY = 0;
     int numberOfDepthValues = 0;
 
+    //Values for empty square
+    int totalXPixelValueEmpty = 0;
+    int totalYPixelValueEmpty = 0;
+    float totalDepthValueEmpty = 0;
+
+    int numberOfPixelXEmpty = 0;
+    int numberOfPixelYEmpty = 0;
+    int numberOfDepthValuesEmpty = 0;
+
     // Iterating through each selected Chessboard cell
     for(auto square : imageSquares){
 
         // Reseting the values for each square
+        // Variables for square with chessPiece
         totalXPixelValue = 0;
         totalYPixelValue = 0;
         totalDepthValue = 0;
@@ -250,6 +264,15 @@ void imageCbDepth(const sensor_msgs::ImageConstPtr& msg) {
         numberOfPixelX = 0;
         numberOfPixelY = 0;
         numberOfDepthValues = 0;
+
+        //Values for empty square
+        totalXPixelValueEmpty = 0;
+        totalYPixelValueEmpty = 0;
+        totalDepthValueEmpty = 0;
+
+        numberOfPixelXEmpty = 0;
+        numberOfPixelYEmpty = 0;
+        numberOfDepthValuesEmpty = 0;
 
         // Iterating through each pixel of the square
         for(int x = square.x1; x <= square.x2; x++){
@@ -270,13 +293,26 @@ void imageCbDepth(const sensor_msgs::ImageConstPtr& msg) {
                     // Adding the Depth value to the total and increasing the number of depthValues
                     totalDepthValue = totalDepthValue + depthAtPixel;
                     numberOfDepthValues++;
+                }else{
+                    // Adding the Pixel values to their totals and increasing the number of pixels we added
+                    totalXPixelValueEmpty = totalXPixelValueEmpty + x;
+                    numberOfPixelXEmpty++;
+
+                    totalYPixelValueEmpty = totalYPixelValueEmpty + y;
+                    numberOfPixelYEmpty++;
+
+                    // Adding the Depth value to the total and increasing the number of depthValues
+                    totalDepthValueEmpty = totalDepthValueEmpty + depthAtPixel;
+                    numberOfDepthValuesEmpty++;
                 }
             }
         }
 
         // Creating the imageChessPieceDepth object if we have a number of pixel and depthValues
         ImageChessPieceDepth imageChessPieceDepth;
-        if(numberOfPixelX != 0 && numberOfPixelY != 0 && numberOfDepthValues != 0){
+
+        // DO we have depthValues for a chessPieve
+        if(numberOfDepthValues != 0){
             // Calculating center of the piece in X,Y and adding it to the imageChessPieceDepth object
             imageChessPieceDepth.x = totalXPixelValue / numberOfPixelX;
             imageChessPieceDepth.y = totalYPixelValue / numberOfPixelY;
@@ -287,10 +323,23 @@ void imageCbDepth(const sensor_msgs::ImageConstPtr& msg) {
             //Indicating that the cell is occupied
             imageChessPieceDepth.isOccupied = true;
         }
+        // Otherwise use the empty cells depth
+        else if(numberOfDepthValuesEmpty != 0){
+            // Calculating center of the piece in X,Y and adding it to the imageChessPieceDepth object
+            imageChessPieceDepth.x = totalXPixelValueEmpty / numberOfPixelXEmpty;
+            imageChessPieceDepth.y = totalYPixelValueEmpty / numberOfPixelYEmpty;
+
+            //Calculating avarage depth of the piece and adding it to the imageCHessPieceDepth object
+            imageChessPieceDepth.depth = totalDepthValueEmpty / numberOfDepthValuesEmpty;
+
+            //Indicating that the cell is occupied
+            imageChessPieceDepth.isOccupied = false;
+        }
 
         // Adding it to the vector
         imageChessPiecesDepths.push_back(imageChessPieceDepth);
     }
+
 }
 
 
@@ -308,7 +357,7 @@ void imageCbDepth(const sensor_msgs::ImageConstPtr& msg) {
     void publishCellInformation(ros::Publisher const *cellDetection_pub){
 
         // If we do not have 64 cells then do not publish
-        if(imageChessCells.size() < 64) return;
+        if(imageChessCells.size() != 64) return;
 
         // Creating the necesarry objects for the message to be send
         ibo1_irc_api::ChessCells sendChessCells;
@@ -347,7 +396,7 @@ int main (int argc, char **argv){
     spinner.start();
 
     ros::Publisher cellDetection_pub = nh.advertise<ibo1_irc_api::ChessCells>("chessCellDetection", 10);
-    ros::Subscriber corners_sub = nh.subscribe("/goodfeature_filter/corners", 5, &cornersMessageReceived);
+    ros::Subscriber corners_sub = nh.subscribe("/imageProcessing/goodfeature_filter/corners", 5, &cornersMessageReceived);
 
     image_transport::ImageTransport itImage(nh);
     image_transport::Subscriber color_sub = itImage.subscribe("/external_camera_overhead/ec_depth/image_raw", 1, imageCb);
