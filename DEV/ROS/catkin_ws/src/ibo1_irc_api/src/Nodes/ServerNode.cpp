@@ -201,16 +201,39 @@ int main (int argc, char **argv){
 
     ros::Rate rate(10);
 
-    // while(server_pub.getNumSubscribers() == 0){
-    //     rate.sleep();
-    // }
-
 
     Users users(usersFilePathName);
 
+    
+    
+
     IRCServer server = IRCServer(54001);
-    server.initiateServerSocket();
-    cout << "Client Socket: " << server.getClientSocket() << endl;
+
+    
+    // Amount of retrying to start server
+    int triesToStartServer = 0;
+    bool serverStarted = false;
+
+    while(!serverStarted){
+        if(triesToStartServer <= 4){
+            //Try to open connection again if it doesnt work retry
+            try{
+                server.initiateServerSocket();
+                cout << "Client Socket: " << server.getClientSocket() << endl;
+                serverStarted = true;
+            } catch(...){
+                ROS_WARN("Server wasn't started retrying");
+                triesToStartServer++;
+                ros::Duration(2).sleep();
+            }  
+        }
+        else{
+            ROS_ERROR("Server couldnt be started");
+            return -1;
+        }
+    }
+    
+    
 
     int bufferSizeData = 0;
 
@@ -225,6 +248,12 @@ int main (int argc, char **argv){
             cout << "Was told to disconnect!" << endl;
             break;
         }
+        else if(bufferSizeData == -4){
+            ROS_ERROR("Bytes rescv is not length of proctocol(5)!");
+            ROS_ERROR("Closing socket!");
+            server.closeClientSocket();
+            break;
+        }
 
         cout << "Size of to come Data: " << bufferSizeData << endl;
         communicationLogic(bufferSizeData, server, users);
@@ -234,6 +263,7 @@ int main (int argc, char **argv){
         ros::spinOnce();
         rate.sleep();
     }
+
 
     return 0;
 }

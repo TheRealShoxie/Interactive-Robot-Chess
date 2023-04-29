@@ -98,39 +98,43 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
     }
 
     // Get the second move of castle move
-    string secondMoveOfCastleMove(){
+    bool secondMoveOfCastleMove(){
         
         string moveCmd = "";
+        string newMoveCmd = "";
         DataCreator::convertBytesToString(inSimulationDataStorage, moveCmd);
+        cout << "______________________________________________________________________________________" << endl;
+        cout << moveCmd << endl;
+
+
 
         //White Castle King side
         if(moveCmd.compare("e1g1") == 0){
-            inSimulationDataStorageForCastling = inSimulationDataStorage;
-            didCastle = true;
-            string newMoveCmd = "h1f1";
-            copy(newMoveCmd.begin(), newMoveCmd.end(), std::back_inserter(inSimulationDataStorage));
+            newMoveCmd = "h1f1";
         }
         //White Castle Queen side
         else if(moveCmd.compare("e1c1") == 0){
-            inSimulationDataStorageForCastling = inSimulationDataStorage;
-            didCastle = true;
-            string newMoveCmd = "a1d1";
-            copy(newMoveCmd.begin(), newMoveCmd.end(), std::back_inserter(inSimulationDataStorage));
+            newMoveCmd = "a1d1";
         }
         //Black Castle King side
         else if(moveCmd.compare("e8g8") == 0){
-            inSimulationDataStorageForCastling = inSimulationDataStorage;
-            didCastle = true;
-            string newMoveCmd = "h8f8";
-            copy(newMoveCmd.begin(), newMoveCmd.end(), std::back_inserter(inSimulationDataStorage));
+            newMoveCmd = "h8f8";
         }
         //Black Castle Queen side
         else if(moveCmd.compare("e8c8") == 0){
-            inSimulationDataStorageForCastling = inSimulationDataStorage;
-            didCastle = true;
-            string newMoveCmd = "a8d8";
-            copy(newMoveCmd.begin(), newMoveCmd.end(), std::back_inserter(inSimulationDataStorage));
+            newMoveCmd = "a8d8";
         }
+        else{
+            return false;
+        }
+
+        
+        didCastle = true;
+        inSimulationDataStorageForCastling = inSimulationDataStorage;
+        inSimulationDataStorage.clear();
+        copy(newMoveCmd.begin(), newMoveCmd.end(), std::back_inserter(inSimulationDataStorage));
+        return true;
+
     }
     
     // in Simulation States for setting target moving robot arm and clearing target
@@ -161,9 +165,13 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
 
                 // As we got back the not castle move we increase the inSimulationRobotMoveState
                 inSimulationRobotMoveState++;
+            }else{
+                // We got a last move castle move true thus we update the command 
+                if(secondMoveOfCastleMove()) inSimulationRobotMoveState = 1;
+                else inSimulationRobotMoveState++;
             }
 
-            // As we got information that last move was castle move we need to update the 
+            
         }
 
         // Waiting till we cleared the target then we go into next stage
@@ -202,6 +210,7 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
 
                 // Increase to next state twice as we already did castle check
                 inSimulationRobotMoveState = inSimulationRobotMoveState + 2;
+                cout << "Should have increased inSimulationRobot state by 2 to 6:" << inSimulationRobotMoveState << endl;
 
                 //Setting original data back into inSimulation and clearing temp castling data to free up memory
                 inSimulationDataStorage = inSimulationDataStorageForCastling;
@@ -286,17 +295,26 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
         //ChessEngineMove state 1, sending set target with ChessMove to CreateTargetNode
         else if(inSimulationRobotMoveState == 1){
 
+            cout << "Do I die in here?" << endl;
             //Create the protocol for setting the targets
             ibo1_irc_api::Protocol sendCreateTargetProtocol;
             sendCreateTargetProtocol.cmd = CMD_INTERNAL_SETTARGET;
             sendCreateTargetProtocol.sender = SENDER_SYSTEMSTATEMACHINE;
+            cout << "DIE1" << endl;
+            string test = "";
+            DataCreator::convertBytesToString(inSimulationDataStorage, test);
+            cout << "Move Command after castle yes:" << test << endl;
             sendCreateTargetProtocol.data = inSimulationDataStorage;
 
+            cout << "DIE2" << endl;
             //Sending setTarget command to Create target
             sendToSender(SENDER_CREATETARGET, sendCreateTargetProtocol);
 
+            cout << "DIE3" << endl;
             //Increase to next state for chessEngineMove
             inSimulationRobotMoveState++;
+
+            cout << "I did not die in here!" << endl;
         }
     }
 

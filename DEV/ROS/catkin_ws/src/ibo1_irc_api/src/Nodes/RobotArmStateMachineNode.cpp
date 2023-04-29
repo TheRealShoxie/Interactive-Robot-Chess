@@ -65,6 +65,7 @@ geometry_msgs::TransformStamped endFrameTransform;
 
 
 
+
 // Transform global variables
 tf2_ros::Buffer* tfBuffer_ptr;
 
@@ -74,32 +75,32 @@ static const tf2::Quaternion quaternionPickDrop(0.000, 1.000, 0.000, 0.000);
 static const tf2::Quaternion quaternionRestPosition(0.716, 0.698, 0.000, 0.000);
 
 
-// Height and transform offsets
-double chessPieceRemoveIntermediateStandardOffsetHeigh = 0.25;
-double chessPieceRemovePickUpStandardOffsetHeigh = 0.015;
-double chessPieceRemoveGraveYardIntermediateStandardOffsetHeigh = 0.25;
+// Height offsets for removing a piece from the board
+double chessPieceRemoveIntermediateStandardOffsetHeigh = 0.18;
+double chessPieceRemovePickUpStandardOffsetHeigh = 0.012;
+double chessPieceRemoveGraveYardIntermediateStandardOffsetHeigh = 0.18;
 double chessPieceRemoveGraveYardDropStandardOffsetHeigh = 0.1;
 
-
-double chessPieceMoveIntermediateStandardOffsetHeight = 0.25;
-double chessPieceMovePickUpStandardOffsetHeight = 0.015;
-double chessPieceMoveDropIntermediateStandardOffsetHeight = 0.25;
-double chessPieceMoveDropStandardOffsetHeigh = 0.095;
+// Height offsets for making a move forward
+double chessPieceMoveIntermediateStandardOffsetHeight = 0.18;
+double chessPieceMovePickUpStandardOffsetHeight = 0.012;
+double chessPieceMoveDropIntermediateStandardOffsetHeight = 0.18;
+double chessPieceMoveDropStandardOffsetHeigh = 0.09;
 
 // Removing a piece offsets
 double removePieceOffsets[4][3] = {
-    {0, -0.02, chessPieceRemoveIntermediateStandardOffsetHeigh},
-    {0, -0.0125, chessPieceRemovePickUpStandardOffsetHeigh},
+    {0, -0.0128, chessPieceRemoveIntermediateStandardOffsetHeigh},
+    {0, -0.0128, chessPieceRemovePickUpStandardOffsetHeigh},
     {-0.2, 0, chessPieceRemoveGraveYardIntermediateStandardOffsetHeigh},
     {0, 0, chessPieceRemoveGraveYardDropStandardOffsetHeigh}
 };
 
 // Picking up a piece offsets
 double movePieceOffsets[4][3] = {
-    {0, -0.02, chessPieceMoveIntermediateStandardOffsetHeight},
-    {0, -0.0125, chessPieceMovePickUpStandardOffsetHeight},
-    {0, -0.02, chessPieceMoveDropIntermediateStandardOffsetHeight},
-    {0, -0.0125, chessPieceMoveDropStandardOffsetHeigh},
+    {0, -0.0128, chessPieceMoveIntermediateStandardOffsetHeight},
+    {0, -0.0128, chessPieceMovePickUpStandardOffsetHeight},
+    {0, -0.0128, chessPieceMoveDropIntermediateStandardOffsetHeight},
+    {0, -0.0128, chessPieceMoveDropStandardOffsetHeigh},
 };
 
 // Speed values
@@ -321,9 +322,6 @@ void chessCellDetectionMessageReceived(const ibo1_irc_api::ChessCells& msg){
     // Function to publish to a specific sender with a supplied Protocol
     void sendToSender(BYTE sender, const ibo1_irc_api::Protocol& sendProtocol){
 
-        cout << "I am sending to:" << (int)sender << endl;
-        cout << "Following command: " << (int)sendProtocol.cmd << endl;
-
         // Checking which sender it should return to
         switch (sender)
         {
@@ -463,7 +461,9 @@ void chessCellDetectionMessageReceived(const ibo1_irc_api::ChessCells& msg){
 
         if(success){
             
-            return (move_group_gripper_ptr->execute(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
+            bool finished = (move_group_gripper_ptr->execute(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
+            ros::Duration(0.5).sleep();
+            return finished;
         }
 
         return false;
@@ -644,15 +644,11 @@ void chessCellDetectionMessageReceived(const ibo1_irc_api::ChessCells& msg){
 
     // Main logic to run through
     void robotArmStateMachine(){
-
-        cout << "RobotArmState: " << robotArmState << endl;
-        cout << "PickDropState: " << pickDropState << endl;
-        cout << "-------------------------------------------" << endl;
-
+        BYTE gotCmd = returnedProtocol.cmd;
         
 
         // Waiting for move Command
-        if(robotArmState == 0 && returnedProtocol.cmd == CMD_INTERNAL_ROBOTARMMOVE){
+        if(robotArmState == 0 && gotCmd == CMD_INTERNAL_ROBOTARMMOVE){
             
             // Getting the chessCells which we are trying to pickUp from and drop into
             bool pickUpCellOccupied = false;
@@ -737,24 +733,39 @@ int main (int argc, char **argv){
 
     
     // Setting up the movegroup for arm and gripper
-    bool foundRobotModel = false;
+    bool gotToInitialPosition = false;
 
-    // while(!foundRobotModel){
-    //     try{
-    //         ros::Duration(5).sleep();
-    //         moveit::planning_interface::MoveGroupInterface move_group_arm("arm");
-    //         move_group_arm_ptr = &move_group_arm;
-    //         foundRobotModel = true;//Going to rest position
-    // bool gotToRestPosition = false;
-    // while(!gotToRestPosition){
-    //     ros::Duration(3).sleep();
-    //     ROS_INFO("Didnt get to rest position initial yet.");
-    //     gotToRestPosition = moveArmToTarget(goalFrames[3]);
+    // Initial transform
+    geometry_msgs::TransformStamped initialTransform;
+    initialTransform.transform.translation.x = 0.656;
+    initialTransform.transform.translation.y = 0.002;
+    initialTransform.transform.translation.z = 0.434;
+    initialTransform.transform.rotation.x = 0.500;
+    initialTransform.transform.rotation.y = 0.500;
+    initialTransform.transform.rotation.z = 0.501;
+    initialTransform.transform.rotation.w = 0.499;
+
+    geometry_msgs::TransformStamped currentInitialPose;
+
+    // Waiting till robotArm arrived at initial position
+    while(!gotToInitialPosition){
+        ros::Duration(0.5).sleep();
+        updateTransform("tool_frame", currentInitialPose);
         
-    // }
-            
-    //     }
-    // }
+        // Checking if we arrived at initial position
+        if(
+            abs(initialTransform.transform.translation.x - currentInitialPose.transform.translation.x) <= 0.025 &&
+            abs(initialTransform.transform.translation.y - currentInitialPose.transform.translation.y) <= 0.025 &&
+            abs(initialTransform.transform.translation.z - currentInitialPose.transform.translation.z) <= 0.025 &&
+            abs(initialTransform.transform.rotation.x - abs(currentInitialPose.transform.rotation.x)) <= 0.005 &&
+            abs(initialTransform.transform.rotation.y - abs(currentInitialPose.transform.rotation.y)) <= 0.005 &&
+            abs(initialTransform.transform.rotation.z - abs(currentInitialPose.transform.rotation.z)) <= 0.005 &&
+            abs(initialTransform.transform.rotation.w - abs(currentInitialPose.transform.rotation.w)) <= 0.005 
+        ){
+            gotToInitialPosition = true;
+        }
+    }
+
 
     moveit::planning_interface::MoveGroupInterface move_group_arm("arm");
     move_group_arm_ptr = &move_group_arm;

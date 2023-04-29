@@ -193,6 +193,9 @@ void wrapperLogic(vector<ChessEngineDefinitionStruct>& chessEngines){
 
                 bool lastMoveCastleMove = chessEnginePointer->wasLastMoveCastleMove();
                 BYTE toReturnProtocolCmd;
+                
+                cout << "Last Move was castle: " << lastMoveCastleMove << endl;
+
 
                 if(lastMoveCastleMove){
                     toReturnProtocolCmd = CMD_INTERNAL_LASTMOVECASTLEMOVE;
@@ -239,11 +242,6 @@ int main (int argc, char **argv){
     ChessBoard ch = ChessBoard();
 
     ros::Rate rate(10);
-
-    //Waiting till ros system subscribers are activated
-    // while(chessWrapper_pub.getNumSubscribers() == 0){
-    //     rate.sleep();
-    // }
 
     while(ros::ok()){
 

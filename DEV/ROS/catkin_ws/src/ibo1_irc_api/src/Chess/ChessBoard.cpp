@@ -76,6 +76,7 @@
 
         whiteKingInCheck = false;
         blackKingInCheck = false;
+        lastMoveCastle = false;
 
         castleRights[0][0] = false;
         castleRights[0][1] = false;
@@ -811,6 +812,7 @@
         //Otherwise not castling
         else{
             isMoveValidCode = isMoveValid(startPos, endPos);
+            lastMoveCastle = false;
         }
 
 
@@ -846,7 +848,6 @@
 
             chessBoard.at(endPos).setChessPiece( chessBoard.at(startPos).releaseChessPiece() );
 
-            lastMoveCastle = false;
             return 0;
         }
         

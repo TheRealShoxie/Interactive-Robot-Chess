@@ -11,6 +11,8 @@ import Client.IRCClient;
 import Protocol.ChessEngine;
 import ibo1.UIElements.Space;
 import ibo1.Utility.PopUpMessages;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.layout.GridPane;
 
 import java.util.ArrayList;
@@ -37,17 +39,15 @@ public class UIChessBoard extends GridPane{
     // ////////////// //
 
     private void updateBoardState(){
+        int position = 0;
         for(int x = 0; x < 8; x++){
             for(int y = 0; y < 8; y++) {
-                spaces[x][y].setCell(chessBoard.getCellAtPosition(x,y));
+                position = y +(x*8);
+                observableListSpaces.get(position).setCell(chessBoard.getCellAtPosition(x,y));
             }
         }
     }
 
-    private void updateSpaces(int startSpaceX, int startSpaceY, int endSpaceX, int endSpaceY){
-        spaces[startSpaceX][startSpaceY].setCell(chessBoard.getCellAtPosition(startSpaceX,startSpaceY));
-        spaces[endSpaceX][endSpaceY].setCell(chessBoard.getCellAtPosition(endSpaceX,endSpaceY));
-    }
 
     private void setActiveSpace(Space space){
         if(this.activeSpace != null) this.activeSpace.getStyleClass().removeAll("chess-space-active");
@@ -73,7 +73,7 @@ public class UIChessBoard extends GridPane{
     // /////////////////// //
     // Instance variables. //
     // /////////////////// //
-    Space[][] spaces = new Space[8][8];
+    ObservableList<Space> observableListSpaces = FXCollections.observableArrayList();
     ChessBoard chessBoard;
     Space activeSpace;
 
@@ -86,18 +86,22 @@ public class UIChessBoard extends GridPane{
 
         chessBoard = new ChessBoard(playerIsWhite, chessEngine, ircClient);
 
-        for(int x = 0; x < spaces[0].length; x++){
-            for(int y = 0; y < spaces[1].length; y++) {
+        for(int x = 0; x < 8; x++){
+            for(int y = 0; y < 8; y++) {
 
+                //Creating the space
                 Space space = new Space(this.chessBoard.getCellAtPosition(x,y));
-                spaces[x][y] = space;
+                // Adding the space to the observable list
+                observableListSpaces.add(space);
 
-                this.add(spaces[x][y],x,y);
+                int pos = y +(x*8);
+                // Adding the observableListSpace at x and y
+                this.add(observableListSpaces.get(pos),x,y);
 
                 final int xVal = x;
                 final int yVal = y;
 
-                spaces[x][y].setOnAction(e -> {
+                observableListSpaces.get(pos).setOnAction(e -> {
                     this.onSpaceClick(xVal, yVal);
                 });
             }
@@ -122,7 +126,9 @@ public class UIChessBoard extends GridPane{
     // Methods. //
     // //////// //
     public void onSpaceClick(int x, int y){
-        Space clickedSpace = spaces[x][y];
+        int position = y + (x*8);
+
+        Space clickedSpace = observableListSpaces.get(position);
 
         if(activeSpace != null
                 && activeSpace.getCell().getChessPiece() != null
@@ -191,8 +197,8 @@ public class UIChessBoard extends GridPane{
             this.setActiveSpace(null);
         }
         else{
-            if(spaces[x][y].getCell().getChessPiece() != null){
-                this.setActiveSpace(spaces[x][y]);
+            if(observableListSpaces.get(position).getCell().getChessPiece() != null){
+                this.setActiveSpace(observableListSpaces.get(position));
             }
         }
 

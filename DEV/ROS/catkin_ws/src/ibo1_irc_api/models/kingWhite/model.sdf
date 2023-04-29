@@ -3,14 +3,14 @@
   <model name='KingWhite'>
     <link name='kingWhite_link'>
       <inertial>
-        <mass>0.001</mass>
+       <mass>0.001</mass>
         <inertia>
-          <ixx>0.145833</ixx>
+          <ixx>3.91e-06</ixx>
           <ixy>0</ixy>
           <ixz>0</ixz>
-          <iyy>0.145833</iyy>
+          <iyy>3.91e-06</iyy>
           <iyz>0</iyz>
-          <izz>0.125</izz>
+          <izz>3.91e-06</izz>
         </inertia>
         <pose>0 0 0 0 -0 0</pose>
       </inertial>

@@ -108,3 +108,7 @@ Friday:
         - Need to find a way to do castling then I can call it finished for now 
         - Castling was a bit interesting to implement had to create a checkLastMove castle on ChessWrapper to check it so that it function with the rest of the system
         - Need to look at how heavy chessPieces are and set the pieces to that weight
+
+Saturday:
+    - Tested implementation from yesterday for castling. Didnt work then something weird happens so gotta start debugging.
+    Really hard to test as a standalone
