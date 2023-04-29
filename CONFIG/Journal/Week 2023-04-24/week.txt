@@ -122,6 +122,7 @@ Saturday:
     
     - Actually added a error converter
     - Also started working on playing with the robot arm and without it through the UI.
+    - Further added the possibility to stop the game and check if restarting would work or not.
     - Added option on the UI and the ROS system to change the state of the simulation. If you want to play in sim or not in sim.
         - As in use robot arm or not to show without it taking too long what is going on.
         - Will now start working on commenting code and writing test cases
