@@ -112,3 +112,10 @@ Friday:
 Saturday:
     - Tested implementation from yesterday for castling. Didnt work then something weird happens so gotta start debugging.
     Really hard to test as a standalone
+
+    - Finished implementing castling
+        - Works - manually tested due to integration
+        - Now code is finished modules are kept as is
+        - Will move sprint 2 into main and work from main here on out
+        - Will start on writing code comments and cleaning up the code. Then will start writing tests.
+        - After that the report will be started.
