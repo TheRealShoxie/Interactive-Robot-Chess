@@ -212,6 +212,10 @@ int IRCServer::commandExtraction(){
             clientCommand = CMD_SETCHESSENGINEOPTIONS;
             break;
 
+        case CMD_SETSEARCHOPTIONS:
+            clientCommand = CMD_SETSEARCHOPTIONS;
+            break;
+
         case CMD_PLAYERMOVE:
             clientCommand = CMD_PLAYERMOVE;
             break;
@@ -220,8 +224,12 @@ int IRCServer::commandExtraction(){
             clientCommand = CMD_CHESSENGINEMOVE;
             break;
 
-        case CMD_SETSEARCHOPTIONS:
-            clientCommand = CMD_SETSEARCHOPTIONS;
+        case CMD_SYSTEMFULLSIM:
+            clientCommand = CMD_SYSTEMFULLSIM;
+            break;
+
+        case CMD_SYSTEMWITHOUTSIM:
+            clientCommand = CMD_SYSTEMWITHOUTSIM;
             break;
 
         // Checking if command is to disconnect.

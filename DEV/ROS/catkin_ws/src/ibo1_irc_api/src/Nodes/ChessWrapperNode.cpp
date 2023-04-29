@@ -126,12 +126,16 @@ void wrapperLogic(vector<ChessEngineDefinitionStruct>& chessEngines){
 
         case CMD_INTERNAL_STOPCHESSENGINE:{
             if(chessEnginePointer == 0){
-                sendProtocol.cmd == ERROR_INTERNAL_CMD_NOCHESSENGINERUNNING;
+                sendProtocol.cmd = ERROR_INTERNAL_CMD_NOCHESSENGINERUNNING;
+                cout << "Couldn't find Chess Engine" << endl;
             }else{
                 delete chessEnginePointer;
                 chessEnginePointer = 0;
-                sendProtocol.cmd == CMD_INTERNAL_STOPCHESSENGINE;
+                sendProtocol.cmd = CMD_INTERNAL_STOPCHESSENGINE;
+                cout << "Stopping Chess Engine" << endl;
             }
+
+
             sendProtocol.sender = SENDER_CHESSWRAPPER;
             sendProtocol.data = response;
             sendToSender(returnedProtocol.sender, sendProtocol);
@@ -140,7 +144,7 @@ void wrapperLogic(vector<ChessEngineDefinitionStruct>& chessEngines){
 
         case CMD_INTERNAL_PLAYERMOVE:{
             if(chessEnginePointer == 0){
-                sendProtocol.cmd == ERROR_INTERNAL_CMD_NOCHESSENGINERUNNING;
+                sendProtocol.cmd = ERROR_INTERNAL_CMD_NOCHESSENGINERUNNING;
             }else{
                 string moveCommand = "";
                 DataCreator::convertBytesToString(returnedProtocol.data, moveCommand);
@@ -164,7 +168,7 @@ void wrapperLogic(vector<ChessEngineDefinitionStruct>& chessEngines){
 
         case CMD_INTERNAL_CHESSENGINEMOVE:{
             if(chessEnginePointer == NULL){
-                sendProtocol.cmd == ERROR_INTERNAL_CMD_NOCHESSENGINERUNNING;
+                sendProtocol.cmd = ERROR_INTERNAL_CMD_NOCHESSENGINERUNNING;
             }else{
                 string chessEngineMove = "";
                 BYTE toReturnProtocolCmd;
@@ -188,7 +192,7 @@ void wrapperLogic(vector<ChessEngineDefinitionStruct>& chessEngines){
 
         case CMD_INTERNAL_LASTMOVECASTLEMOVE:{
             if(chessEnginePointer == NULL){
-                sendProtocol.cmd == ERROR_INTERNAL_CMD_NOCHESSENGINERUNNING;
+                sendProtocol.cmd = ERROR_INTERNAL_CMD_NOCHESSENGINERUNNING;
             }else{
 
                 bool lastMoveCastleMove = chessEnginePointer->wasLastMoveCastleMove();

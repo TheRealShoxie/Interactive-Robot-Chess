@@ -88,6 +88,9 @@ class NodeHelper{
             {
                 case CMD_INTERNAL_GETCHESSENGINES:{
                     expectedReturn.push_back(CMD_INTERNAL_GETCHESSENGINES);
+                    
+                    expectedReturn.push_back(ERROR_INTERNAL_CMD_SYSTEMINPLAYCHESSSTATEMACHINE);
+                    expectedReturn.push_back(ERROR_INTERNAL_CMD_UNRECOGNIZABLE);
 
                     return expectedReturn;
                 }
@@ -97,6 +100,9 @@ class NodeHelper{
                     expectedReturn.push_back(CMD_INTERNAL_STARTCHESSENGINE);
                     expectedReturn.push_back(ERROR_INTERNAL_CMD_CHESSENGINEDOESNTEXIST);
 
+                    expectedReturn.push_back(ERROR_INTERNAL_CMD_SYSTEMINPLAYCHESSSTATEMACHINE);
+                    expectedReturn.push_back(ERROR_INTERNAL_CMD_UNRECOGNIZABLE);
+
                     return expectedReturn;
                 }
 
@@ -104,6 +110,9 @@ class NodeHelper{
 
                     expectedReturn.push_back(CMD_INTERNAL_STOPCHESSENGINE);
                     expectedReturn.push_back(ERROR_INTERNAL_CMD_NOCHESSENGINERUNNING);
+
+                    expectedReturn.push_back(ERROR_INTERNAL_CMD_SYSTEMINPLAYCHESSSTATEMACHINE);
+                    expectedReturn.push_back(ERROR_INTERNAL_CMD_UNRECOGNIZABLE);
 
                     return expectedReturn;
                 }
@@ -127,6 +136,11 @@ class NodeHelper{
                     expectedReturn.push_back(ERROR_INTERNAL_CMD_PAWNNOTMOVINGTOENDOFBOARD);
                     expectedReturn.push_back(ERROR_INTERNAL_CMD_INVALIDPIECENAMETOPROMOTEINTO);
                     expectedReturn.push_back(ERROR_INTERNAL_CMD_INVALIDMOVEFORMAT);
+                    expectedReturn.push_back(ERROR_INTERNAL_CMD_NOCHESSBOARDINFORMATION);
+                    expectedReturn.push_back(ERROR_INTERNAL_CMD_PICKUPCELLEMPTY);
+
+                    expectedReturn.push_back(ERROR_INTERNAL_CMD_SYSTEMINPLAYCHESSSTATEMACHINE);
+                    expectedReturn.push_back(ERROR_INTERNAL_CMD_UNRECOGNIZABLE);
 
                     return expectedReturn;
                 }
@@ -149,17 +163,29 @@ class NodeHelper{
                     expectedReturn.push_back(ERROR_INTERNAL_CMD_INVALIDPIECENAMETOPROMOTEINTO);
                     expectedReturn.push_back(ERROR_INTERNAL_CMD_CHESSENGINECREATEDNOMOVE);
                     expectedReturn.push_back(ERROR_INTERNAL_CMD_INVALIDMOVEFORMAT);
+                    expectedReturn.push_back(ERROR_INTERNAL_CMD_NOCHESSBOARDINFORMATION);
+                    expectedReturn.push_back(ERROR_INTERNAL_CMD_PICKUPCELLEMPTY);
+
+                    expectedReturn.push_back(ERROR_INTERNAL_CMD_SYSTEMINPLAYCHESSSTATEMACHINE);
+                    expectedReturn.push_back(ERROR_INTERNAL_CMD_UNRECOGNIZABLE);
 
                     return expectedReturn;
                 }
 
-            case CMD_INTERNAL_SETTARGET:{
-                expectedReturn.push_back(CMD_INTERNAL_SETTARGET);
-                expectedReturn.push_back(ERROR_INTERNAL_CMD_INVALIDMOVEFORMAT);
+            case CMD_INTERNAL_SYSTEMFULLSIM:{
+                expectedReturn.push_back(CMD_INTERNAL_SYSTEMFULLSIM);
+                expectedReturn.push_back(ERROR_INTERNAL_CMD_SYSTEMINPLAYCHESSSTATEMACHINE);
+                expectedReturn.push_back(ERROR_INTERNAL_CMD_UNRECOGNIZABLE);
+
+                return expectedReturn;
             }
 
-            case CMD_INTERNAL_CLEARTARGET:{
-                expectedReturn.push_back(CMD_INTERNAL_CLEARTARGET);
+            case CMD_INTERNAL_SYSTEMWITHOUTSIM:{
+                expectedReturn.push_back(CMD_INTERNAL_SYSTEMWITHOUTSIM);
+                expectedReturn.push_back(ERROR_INTERNAL_CMD_SYSTEMINPLAYCHESSSTATEMACHINE);
+                expectedReturn.push_back(ERROR_INTERNAL_CMD_UNRECOGNIZABLE);
+                
+                return expectedReturn;
             }
 
             default:

@@ -49,18 +49,16 @@ Further the reply will always consist of the command sent to check for the corre
 |   0x0A    |   n               |   UTF-8 encoding  |   0x0A            |   0               |   none            |   Chess Player move send Command <code>ChessMove</code> example: D2D4, A2A4,.....
 |   0x0B    |   0               |   none            |   0x0B            |   n               |   UTF-8 encoding  |   Chess Chessengine move return Command <code>ChessMove</code> example: D2D4, A2A4,.....
 |   0x0C    |   0               |   none            |   0x0C            |   0               |   none            |   Check if it is a castleMove. Data to send <code>ChessMove</code>. Returns cmdByte if last move was castle move otherwise error 0xE3
+|   0x0D    |   0               |   none            |   0x0C            |   0               |   none            |   Set system playing against chess engine without roboter
+|   0x0E    |   0               |   none            |   0x0D            |   0               |   none            |   Set system into complete simulation with roboter simulating player and chessEngine
+
 
 
 
 ## Error Codes
 |   Value   |   Description
 |   :---:   |   :----------
-|   0xFF    |   Reading bytes error
 |   0xFE    |   Command doesn't exist
-|   0xFD    |   Client not yet connected.
-|   0xFC    |   User does not exist.
-|   0xFB    |   User name already exists.
-|   0xFA    |   User couldn't be created.
 |   0xF9    |   Chess Engine could not be found.
 |   0xF8    |   Chess Engine could not be started.
 |   0xF7    |   No instance of chess engine running.
@@ -83,7 +81,8 @@ Further the reply will always consist of the command sent to check for the corre
 |   0xE6    |   Invalid Move format
 |   0xE5    |   No chess board information from camera published
 |   0xE4    |   Pick Up cell is empty. Internal and real world chess board mismatch
-|   0xE3    |   Last move was not a castle move
+|   0xE3    |   System already in a playing chess state machine  
+|   0xE2    |   Last move was not a castle move
 
 ## Sender
 |   Value   |   Description

@@ -119,3 +119,9 @@ Saturday:
         - Will move sprint 2 into main and work from main here on out
         - Will start on writing code comments and cleaning up the code. Then will start writing tests.
         - After that the report will be started.
+    
+    - Actually added a error converter
+    - Also started working on playing with the robot arm and without it through the UI.
+    - Added option on the UI and the ROS system to change the state of the simulation. If you want to play in sim or not in sim.
+        - As in use robot arm or not to show without it taking too long what is going on.
+        - Will now start working on commenting code and writing test cases

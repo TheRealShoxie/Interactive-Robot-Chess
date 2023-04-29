@@ -18,6 +18,8 @@ typedef uint8_t BYTE;
 #define CMD_SETSEARCHOPTIONS                            (BYTE)0x09
 #define CMD_PLAYERMOVE                                  (BYTE)0x0a
 #define CMD_CHESSENGINEMOVE                             (BYTE)0x0b
+#define CMD_SYSTEMWITHOUTSIM                            (BYTE)0x0c
+#define CMD_SYSTEMFULLSIM                               (BYTE)0x0d
 
 
 // Error Codes:
@@ -53,3 +55,4 @@ typedef uint8_t BYTE;
 #define ERROR_CMD_INVALIDMOVEFORMAT                     (BYTE)0xe6
 #define ERROR_CMD_NOCHESSBOARDINFORMATIONFromCamera     (BYTE)0xe5
 #define ERROR_CMD_PICKUPCELLEMPTY                       (BYTE)0xe4
+#define ERROR_CMD_SYSTEMINPLAYCHESSSTATEMACHINE         (BYTE)0xe3

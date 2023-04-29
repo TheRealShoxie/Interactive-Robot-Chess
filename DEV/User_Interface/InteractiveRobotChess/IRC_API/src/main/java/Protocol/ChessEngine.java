@@ -12,6 +12,7 @@ import Enum.ProtocolErrors;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -34,6 +35,8 @@ public class ChessEngine {
     final static byte cmdByteSetSearchEngineOption = (byte)0x09;
     final static byte cmdBytePlayerMove = (byte)0x0A;
     final static byte cmdByteChessEngineMove = (byte)0x0B;
+    final static byte cmdByteSetSystemWithoutRoboter = (byte)0x0C;
+    final static byte cmdByteSetSystemFullSim = (byte)0x0D;
 
 
 
@@ -57,6 +60,9 @@ public class ChessEngine {
     final static byte chessEngineInvalidNameForPieceToPromoteInto = (byte)0xE8;
     final static byte chessEngineCreatedNoMove = (byte)0xE7;
     final static byte chessEngineMoveFormatInvalid = (byte)0xE6;
+    final static byte noChessBoardInformationFromCameraPublished = (byte)0xE5;
+    final static byte pickUpCellEmptyInternalAndRealWorldChessBoardMismatch = (byte)0xE4;
+    final static byte systemInPlayingChessStateMachine = (byte)0xE3;
     final static byte unrecognizableCmd = (byte)0xFE;
 
     // //////////////// //
@@ -81,14 +87,81 @@ public class ChessEngine {
         chessEngineChoices = Arrays.asList(possibleChessEngines);
     }
 
+    /**
+     * @param ircClient ircClient to be used
+     * @throws IOException thrown by sending and receiving the buffer
+     * @throws ProtocolException thrown if returned cmd does not match expected or if chess engine doesn't exist.
+     */
+    private void setSystemNoRoboter(IRCClient ircClient) throws IOException, ProtocolException {
+
+        // Creating the Protocol object for the possible chess Engine command
+        ProtocolObject protocolSetNoRoboter = new ProtocolObject();
+        protocolSetNoRoboter.setCmdByte(cmdByteSetSystemWithoutRoboter);
+
+        // Sending the command
+        ircClient.send(protocolSetNoRoboter);
+
+        // Retrieving the answer
+        ProtocolObject receivedProtocol = ircClient.receive();
+
+        byte receivedCommandByte = receivedProtocol.getCmdByte();
+
+        // Returning that we successfully set it;
+        if(receivedCommandByte == cmdByteSetSystemWithoutRoboter){
+            // Setting chessEngineChoices
+            return;
+        }
+        else if(receivedCommandByte == systemInPlayingChessStateMachine) throw new ProtocolException(ProtocolErrors.SYSTEM_ALREADY_IN_CHESS_STATE.toString());
+            // Command was not recognizable
+        else if(receivedCommandByte == unrecognizableCmd) throw new ProtocolException(ProtocolErrors.UNRECOGNIZABLE_CMD.toString());
+            // Does not match expected return
+        else throw new ProtocolException(ProtocolErrors.UNEXPECTED_RETURN_CMD.toString());
+    }
+
+    /**
+     * @param ircClient ircClient to be used
+     * @throws IOException thrown by sending and receiving the buffer
+     * @throws ProtocolException thrown if returned cmd does not match expected or if chess engine doesn't exist.
+     */
+    private void setSystemInFullSimulationState(IRCClient ircClient) throws IOException, ProtocolException {
+
+        // Creating the Protocol object for the possible chess Engine command
+        ProtocolObject protocolSetFullSim = new ProtocolObject();
+        protocolSetFullSim.setCmdByte(cmdByteSetSystemFullSim);
+
+        // Sending the command
+        ircClient.send(protocolSetFullSim);
+
+        // Retrieving the answer
+        ProtocolObject receivedProtocol = ircClient.receive();
+
+        byte receivedCommandByte = receivedProtocol.getCmdByte();
+
+        // Returning that we successfully set it;
+        if(receivedCommandByte == cmdByteSetSystemFullSim){
+            // Setting chessEngineChoices
+            return;
+        }
+        else if(receivedCommandByte == systemInPlayingChessStateMachine) throw new ProtocolException(ProtocolErrors.SYSTEM_ALREADY_IN_CHESS_STATE.toString());
+            // Command was not recognizable
+        else if(receivedCommandByte == unrecognizableCmd) throw new ProtocolException(ProtocolErrors.UNRECOGNIZABLE_CMD.toString());
+            // Does not match expected return
+        else throw new ProtocolException(ProtocolErrors.UNEXPECTED_RETURN_CMD.toString());
+    }
+
     // /////////////////// //
     // Instance variables. //
     // /////////////////// //
     List<String> chessEngineChoices;
+    List<String> simChoices;
 
     // ///////////// //
     // Constructors. //
     // ///////////// //
+
+    public ChessEngine(){
+        simChoices = Arrays.asList("Full sim", "No Sim");
+    }
 
     // ////////////////////// //
     // Read/Write properties. //
@@ -104,11 +177,26 @@ public class ChessEngine {
     public List<String> getChessEngineChoices() {
         return chessEngineChoices;
     }
+    public List<String> getSimChoices() {return simChoices;}
 
 
     // //////// //
     // Methods. //
     // //////// //
+
+    public boolean setSimulation(IRCClient ircClient, String chosenSim) throws ProtocolException, IOException {
+        if(chosenSim.equals(simChoices.get(0))){
+            setSystemInFullSimulationState(ircClient);
+            return true;
+        }
+        else if(chosenSim.equals(simChoices.get(1))){
+            setSystemNoRoboter(ircClient);
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 
     /**
      * @param ircClient ircClient to be used
@@ -134,6 +222,7 @@ public class ChessEngine {
             // Setting chessEngineChoices
             createChessEngineOptionsList(receivedProtocol.getData());
         }
+        else if(receivedCommandByte == systemInPlayingChessStateMachine) throw new ProtocolException(ProtocolErrors.SYSTEM_ALREADY_IN_CHESS_STATE.toString());
         // Command was not recognizable
         else if(receivedCommandByte == unrecognizableCmd) throw new ProtocolException(ProtocolErrors.UNRECOGNIZABLE_CMD.toString());
         // Does not match expected return
@@ -172,6 +261,7 @@ public class ChessEngine {
         }
         else if(receivedCommandByte == chessEngineNotFound) throw new ProtocolException(ProtocolErrors.CHESSENGINE_NOT_FOUND.toString());
         else if(receivedCommandByte == chessEngineNotStarted) throw new ProtocolException(ProtocolErrors.CHESSENGINE_NOT_STARTED.toString());
+        else if(receivedCommandByte == systemInPlayingChessStateMachine) throw new ProtocolException(ProtocolErrors.SYSTEM_ALREADY_IN_CHESS_STATE.toString());
         // Command was not recognizable
         else if(receivedCommandByte == unrecognizableCmd) throw new ProtocolException(ProtocolErrors.UNRECOGNIZABLE_CMD.toString());
         // Does not match expected return
@@ -247,6 +337,15 @@ public class ChessEngine {
 
             case chessEngineMoveFormatInvalid:
                 throw new ProtocolException(ProtocolErrors.CHESSENGINE_MOVE_FORMAT_INVALID.toString());
+
+            case noChessBoardInformationFromCameraPublished:
+                throw new ProtocolException(ProtocolErrors.CAMERA_DOESNT_PUBLISH_INFO.toString());
+
+            case pickUpCellEmptyInternalAndRealWorldChessBoardMismatch:
+                throw new java.net.ProtocolException(ProtocolErrors.INTERNAL_REAL_CHESS_BOARD_MISMATCH.toString());
+
+            case systemInPlayingChessStateMachine:
+                throw new ProtocolException(ProtocolErrors.SYSTEM_ALREADY_IN_CHESS_STATE.toString());
 
                 // Command was not recognizable
             case unrecognizableCmd :
@@ -332,14 +431,57 @@ public class ChessEngine {
             case chessEngineMoveFormatInvalid:
                 throw new ProtocolException(ProtocolErrors.CHESSENGINE_MOVE_FORMAT_INVALID.toString());
 
+            case noChessBoardInformationFromCameraPublished:
+                throw new ProtocolException(ProtocolErrors.CAMERA_DOESNT_PUBLISH_INFO.toString());
+
+            case pickUpCellEmptyInternalAndRealWorldChessBoardMismatch:
+                throw new java.net.ProtocolException(ProtocolErrors.INTERNAL_REAL_CHESS_BOARD_MISMATCH.toString());
+
+            case systemInPlayingChessStateMachine:
+                throw new ProtocolException(ProtocolErrors.SYSTEM_ALREADY_IN_CHESS_STATE.toString());
+
                 // Command was not recognizable
             case unrecognizableCmd :
                 throw new ProtocolException(ProtocolErrors.UNRECOGNIZABLE_CMD.toString());
+
 
                 // Does not match expected return
             default:
                 throw new ProtocolException(ProtocolErrors.UNEXPECTED_RETURN_CMD.toString());
         }
+    }
+
+
+    /**
+     * @param ircClient ircClient to be used
+     * @throws IOException thrown by sending and receiving the buffer
+     * @throws ProtocolException thrown if returned cmd does not match expected or if chess engine doesn't exist.
+     */
+    public void stopChessEngine(IRCClient ircClient) throws IOException, ProtocolException {
+
+        // Creating the Protocol object for the possible chess Engine command
+        ProtocolObject protocolSetNoRoboter = new ProtocolObject();
+        protocolSetNoRoboter.setCmdByte(cmdByteStopChessEngine);
+
+        // Sending the command
+        ircClient.send(protocolSetNoRoboter);
+
+        // Retrieving the answer
+        ProtocolObject receivedProtocol = ircClient.receive();
+
+        byte receivedCommandByte = receivedProtocol.getCmdByte();
+
+        // Returning that we successfully set it;
+        if(receivedCommandByte == cmdByteStopChessEngine){
+            // Setting chessEngineChoices
+            return;
+        }
+        else if(receivedCommandByte == chessEngineNotRunning) throw new ProtocolException(ProtocolErrors.CHESSENGINE_NOT_RUNNING.toString());
+        else if(receivedCommandByte == systemInPlayingChessStateMachine) throw new ProtocolException(ProtocolErrors.SYSTEM_ALREADY_IN_CHESS_STATE.toString());
+            // Command was not recognizable
+        else if(receivedCommandByte == unrecognizableCmd) throw new ProtocolException(ProtocolErrors.UNRECOGNIZABLE_CMD.toString());
+            // Does not match expected return
+        else throw new ProtocolException(ProtocolErrors.UNEXPECTED_RETURN_CMD.toString());
     }
 
 

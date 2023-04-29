@@ -18,7 +18,10 @@ ros::Publisher* createTarget_pub_ptr;
 ros::Publisher* robotArmStateMachine_pub_ptr;
 
 // Command Executer variables
-static const bool isSimulation = true;
+bool isNoSimulation = true;
+bool isSimulationFull = false;
+bool isPartialSimulation = false;
+bool isReal = false;
 
 
 // Overall StateMachine variables
@@ -415,7 +418,7 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
 
 
     // StateMachine for simulation playing a game of Chess
-    void inSimulationStateMachine(){
+    void inSimulationFullStateMachine(){
 
         // Checking if we are in going down the playerMove state
         if(inSimulationState == 2){
@@ -471,21 +474,125 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
                     //Getting the initial sender
                     BYTE initialSender = returnedProtocol.sender;
 
-                    sendToSender(initialSender, SystemStateMachine::systemStateMachineChessEngineForwarder(returnedProtocol, chessWrapper_pub_ptr));
+                    sendToSender(initialSender, SystemStateMachineHelper::systemStateMachineChessEngineForwarder(returnedProtocol, chessWrapper_pub_ptr));
 
                     // After stopping the chessEngine we go back to initial idle state
                     systemState = 0;
                     break;
                 }
 
-                default:
+                case ((BYTE)0x00):{
                     break;
+                }
+
+                default:{
+                    // Getting the initial sender
+                    BYTE initialSender = returnedProtocol.sender;
+
+                    // Sending back to sender unrecognizable cmd
+                    ibo1_irc_api::Protocol sendUnrecognizableCmdProtocol;
+                    sendUnrecognizableCmdProtocol.cmd = ERROR_INTERNAL_CMD_SYSTEMINPLAYCHESSSTATEMACHINE;
+                    sendUnrecognizableCmdProtocol.sender = SENDER_SYSTEMSTATEMACHINE;
+                    sendToSender(initialSender, sendUnrecognizableCmdProtocol);
+
+                    break;
+                }
+            }
+        }
+    }
+
+    // Playing chess without robot arms
+    void inNoRobotArmState(){
+        BYTE gotCMD = returnedProtocol.cmd;
+
+        switch(gotCMD){
+            case CMD_INTERNAL_PLAYERMOVE:{
+                //Getting the initial sender
+                BYTE initialSender = returnedProtocol.sender;
+
+                ibo1_irc_api::Protocol testProtocol = SystemStateMachineHelper::systemStateMachineChessEngineForwarder(returnedProtocol, chessWrapper_pub_ptr);
+
+                cout << "----------------Player Move in No Robot Arm State----------------" << endl;
+                cout << "Sending to:" << (int)initialSender << endl;
+                cout << "Cmd to send back: " << (int)testProtocol.cmd << endl;
+                cout << "Data to send back: ";
+                for(auto &b : testProtocol.data){
+                    cout << (char)(int(b));
+                }
+                cout << endl;
+                cout << "Sender inside Protocol: " << (int)testProtocol.sender << endl;
+                cout << "-----------------------------------------------------------------" << endl;
+
+                sendToSender(initialSender, testProtocol);
+                break;
+            }
+
+            case CMD_INTERNAL_CHESSENGINEMOVE:{
+                //Getting the initial sender
+                BYTE initialSender = returnedProtocol.sender;
+
+                ibo1_irc_api::Protocol testProtocol = SystemStateMachineHelper::systemStateMachineChessEngineForwarder(returnedProtocol, chessWrapper_pub_ptr);
+
+                cout << "----------------ChessEngine Move in No Robot Arm State----------------" << endl;
+                cout << "Sending to:" << (int)initialSender << endl;
+                cout << "Cmd to send back: " << (int)testProtocol.cmd << endl;
+                cout << "Data to send back: ";
+                for(auto &b : testProtocol.data){
+                    cout << (char)(int(b));
+                }
+                cout << endl;
+                cout << "Sender inside Protocol: " << (int)testProtocol.sender << endl;
+                cout << "-----------------------------------------------------------------" << endl;
+
+                sendToSender(initialSender, testProtocol);
+                break;
+            }
+
+            case CMD_INTERNAL_STOPCHESSENGINE:{
+                //Getting the initial sender
+                BYTE initialSender = returnedProtocol.sender;
+
+                ibo1_irc_api::Protocol testProtocol = SystemStateMachineHelper::systemStateMachineChessEngineForwarder(returnedProtocol, chessWrapper_pub_ptr);
+
+                cout << "----------------Stop Chess Engine in No Robot Arm State----------------" << endl;
+                cout << "Sending to:" << (int)initialSender << endl;
+                cout << "Cmd to send back: " << (int)testProtocol.cmd << endl;
+                cout << "Data to send back: ";
+                for(auto &b : testProtocol.data){
+                    cout << (char)(int(b));
+                }
+                cout << endl;
+                cout << "Sender inside Protocol: " << (int)testProtocol.sender << endl;
+                cout << "-----------------------------------------------------------------" << endl;
+
+                sendToSender(initialSender, testProtocol);
+                
+                // After stopping the chessEngine we go back to initial idle state
+                systemState = 0;
+                break;
+            }
+
+            case ((BYTE)0x00):{
+                break;
+            }
+
+            default:{
+                // Getting the initial sender
+                BYTE initialSender = returnedProtocol.sender;
+
+                // Sending back to sender unrecognizable cmd
+                ibo1_irc_api::Protocol sendUnrecognizableCmdProtocol;
+                sendUnrecognizableCmdProtocol.cmd = ERROR_INTERNAL_CMD_SYSTEMINPLAYCHESSSTATEMACHINE;
+                sendUnrecognizableCmdProtocol.sender = SENDER_SYSTEMSTATEMACHINE;
+                sendToSender(initialSender, sendUnrecognizableCmdProtocol);
+
+                break;
             }
         }
     }
 
     // For IDLE state system is a messageForwarder
-    void messageForwarder(){
+    void idleState(){
         BYTE gotCMD = returnedProtocol.cmd;
 
         switch (gotCMD)
@@ -494,7 +601,7 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
                 //Getting the initial sender
                 BYTE initialSender = returnedProtocol.sender;
 
-                sendToSender(initialSender, SystemStateMachine::systemStateMachineChessEngineForwarder(returnedProtocol, chessWrapper_pub_ptr));
+                sendToSender(initialSender, SystemStateMachineHelper::systemStateMachineChessEngineForwarder(returnedProtocol, chessWrapper_pub_ptr));
                 break;
             }
 
@@ -502,15 +609,68 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
                 //Getting the initial sender
                 BYTE initialSender = returnedProtocol.sender;
 
-                sendToSender(initialSender, SystemStateMachine::systemStateMachineChessEngineForwarder(returnedProtocol, chessWrapper_pub_ptr));
+                sendToSender(initialSender, SystemStateMachineHelper::systemStateMachineChessEngineForwarder(returnedProtocol, chessWrapper_pub_ptr));
 
                 //Moving to next state
                 systemState = 1;
                 break;
             }
-        
-            default:
+
+            case CMD_INTERNAL_SYSTEMWITHOUTSIM:{
+                isNoSimulation = true;
+                isReal = false;
+                isPartialSimulation = false;
+                isSimulationFull = false;
+
+                cout << "___________________________________" << endl;
+                cout << "SET SYSTEM WITHOUT SIM" << endl;
+                cout << "___________________________________" << endl;
+
+
+                // Sending back to sender unrecognizable cmd
+                ibo1_irc_api::Protocol sendSystemWithoutSimProtocol;
+                sendSystemWithoutSimProtocol.cmd = CMD_INTERNAL_SYSTEMWITHOUTSIM;
+                sendSystemWithoutSimProtocol.sender = SENDER_SYSTEMSTATEMACHINE;
+                sendToSender(returnedProtocol.sender, sendSystemWithoutSimProtocol);
                 break;
+            }
+
+            case CMD_INTERNAL_SYSTEMFULLSIM:{
+                isNoSimulation = false;
+                isReal = false;
+                isPartialSimulation = false;
+                isSimulationFull = true;
+
+                cout << "___________________________________" << endl;
+                cout << "SET SYSTEM FULL SIM" << endl;
+                cout << "___________________________________" << endl;
+
+                // Sending back to sender unrecognizable cmd
+                ibo1_irc_api::Protocol sendSystemFullSimProtocol;
+                sendSystemFullSimProtocol.cmd = CMD_INTERNAL_SYSTEMFULLSIM;
+                sendSystemFullSimProtocol.sender = SENDER_SYSTEMSTATEMACHINE;
+                sendToSender(returnedProtocol.sender, sendSystemFullSimProtocol);
+                break;
+            }
+
+            case ((BYTE)0x00):{
+                break;
+            }
+        
+            default:{
+                // Getting the initial sender
+                BYTE initialSender = returnedProtocol.sender;
+
+                // Sending back to sender unrecognizable cmd
+                ibo1_irc_api::Protocol sendUnrecognizableCmdProtocol;
+                sendUnrecognizableCmdProtocol.cmd = ERROR_INTERNAL_CMD_UNRECOGNIZABLE;
+                sendUnrecognizableCmdProtocol.sender = SENDER_SYSTEMSTATEMACHINE;
+                sendToSender(initialSender, sendUnrecognizableCmdProtocol);
+
+                break;
+            }
+
+                
         }
     }
 
@@ -520,18 +680,30 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
 
         // Looking through all system states
         if(systemState == 1){
-
-            // Checking if we need to execute simulation path
-            if(isSimulation){
-                inSimulationStateMachine();
+            
+            // Checking if we are running no robot simulation
+            if(isNoSimulation){
+                inNoRobotArmState();
             }
-            // Otherwise do inperson path
-            else{
+            // Checking if we need to execute full simulation
+            else if(isSimulationFull){
+                inSimulationFullStateMachine();
+            }
+            // Otherwise checking if we are in real Simulation 
+            else if(isReal){
                 cout << "Not Implemented!" << endl;
+            }
+            // Simulation for chess engine and player move done not by robot arm
+            else if(isPartialSimulation){
+                cout << "Not Implemented!" << endl;
+            }
+            // None set error
+            else{
+                cout << "Error not implemented!" << endl;
             }
         }
         else if(systemState == 0){
-            messageForwarder();
+            idleState();
         }
 
         returnedProtocol.cmd = (BYTE)0x00; 

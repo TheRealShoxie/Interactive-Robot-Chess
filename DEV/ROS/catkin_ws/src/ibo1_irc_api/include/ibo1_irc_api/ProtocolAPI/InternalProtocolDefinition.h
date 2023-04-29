@@ -31,6 +31,8 @@ typedef uint8_t BYTE;
 #define CMD_INTERNAL_PLAYERMOVE                                     (BYTE)0x0a
 #define CMD_INTERNAL_CHESSENGINEMOVE                                (BYTE)0x0b
 #define CMD_INTERNAL_LASTMOVECASTLEMOVE                             (BYTE)0x0c
+#define CMD_INTERNAL_SYSTEMWITHOUTSIM                               (BYTE)0x0d
+#define CMD_INTERNAL_SYSTEMFULLSIM                                  (BYTE)0x0e
 
 
 // Error Codes:
@@ -59,7 +61,8 @@ typedef uint8_t BYTE;
 #define ERROR_INTERNAL_CMD_INVALIDMOVEFORMAT                        (BYTE)0xe6
 #define ERROR_INTERNAL_CMD_NOCHESSBOARDINFORMATION                  (BYTE)0xe5
 #define ERROR_INTERNAL_CMD_PICKUPCELLEMPTY                          (BYTE)0xe4
-#define ERROR_INTERNAL_CMD_LASTMOVEWASNOTCASTLEMOVE                 (BYTE)0xe3
+#define ERROR_INTERNAL_CMD_SYSTEMINPLAYCHESSSTATEMACHINE            (BYTE)0xe3
+#define ERROR_INTERNAL_CMD_LASTMOVEWASNOTCASTLEMOVE                 (BYTE)0xe2
 
 //Create Target errors
 

@@ -65,11 +65,13 @@ void communicationLogic(int bufferSizeData, IRCServer &server, Users &users){
                     cout << (char)(int(b));
                 }
                 cout << endl;
+
+                BYTE sendCommand = IRCServerNodeHelper::externalToInternalCmdConverter(CMD_GETCHESSENGINES);
                 BYTE returnedCommand;
 
-                NodeHelper::forwarder(returnedProtocol, receivedData, CMD_INTERNAL_GETCHESSENGINES, SENDER_SERVER, SENDER_SYSTEMSTATEMACHINE, answer, returnedCommand, systemStateMachine_pub_ptr);
+                NodeHelper::forwarder(returnedProtocol, receivedData, sendCommand, SENDER_SERVER, SENDER_SYSTEMSTATEMACHINE, answer, returnedCommand, systemStateMachine_pub_ptr);
 
-
+                returnedCommand = IRCServerNodeHelper::internalToExternalCmdConverter(returnedCommand);
                 cout << "Command to send back: " << (int)returnedCommand << endl;
                 cout << "-------------------------";
                 
@@ -84,15 +86,16 @@ void communicationLogic(int bufferSizeData, IRCServer &server, Users &users){
                     cout << (char)(int(b));
                 }
                 cout << endl;
+
+                BYTE sendCommand = IRCServerNodeHelper::externalToInternalCmdConverter(CMD_STARTCHESSENGINE);
                 BYTE returnedCommand;
 
-                NodeHelper::forwarder(returnedProtocol, receivedData, CMD_INTERNAL_STARTCHESSENGINE, SENDER_SERVER, SENDER_SYSTEMSTATEMACHINE, answer, returnedCommand, systemStateMachine_pub_ptr);
+                NodeHelper::forwarder(returnedProtocol, receivedData, sendCommand, SENDER_SERVER, SENDER_SYSTEMSTATEMACHINE, answer, returnedCommand, systemStateMachine_pub_ptr);
 
 
-            
+                returnedCommand = IRCServerNodeHelper::internalToExternalCmdConverter(returnedCommand);
                 cout << "Command to send back: " << (int)returnedCommand << endl;
                 cout << "-------------------------";
-
 
                 returnedProtocol.cmd = (BYTE)0x00;
                 server.setClientCommand(returnedCommand);
@@ -106,12 +109,14 @@ void communicationLogic(int bufferSizeData, IRCServer &server, Users &users){
                     cout << (char)(int(b));
                 }
                 cout << endl;
+
+                BYTE sendCommand = IRCServerNodeHelper::externalToInternalCmdConverter(CMD_STOPCHESSENGINE);
                 BYTE returnedCommand;
 
-                NodeHelper::forwarder(returnedProtocol, receivedData, CMD_INTERNAL_STOPCHESSENGINE, SENDER_SERVER, SENDER_SYSTEMSTATEMACHINE, answer, returnedCommand, systemStateMachine_pub_ptr);
+                NodeHelper::forwarder(returnedProtocol, receivedData, sendCommand, SENDER_SERVER, SENDER_SYSTEMSTATEMACHINE, answer, returnedCommand, systemStateMachine_pub_ptr);
 
 
-            
+                returnedCommand = IRCServerNodeHelper::internalToExternalCmdConverter(returnedCommand);
                 cout << "Command to send back: " << (int)returnedCommand << endl;
                 cout << "-------------------------";
 
@@ -128,10 +133,12 @@ void communicationLogic(int bufferSizeData, IRCServer &server, Users &users){
                 }
                 cout << endl;
 
+                BYTE sendCommand = IRCServerNodeHelper::externalToInternalCmdConverter(CMD_PLAYERMOVE);
                 BYTE returnedCommand;
 
-                NodeHelper::forwarder(returnedProtocol, receivedData, CMD_INTERNAL_PLAYERMOVE, SENDER_SERVER, SENDER_SYSTEMSTATEMACHINE, answer, returnedCommand, systemStateMachine_pub_ptr);
+                NodeHelper::forwarder(returnedProtocol, receivedData, sendCommand, SENDER_SERVER, SENDER_SYSTEMSTATEMACHINE, answer, returnedCommand, systemStateMachine_pub_ptr);
 
+                returnedCommand = IRCServerNodeHelper::internalToExternalCmdConverter(returnedCommand);
                 cout << "Command to send back: " << (int)returnedCommand << endl;
                 cout << "-------------------------";
 
@@ -149,15 +156,18 @@ void communicationLogic(int bufferSizeData, IRCServer &server, Users &users){
                 }
                 cout << endl;
 
+                BYTE sendCommand = IRCServerNodeHelper::externalToInternalCmdConverter(CMD_CHESSENGINEMOVE);
                 BYTE returnedCommand;
 
-                NodeHelper::forwarder(returnedProtocol, receivedData, CMD_INTERNAL_CHESSENGINEMOVE, SENDER_SERVER, SENDER_SYSTEMSTATEMACHINE, answer, returnedCommand, systemStateMachine_pub_ptr);
+                NodeHelper::forwarder(returnedProtocol, receivedData, sendCommand, SENDER_SERVER, SENDER_SYSTEMSTATEMACHINE, answer, returnedCommand, systemStateMachine_pub_ptr);
 
                 cout << "Data to return: ";
                 for(auto &b : answer){
                     cout << (char)(int(b));
                 }
                 cout << endl;
+
+                returnedCommand = IRCServerNodeHelper::internalToExternalCmdConverter(returnedCommand);
                 cout << "Command to send back: " << (int)returnedCommand << endl;
                 cout << "-------------------------";
 
@@ -166,7 +176,40 @@ void communicationLogic(int bufferSizeData, IRCServer &server, Users &users){
                 break;
 
             }
-            
+
+            case CMD_SYSTEMFULLSIM:{
+                cout << "-------SYSTEM set full sim-------" << endl;
+
+                BYTE sendCommand = IRCServerNodeHelper::externalToInternalCmdConverter(CMD_SYSTEMFULLSIM);
+                BYTE returnedCommand;
+
+                NodeHelper::forwarder(returnedProtocol, receivedData, sendCommand, SENDER_SERVER, SENDER_SYSTEMSTATEMACHINE, answer, returnedCommand, systemStateMachine_pub_ptr);
+
+                returnedCommand = IRCServerNodeHelper::internalToExternalCmdConverter(returnedCommand);
+                cout << "Command to send back: " << (int)returnedCommand << endl;
+                cout << "-------------------------";
+
+                returnedProtocol.cmd = (BYTE)0x00;
+                server.setClientCommand(returnedCommand);
+                break;
+            }
+
+            case CMD_SYSTEMWITHOUTSIM:{
+                cout << "-------SYSTEM set without sim-------" << endl;
+
+                BYTE sendCommand = IRCServerNodeHelper::externalToInternalCmdConverter(CMD_SYSTEMWITHOUTSIM);
+                BYTE returnedCommand;
+
+                NodeHelper::forwarder(returnedProtocol, receivedData, sendCommand, SENDER_SERVER, SENDER_SYSTEMSTATEMACHINE, answer, returnedCommand, systemStateMachine_pub_ptr);
+
+                returnedCommand = IRCServerNodeHelper::internalToExternalCmdConverter(returnedCommand);
+                cout << "Command to send back: " << (int)returnedCommand << endl;
+                cout << "-------------------------";
+
+                returnedProtocol.cmd = (BYTE)0x00;
+                server.setClientCommand(returnedCommand);
+                break;
+            }
 
             default:
                 break;

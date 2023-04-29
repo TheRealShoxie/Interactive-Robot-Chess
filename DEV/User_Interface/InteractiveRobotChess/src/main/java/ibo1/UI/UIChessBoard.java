@@ -182,8 +182,6 @@ public class UIChessBoard extends GridPane{
             }
 
 
-
-
             if(!madeMove) return;
 
             updateBoardState();

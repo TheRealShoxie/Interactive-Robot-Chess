@@ -45,6 +45,8 @@ Further the reply will always consist of the command sent to check for the corre
 |   0x09    |   n               |   UTF-8 encoding  |   0x09            |   0               |   none            |   set search option. Data consists of <code>Unknown</code>
 |   0x0A    |   n               |   UTF-8 encoding  |   0x0A            |   0               |   none            |   Chess Player move send Command <code>ChessMove</code> example: D2D4, A2A4,.....
 |   0x0B    |   0               |   none            |   0x0B            |   n               |   UTF-8 encoding  |   Chess Chessengine move return Command <code>ChessMove</code> example: D2D4, A2A4,.....
+|   0x0C    |   0               |   none            |   0x0C            |   0               |   none            |   Set system playing against chess engine without roboter
+|   0x0D    |   0               |   none            |   0x0D            |   0               |   none            |   Set system into complete simulation with roboter simulating player and chessEngine
 
 
 
@@ -77,3 +79,6 @@ Further the reply will always consist of the command sent to check for the corre
 |   0xE8    |   Invalid Piece to promote into
 |   0xE7    |   Chess Engine created no move
 |   0xE6    |   Invalid Move format
+|   0xE5    |   No chess board information from camera published
+|   0xE4    |   Pick Up cell is empty. Internal and real world chess board mismatch
+|   0xE3    |   System already in a playing chess state machine  

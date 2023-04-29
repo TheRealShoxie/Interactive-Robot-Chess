@@ -13,7 +13,7 @@
     // Constants. //
     // ////////// //
 
-class SystemStateMachine{
+class SystemStateMachineHelper{
 
     public:
 
