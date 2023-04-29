@@ -11,6 +11,7 @@ typedef uint8_t BYTE;
 #define SENDER_SERVER                                               (BYTE)0x01
 #define SENDER_CHESSWRAPPER                                         (BYTE)0x02
 #define SENDER_CREATETARGET                                         (BYTE)0x03
+#define SENDER_ROBOTARMSTATEMACHINE                                 (BYTE)0x04
 
 
 // Protocol Commands
@@ -29,6 +30,7 @@ typedef uint8_t BYTE;
 #define CMD_INTERNAL_SETSEARCHOPTIONS                               (BYTE)0x09
 #define CMD_INTERNAL_PLAYERMOVE                                     (BYTE)0x0a
 #define CMD_INTERNAL_CHESSENGINEMOVE                                (BYTE)0x0b
+#define CMD_INTERNAL_LASTMOVECASTLEMOVE                             (BYTE)0x0c
 
 
 // Error Codes:
@@ -55,6 +57,9 @@ typedef uint8_t BYTE;
 #define ERROR_INTERNAL_CMD_INVALIDPIECENAMETOPROMOTEINTO            (BYTE)0xe8
 #define ERROR_INTERNAL_CMD_CHESSENGINECREATEDNOMOVE                 (BYTE)0xe7
 #define ERROR_INTERNAL_CMD_INVALIDMOVEFORMAT                        (BYTE)0xe6
+#define ERROR_INTERNAL_CMD_NOCHESSBOARDINFORMATION                  (BYTE)0xe5
+#define ERROR_INTERNAL_CMD_PICKUPCELLEMPTY                          (BYTE)0xe4
+#define ERROR_INTERNAL_CMD_LASTMOVEWASNOTCASTLEMOVE                 (BYTE)0xe3
 
 //Create Target errors
 

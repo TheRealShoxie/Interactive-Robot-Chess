@@ -91,3 +91,20 @@ Thursday:
                 that in their python example they set a namespace so I looked into how to set a namespace for C++ but couldnt really find anything
                 so my workaround was to just launch the node inside a launch file and wrap that node in the launch file around a namespace
                 the namespace my_gen3. That did the trick and it worked. Took me 5-6hrs in total to figure it out
+
+Friday:
+    - Finished setting up transforming now need to work on making the robotArm move to the position
+    - Realized that the robot arm cant reach everything and that poses werent reached a lot
+    - Changed position of chessboard and how robot arm moves around
+    - This is done really simple and not complicated at all
+        - Goes to target picks it up goes far into the air and drops it from the air
+        - Had to do this in a short amount of time
+
+    - Now need to work on incoporating it inside the system
+        - It worked quite well will do the same for the playerMove next to ChessEngine move to simulate playerMovement on the board
+        - Need to find a way to wait with robotArmStateStart till system is completely setup 
+    
+    - Finished generally works so far from what I can see.
+        - Need to find a way to do castling then I can call it finished for now 
+        - Castling was a bit interesting to implement had to create a checkLastMove castle on ChessWrapper to check it so that it function with the rest of the system
+        - Need to look at how heavy chessPieces are and set the pieces to that weight

@@ -1,0 +1,10 @@
+<launch>
+    <!--Including launch file for robotic arm and its  simulation environment-->
+    <include file="$(find ibo1_irc_api)/launch/robotGazebo.launch">
+    </include>
+
+    <!--Including System launch file-->
+    <include file="$(find ibo1_irc_api)/launch/ircSystem.launch">
+    </include>
+
+</launch>

@@ -14,4 +14,7 @@
         Starting the CreateTarget_node
 	    <node pkg="ibo1_irc_api" type="ircRobotArmStateMachine" name="ircRobotArmStateMachine" output="screen" />
     </group> -->
+
+    <node pkg="tf2_ros" type="static_transform_publisher" name="staticBroadcasterRestPosition" args="0.140 -0.376 0.326 0 1 0 0 base_link restposition_frame" />
+    <node pkg="tf2_ros" type="static_transform_publisher" name="staticBroadcasterGraveyard" args="0.6 0.25 0 -0.000 1.000 0.000 0.000 base_link graveyard_frame" />
 </launch>

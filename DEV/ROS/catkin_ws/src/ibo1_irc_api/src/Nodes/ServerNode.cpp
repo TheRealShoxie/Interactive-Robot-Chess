@@ -46,7 +46,6 @@ void communicationLogic(int bufferSizeData, IRCServer &server, Users &users){
 
     if(bufferSizeData >= 0){
 
-        cout << "I get here!" << endl;
         switch (server.getClientCommand())
         {
             case CMD_LOGIN: {
@@ -68,10 +67,8 @@ void communicationLogic(int bufferSizeData, IRCServer &server, Users &users){
                 cout << endl;
                 BYTE returnedCommand;
 
-                cout << "I get before here!" << endl;
                 NodeHelper::forwarder(returnedProtocol, receivedData, CMD_INTERNAL_GETCHESSENGINES, SENDER_SERVER, SENDER_SYSTEMSTATEMACHINE, answer, returnedCommand, systemStateMachine_pub_ptr);
 
-                cout << "I get here!" << endl;
 
                 cout << "Command to send back: " << (int)returnedCommand << endl;
                 cout << "-------------------------";

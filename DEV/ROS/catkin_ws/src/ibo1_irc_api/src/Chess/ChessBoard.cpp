@@ -14,6 +14,7 @@
         previousMoveWasPawn = false;
         whiteKingInCheck = false;
         blackKingInCheck = false;
+        lastMoveCastle = false;
 
         wholeMoves = 1;
         halfMoves = 0;
@@ -769,6 +770,7 @@
             if(isMoveValidCode == 0){
                 castleRights[0][0] = false;
                 castleRights[0][1] = false;
+                lastMoveCastle = true;
             }
         }
         //White Castle Queen side
@@ -781,6 +783,7 @@
             if(isMoveValidCode == 0){
                 castleRights[0][0] = false;
                 castleRights[0][1] = false;
+                lastMoveCastle = true;
             }
         }
         //Black Castle King side
@@ -791,6 +794,7 @@
             if(isMoveValidCode == 0){
                 castleRights[1][0] = false;
                 castleRights[1][1] = false;
+                lastMoveCastle = true;
             }
         }
         //Black Castle Queen side
@@ -801,6 +805,7 @@
             if(isMoveValidCode == 0){
                 castleRights[1][0] = false;
                 castleRights[1][1] = false;
+                lastMoveCastle = true;
             }
         }
         //Otherwise not castling
@@ -841,6 +846,7 @@
 
             chessBoard.at(endPos).setChessPiece( chessBoard.at(startPos).releaseChessPiece() );
 
+            lastMoveCastle = false;
             return 0;
         }
         

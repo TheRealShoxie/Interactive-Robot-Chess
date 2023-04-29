@@ -59,6 +59,9 @@ class ChessEngine{
         // Read-only properties. //
         // ///////////////////// //
         bool getChessEngineStarted();
+        bool wasLastMoveCastleMove(){
+            return chessBoard.wasLastMoveCastleMove();
+        }
 
     private:
 

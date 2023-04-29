@@ -35,6 +35,9 @@ class ChessBoard{
         // ///////////////////// //
         // Read-only properties. //
         // ///////////////////// //
+        bool wasLastMoveCastleMove(){
+            return lastMoveCastle;
+        }
 
     private:
 
@@ -74,6 +77,7 @@ class ChessBoard{
         bool castleRights[2][2];
         bool whiteKingInCheck;
         bool blackKingInCheck;
+        bool lastMoveCastle;
 
     
 };

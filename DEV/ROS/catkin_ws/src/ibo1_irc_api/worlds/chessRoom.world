@@ -15,60 +15,60 @@
       <static>true</static>
       <uri>model://chessboard2</uri>
       <name>chessboard</name>
-      <pose>-0.25 0.5 0.018 0 0 0</pose>
+      <!--<pose>0 0.5 0.018 0 0 0</pose>-->
+      <pose>0 0.35 0.018 0 0 0</pose>
     </include>
 
     <!-- Black Pieces -->
     <!-- ________________________________________________________________________________ -->
-
     <!-- Black Pawns -->
     <!-- _____________________________________________ -->
     <include>
       <uri>model://pawnBlack</uri>
       <name>blackPawn1</name>
-      <pose>-0.075 0.375 0.0515 0 0 0</pose> 
+      <pose>0.175 0.225 0.0515 0 0 0</pose> 
     </include>
 
     <include>
       <uri>model://pawnBlack</uri>
       <name>blackPawn2</name>
-      <pose>-0.125 0.375 0.0515 0 0 0</pose> 
+      <pose>0.125 0.225 0.0515 0 0 0</pose> 
     </include>
 
     <include>
       <uri>model://pawnBlack</uri>
       <name>blackPawn3</name>
-      <pose>-0.175 0.375 0.0515 0 0 0</pose> 
+      <pose>0.075 0.225 0.0515 0 0 0</pose> 
     </include>
 
     <include>
       <uri>model://pawnBlack</uri>
       <name>blackPawn4</name>
-      <pose>-0.225 0.375 0.0515 0 0 0</pose> 
+      <pose>0.025 0.225 0.0515 0 0 0</pose> 
     </include>
 
     <include>
       <uri>model://pawnBlack</uri>
       <name>blackPawn5</name>
-      <pose>-0.275 0.375 0.0515 0 0 0</pose> 
+      <pose>-0.025 0.225 0.0515 0 0 0</pose> 
     </include>
 
     <include>
       <uri>model://pawnBlack</uri>
       <name>blackPawn6</name>
-      <pose>-0.325 0.375 0.0515 0 0 0</pose> 
+      <pose>-0.075 0.225 0.0515 0 0 0</pose> 
     </include>
 
     <include>
       <uri>model://pawnBlack</uri>
       <name>blackPawn7</name>
-      <pose>-0.375 0.375 0.0515 0 0 0</pose> 
+      <pose>-0.125 0.225 0.0515 0 0 0</pose> 
     </include>
 
     <include>
       <uri>model://pawnBlack</uri>
       <name>blackPawn8</name>
-      <pose>-0.425 0.375 0.0515 0 0 0</pose> 
+      <pose>-0.175 0.225 0.0515 0 0 0</pose> 
     </include>
 
     <!-- Black Rooks -->
@@ -76,13 +76,13 @@
     <include>
       <uri>model://rookBlack</uri>
       <name>blackRook1</name>
-      <pose>-0.075 0.325 0.05275 0 0 0</pose> 
+      <pose>0.175 0.175 0.05275 0 0 0</pose> 
     </include>
 
     <include>
       <uri>model://rookBlack</uri>
       <name>blackRook2</name>
-      <pose>-0.425 0.325 0.05275 0 0 0</pose> 
+      <pose>-0.175 0.175 0.05275 0 0 0</pose> 
     </include>
 
     <!-- Black Knights -->
@@ -90,13 +90,13 @@
     <include>
       <uri>model://knightBlack</uri>
       <name>blackKnight1</name>
-      <pose>-0.125 0.325 0.054 0 0 0</pose> 
+      <pose>0.125 0.175 0.054 0 0 0</pose> 
     </include>
 
     <include>
       <uri>model://knightBlack</uri>
       <name>blackKnight2</name>
-      <pose>-0.375 0.325 0.054 0 0 0</pose> 
+      <pose>-0.125 0.175 0.054 0 0 0</pose> 
     </include>
 
     <!-- Black Bishop -->
@@ -104,13 +104,13 @@
     <include>
       <uri>model://bishopBlack</uri>
       <name>blackBishop1</name>
-      <pose>-0.175 0.325 0.0565 0 0 0</pose> 
+      <pose>0.075 0.175 0.0565 0 0 0</pose> 
     </include>
 
     <include>
       <uri>model://bishopBlack</uri>
       <name>blackBishop2</name>
-      <pose>-0.325 0.325 0.0565 0 0 0</pose> 
+      <pose>-0.075 0.175 0.0565 0 0 0</pose> 
     </include>
 
     <!-- Black Queen and King -->
@@ -118,13 +118,13 @@
     <include>
       <uri>model://queenBlack</uri>
       <name>blackQueen</name>
-      <pose>-0.225 0.325 0.06109 0 0 0</pose> 
+      <pose>0.025 0.175 0.06109 0 0 0</pose> 
     </include>
 
     <include>
       <uri>model://kingBlack</uri>
       <name>blackKing</name>
-      <pose>-0.275 0.325 0.0628 0 0 0</pose> 
+      <pose>-0.025 0.175 0.0628 0 0 0</pose> 
     </include>
 
 
@@ -133,55 +133,54 @@
 
     <!-- White Pieces -->
     <!-- ________________________________________________________________________________ -->
-    
     <!-- White Pawns -->
     <!-- _____________________________________________ -->
     <include>
       <uri>model://pawnWhite</uri>
       <name>whitePawn1</name>
-      <pose>-0.075 0.625 0.0515 0 0 0</pose>
+      <pose>0.175 0.475 0.0515 0 0 0</pose> 
     </include>
 
     <include>
       <uri>model://pawnWhite</uri>
       <name>whitePawn2</name>
-      <pose>-0.125 0.625 0.0515 0 0 0</pose> 
+      <pose>0.125 0.475 0.0515 0 0 0</pose> 
     </include>
 
     <include>
       <uri>model://pawnWhite</uri>
       <name>whitePawn3</name>
-      <pose>-0.175 0.625 0.0515 0 0 0</pose> 
+      <pose>0.075 0.475 0.0515 0 0 0</pose> 
     </include>
 
     <include>
       <uri>model://pawnWhite</uri>
       <name>whitePawn4</name>
-      <pose>-0.225 0.625 0.0515 0 0 0</pose> 
+      <pose>0.025 0.475 0.0515 0 0 0</pose> 
     </include>
 
     <include>
       <uri>model://pawnWhite</uri>
       <name>whitePawn5</name>
-      <pose>-0.275 0.625 0.0515 0 0 0</pose> 
+      <pose>-0.025 0.475 0.0515 0 0 0</pose>  
     </include>
 
     <include>
       <uri>model://pawnWhite</uri>
       <name>whitePawn6</name>
-      <pose>-0.325 0.625 0.0515 0 0 0</pose> 
+      <pose>-0.075 0.475 0.0515 0 0 0</pose> 
     </include>
 
     <include>
       <uri>model://pawnWhite</uri>
       <name>whitePawn7</name>
-      <pose>-0.375 0.625 0.0515 0 0 0</pose> 
+      <pose>-0.125 0.475 0.0515 0 0 0</pose> 
     </include>
 
     <include>
       <uri>model://pawnWhite</uri>
       <name>whitePawn8</name>
-      <pose>-0.425 0.625 0.0515 0 0 0</pose> 
+      <pose>-0.175 0.475 0.0515 0 0 0</pose> 
     </include>
 
     <!-- White Rooks -->
@@ -189,13 +188,13 @@
     <include>
       <uri>model://rookWhite</uri>
       <name>whiteRook1</name>
-      <pose>-0.075 0.675 0.05275 0 0 0</pose> 
+      <pose>0.175 0.525 0.05275 0 0 0</pose> 
     </include>
 
     <include>
       <uri>model://rookWhite</uri>
       <name>whiteRook2</name>
-      <pose>-0.425 0.675 0.05275 0 0 0</pose> 
+      <pose>-0.175 0.525 0.05275 0 0 0</pose> 
     </include>
 
     <!-- White Knights -->
@@ -203,13 +202,13 @@
     <include>
       <uri>model://knightWhite</uri>
       <name>whiteKnight1</name>
-      <pose>-0.125 0.675 0.054 0 0 0</pose> 
+      <pose>0.125 0.525 0.054 0 0 0</pose> 
     </include>
 
     <include>
       <uri>model://knightWhite</uri>
       <name>whiteKnight2</name>
-      <pose>-0.375 0.675 0.054 0 0 0</pose> 
+      <pose>-0.125 0.525 0.054 0 0 0</pose> 
     </include>
 
     <!-- White Bishop -->
@@ -217,13 +216,13 @@
     <include>
       <uri>model://bishopWhite</uri>
       <name>whiteBishop1</name>
-      <pose>-0.175 0.675 0.0565 0 0 0</pose> 
+      <pose>0.075 0.525 0.0565 0 0 0</pose> 
     </include>
 
     <include>
       <uri>model://bishopWhite</uri>
       <name>whiteBishop2</name>
-      <pose>-0.325 0.675 0.0565 0 0 0</pose> 
+      <pose>-0.075 0.525 0.0565 0 0 0</pose> 
     </include>
 
     <!-- White Queen and King -->
@@ -231,13 +230,13 @@
     <include>
       <uri>model://queenWhite</uri>
       <name>whiteQueen</name>
-      <pose>-0.225 0.675 0.06109 0 0 0</pose> 
+      <pose>0.025 0.525 0.06109 0 0 0</pose> 
     </include>
 
     <include>
       <uri>model://kingWhite</uri>
       <name>whiteKing</name>
-      <pose>-0.275 0.675 0.0628 0 0 0</pose> 
+      <pose>-0.025 0.525 0.0628 0 0 0</pose> 
     </include>
 
   </world>

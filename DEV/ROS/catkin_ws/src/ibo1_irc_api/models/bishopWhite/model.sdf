@@ -3,7 +3,7 @@
   <model name='BishopWhite'>
     <link name='bishopWhite_link'>
       <inertial>
-        <mass>0.000975</mass>
+        <mass>0.001</mass>
         <inertia>
           <ixx>0.145833</ixx>
           <ixy>0</ixy>

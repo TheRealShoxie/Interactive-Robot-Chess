@@ -40,8 +40,8 @@ ibo1_irc_api::ChessCells returnedChessCells;
 ros::Publisher* systemStateMachine_pub_ptr;
 
 // Target cell
-int targetCellPickUp = 0;
-int targetCellDrop = 8;
+int targetCellPickUp = -1;
+int targetCellDrop = -1;
 
 
 /*

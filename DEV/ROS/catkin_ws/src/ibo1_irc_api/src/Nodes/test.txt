@@ -1,71 +1,74 @@
-Number: 0 |X=490|Y=208
-Number: 1 |X=494|Y=250
-Number: 2 |X=494|Y=285
-Number: 3 |X=494|Y=323
-Number: 4 |X=494|Y=358
-Number: 5 |X=494|Y=393
-Number: 6 |X=494|Y=433
-Number: 7 |X=494|Y=466
+-------Chess Engine Move-------
+Data received: 
+----------------------------------------------------------
+I received following on systemStateMachine: 
+I received from: 1
+CmdByte: 11
+----------------------------------------------------------
+Send to: 2
+Sned Protocol CMD:11
+----------------------------------------------------------
+I received following on chessWrapper: 
+I received from: 0
+CmdByte: 11
+----------------------------------------------------------
+To return CmdByte: 11
+ChessEngine movement: c7c5
+Current Board state as FEN: rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2
 
-Number: 8 |X=529|Y=213
-Number: 9 |X=532|Y=251
-Number: 10|X=532|Y=284
-Number: 11|X=532|Y=324
-Number: 12|X=532|Y=357
-Number: 13|X=529|Y=394
-Number: 14|X=532|Y=430
-Number: 15|X=529|Y=467
-
-Number: 16|X=568|Y=213
-Number: 17|X=565|Y=251
-Number: 18|X=565|Y=284
-Number: 19|X=565|Y=324
-Number: 20|X=565|Y=357
-Number: 21|X=565|Y=396
-Number: 22|X=565|Y=430
-Number: 23|X=565|Y=469
-
-Number: 24|X=601|Y=213
-Number: 25|X=601|Y=248
-Number: 26|X=601|Y=287
-Number: 27|X=602|Y=321
-Number: 28|X=601|Y=360
-Number: 29|X=602|Y=394
-Number: 30|X=602|Y=432
-Number: 31|X=602|Y=467
-
-Number: 32|X=641|Y=213
-Number: 33|X=638|Y=250
-Number: 34|X=638|Y=284
-Number: 35|X=638|Y=323
-Number: 36|X=641|Y=360
-Number: 37|X=638|Y=396
-Number: 38|X=641|Y=433
-Number: 39|X=641|Y=466
-
-Number: 40|X=674|Y=213
-Number: 41|X=674|Y=248
-Number: 42|X=674|Y=287
-Number: 43|X=674|Y=321
-Number: 44|X=674|Y=360
-Number: 45|X=674|Y=393
-Number: 46|X=674|Y=433
-Number: 47|X=674|Y=466
-
-Number: 48|X=714|Y=213
-Number: 49|X=711|Y=250
-Number: 50|X=711|Y=285
-Number: 51|X=711|Y=323
-Number: 52|X=711|Y=357
-Number: 53|X=711|Y=396
-Number: 54|X=711|Y=430
-Number: 55|X=711|Y=469
-
-Number: 56|X=747|Y=213
-Number: 57|X=750|Y=251
-Number: 58|X=750|Y=284
-Number: 59|X=747|Y=321
-Number: 60|X=750|Y=357
-Number: 61|X=747|Y=394
-Number: 62|X=747|Y=433
-Number: 63|X=747|Y=466
+[r][n][b][q][k][b][n][r]
+[p][p][-][p][p][p][p][p]
+[-][-][-][-][-][-][-][-]
+[-][-][p][-][-][-][-][-]
+[-][-][-][-][P][-][-][-]
+[-][-][-][-][-][-][-][-]
+[P][P][P][P][-][P][P][P]
+[R][N][B][Q][K][B][N][R]
+----------------------------------------------------------
+I received following on systemStateMachine: 
+I received from: 2
+CmdByte: 11
+----------------------------------------------------------
+Send to: 3
+Sned Protocol CMD:1
+----------------------------------------------------------
+I received following on createTarget: 
+I received from: 0
+CmdByte: 1
+----------------------------------------------------------
+Setting Targets:
+MoveCommand: c7c5
+Pickup Cell: 50
+Drop Cell: 34
+----------------------------------------------------------
+I received following on systemStateMachine: 
+I received from: 3
+CmdByte: 1
+----------------------------------------------------------
+Send to: 4
+Sned Protocol CMD:3
+----------------------------------------------------------
+I received following on systemStateMachine: 
+I received from: 4
+CmdByte: 3
+----------------------------------------------------------
+Send to: 3
+Sned Protocol CMD:2
+----------------------------------------------------------
+I received following on createTarget: 
+I received from: 0
+CmdByte: 2
+----------------------------------------------------------
+----------------------------------------------------------
+I received following on systemStateMachine: 
+I received from: 3
+CmdByte: 2
+----------------------------------------------------------
+Send to: 1
+Sned Protocol CMD:11
+I received following on server: 
+I received from: 0
+CmdByte: 11
+Data to return: c7c5
+Command to send back: 11
+-------------------------

@@ -12,7 +12,7 @@
     <joint name="ec_world_to_root" type="fixed">
         <child link="ec_base_link" />
         <parent link="world" />
-        <origin xyz="-0.25 0.5 1" rpy="0 0 0" />
+        <origin xyz="0 0.35 1" rpy="0 0 0" />
     </joint> 
 
 

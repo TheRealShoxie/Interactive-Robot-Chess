@@ -186,6 +186,29 @@ void wrapperLogic(vector<ChessEngineDefinitionStruct>& chessEngines){
             }
         }
 
+        case CMD_INTERNAL_LASTMOVECASTLEMOVE:{
+            if(chessEnginePointer == NULL){
+                sendProtocol.cmd == ERROR_INTERNAL_CMD_NOCHESSENGINERUNNING;
+            }else{
+
+                bool lastMoveCastleMove = chessEnginePointer->wasLastMoveCastleMove();
+                BYTE toReturnProtocolCmd;
+
+                if(lastMoveCastleMove){
+                    toReturnProtocolCmd = CMD_INTERNAL_LASTMOVECASTLEMOVE;
+                }
+                else{
+                    toReturnProtocolCmd = ERROR_INTERNAL_CMD_LASTMOVEWASNOTCASTLEMOVE;
+                }
+
+                sendProtocol.cmd = toReturnProtocolCmd;
+                sendProtocol.sender = SENDER_CHESSWRAPPER;
+                sendToSender(returnedProtocol.sender, sendProtocol);
+                break;
+            }
+        }
+
+
         default:
             break;
     }
