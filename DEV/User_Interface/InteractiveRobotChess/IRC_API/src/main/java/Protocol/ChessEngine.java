@@ -1,5 +1,5 @@
 /*
- *@(#) Utility.DataChecker.java 0.1 2023/03/17
+ *@(#) Protocol.ChessEngine.java 0.1 2023/03/17
  *
  * Copyright (c) Omar Ibrahim
  * All rights reserved.
@@ -12,16 +12,24 @@ import Enum.ProtocolErrors;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 /**
- * ClassName - ClassDescription initial
+ * ChessEngine - Class that represents ChessEngine communications
  * <p>
- * What it does
+ * It defines the commands and errors and communication with the ROS system for chess moves.
+ * Direct representation would be the ChessWrapperNode.cpp in the ROS system.
+ *
  * @author Omar Ibrahim
  * @version 0.1 ( Initial development ).
+ * @version 1.0 ( Initial release ).
+ *
+ * @see ChessSpecific.ChessBoard
+ * @see ProtocolException
+ * @see ProtocolErrors
+ * @see IRCClient
+ *
  */
 public class ChessEngine {
     // ////////// //
@@ -88,6 +96,8 @@ public class ChessEngine {
     }
 
     /**
+     * Sets the ROS system into no roboter arm state
+     *
      * @param ircClient ircClient to be used
      * @throws IOException thrown by sending and receiving the buffer
      * @throws ProtocolException thrown if returned cmd does not match expected or if chess engine doesn't exist.
@@ -119,6 +129,8 @@ public class ChessEngine {
     }
 
     /**
+     * Sets the ROS system into Full simulation
+     *
      * @param ircClient ircClient to be used
      * @throws IOException thrown by sending and receiving the buffer
      * @throws ProtocolException thrown if returned cmd does not match expected or if chess engine doesn't exist.
@@ -153,14 +165,17 @@ public class ChessEngine {
     // Instance variables. //
     // /////////////////// //
     List<String> chessEngineChoices;
-    List<String> simChoices;
+    List<String> systemStateChoices;
 
     // ///////////// //
     // Constructors. //
     // ///////////// //
 
+    /**
+     * Constructor for ChessEngine
+     */
     public ChessEngine(){
-        simChoices = Arrays.asList("Full sim", "No Sim");
+        systemStateChoices = Arrays.asList("Full sim", "No Roboter arm");
     }
 
     // ////////////////////// //
@@ -177,28 +192,60 @@ public class ChessEngine {
     public List<String> getChessEngineChoices() {
         return chessEngineChoices;
     }
-    public List<String> getSimChoices() {return simChoices;}
+
+
+    /**
+     * @return the possible System states to choose from
+     */
+    public List<String> getSystemStateChoices() {return systemStateChoices;}
 
 
     // //////// //
     // Methods. //
     // //////// //
 
-    public boolean setSimulation(IRCClient ircClient, String chosenSim) throws ProtocolException, IOException {
-        if(chosenSim.equals(simChoices.get(0))){
+    /**
+     * Method that communicates with the ROS system to set the system state to the supplied one.
+     * If the system state choice doesn't exist this function returns false.
+     * Please use getSystemStateChoices for possible system states.
+     *
+     * @param ircClient the IRCCLient
+     * @param systemState the system state to set the ROS system into
+     * @return true if the system got set into the supplied system state
+     * @throws ProtocolException thrown by sending and receiving the buffer
+     * @throws IOException thrown if returned cmd does not match expected
+     */
+    public boolean setSystemState(IRCClient ircClient, String systemState) throws ProtocolException, IOException {
+
+        // Checking if systemState is equal to first element in system state Choices
+        if(systemState.equals(systemStateChoices.get(0))){
+
+            // If yes set system into full simulation state
             setSystemInFullSimulationState(ircClient);
+
+            // Return true if nothing went wrong
             return true;
         }
-        else if(chosenSim.equals(simChoices.get(1))){
+
+        // Otherwise check if system state is equal to second element in system state Choices
+        else if(systemState.equals(systemStateChoices.get(1))){
+
+            // If yes no roboter arm was selected thus set system into no roboter arm state
             setSystemNoRoboter(ircClient);
+
+            // Return true if nothing went wrong
             return true;
         }
         else{
+
+            // Return false if system state choice doesn't exist
             return false;
         }
     }
 
     /**
+     * Gets the possible chess engines to play against from the ROS system-
+     *
      * @param ircClient ircClient to be used
      * @throws IOException thrown by sending and receiving the buffer
      * @throws ProtocolException thrown if returned cmd does not match expected
@@ -231,6 +278,8 @@ public class ChessEngine {
 
 
     /**
+     * Starts the chess engine with the supplied chessEngine name on the ROS system
+     *
      * @param ircClient ircClient to be used
      * @param chessEngineName chess engine to be started
      * @throws IOException thrown by sending and receiving the buffer
@@ -268,6 +317,15 @@ public class ChessEngine {
         else throw new ProtocolException(ProtocolErrors.UNEXPECTED_RETURN_CMD.toString());
     }
 
+
+    /**
+     * Sends a player move to the ROS system
+     *
+     * @param ircClient ircClient to be used
+     * @param moveCommand the player chess move to send
+     * @throws IOException thrown by sending and receiving the buffer
+     * @throws ProtocolException thrown if returned cmd does not match expected or if chess engine doesn't exist.
+     */
     public void makePlayerMove(IRCClient ircClient, String moveCommand) throws IOException, ProtocolException {
 
         byte[] dataStringAsBytes = moveCommand.getBytes(StandardCharsets.UTF_8);
@@ -358,7 +416,16 @@ public class ChessEngine {
 
     }
 
-    public String makeChessEngineMove(IRCClient ircClient) throws IOException, ProtocolException {
+
+    /**
+     * Gets the chess engine move from the ROS system
+     *
+     * @param ircClient ircClient to be used
+     * @return the chess move from the engine if nothing went wrong
+     * @throws IOException thrown by sending and receiving the buffer
+     * @throws ProtocolException thrown if returned cmd does not match expected or if chess engine doesn't exist.
+     */
+    public String getChessEngineMove(IRCClient ircClient) throws IOException, ProtocolException {
 
 
         // Creating the Protocol object for the possible chess Engine command
@@ -453,6 +520,9 @@ public class ChessEngine {
 
 
     /**
+     * Stops the chess engine. This is used to abort a game.
+     * If a game is not stopped it will currently not work to start a new game.
+     *
      * @param ircClient ircClient to be used
      * @throws IOException thrown by sending and receiving the buffer
      * @throws ProtocolException thrown if returned cmd does not match expected or if chess engine doesn't exist.

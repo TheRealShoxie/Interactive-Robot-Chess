@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'ibo1'
-version '0.1-DRAFT'
+version '0.2-DRAFT'
 
 sourceCompatibility = 17
 
@@ -29,4 +29,15 @@ javafx{
     version = "17.0.6"
 }
 
-mainClassName = 'ibo1.Application.Main'
+
+application{
+    mainClassName = 'ibo1.Application.Main'
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'Application.Main'
+        )
+    }
+}

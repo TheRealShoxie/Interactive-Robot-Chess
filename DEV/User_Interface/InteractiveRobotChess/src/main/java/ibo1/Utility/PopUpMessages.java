@@ -1,11 +1,12 @@
 /*
- *@(#) Utility.DataChecker.java 0.1 2023/03/17
+ *@(#) Utility.PopUpMessages.java 0.1 2023/03/17
  *
  * Copyright (c) Omar Ibrahim
  * All rights reserved.
  */
 package ibo1.Utility;
 
+import ibo1.UIElements.UIChessBoard;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceDialog;
@@ -19,8 +20,16 @@ import java.util.Optional;
  * This class uses JFX to display information outside the nominal usage of the user interface.
  * <p>
  * Implements multiple methods to handle exception and alert messages shown to the user.
+ * Further, implements a choice box version to pick from different choices
+ *
  * @author Omar Ibrahim
  * @version 0.1 ( Initial development ).
+ * @version 1.0 ( Initial release ).
+ *
+ * @see ibo1.UI.HomePageUserController
+ * @see ibo1.UI.StartUpController
+ * @see ibo1.UI.LoginController
+ * @see UIChessBoard
  */
 public abstract class PopUpMessages {
     // ////////// //
@@ -147,6 +156,12 @@ public abstract class PopUpMessages {
         return createAndShowChoiceDialog("Chess Engine Picker","Select the chess engine to use:","ChessEngine:", choices);
     }
 
+    /**
+     * Creates a choice dialog for promoting a chess piece
+     *
+     * @param choices Possible choices to pick from
+     * @return the choice that was picked
+     */
     public static String showChoiceDialogPromotion(List<String> choices){
         return createAndShowChoiceDialog("Promotion picker","Select the chess piece to promote into:","Chess Piece:", choices);
     }

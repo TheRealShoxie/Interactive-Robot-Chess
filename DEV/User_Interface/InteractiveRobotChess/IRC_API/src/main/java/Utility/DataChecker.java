@@ -18,8 +18,9 @@ import java.util.regex.Pattern;
  * If data is invalid it throws an exception.
  * @author Omar Ibrahim
  * @version 0.1 ( Initial development ).
- *
+ * @version 1.0 ( Initial release ).
  * @see InvalidDataException
+ * @see Client.IRCClient
  **/
 public abstract class DataChecker {
     // ////////// //

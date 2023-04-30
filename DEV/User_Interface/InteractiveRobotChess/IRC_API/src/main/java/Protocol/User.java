@@ -1,5 +1,5 @@
 /*
- *@(#) Utility.DataChecker.java 0.1 2023/03/17
+ *@(#) Protocol.User.java 0.1 2023/03/17
  *
  * Copyright (c) Omar Ibrahim
  * All rights reserved.
@@ -11,7 +11,6 @@ import CustomException.ProtocolException;
 import Enum.ProtocolErrors;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -20,9 +19,11 @@ import java.nio.charset.StandardCharsets;
  * This class handles all the requests sent to the server to get information from the server regarding a User.
  * @author Omar Ibrahim
  * @version 0.1 ( Initial development ).
+ * @version 1.0 ( Initial release ).
  * @see IRCClient
  * @see ProtocolException
  * @see ProtocolErrors
+ * @see ProtocolObject
  **/
 public class User{
 

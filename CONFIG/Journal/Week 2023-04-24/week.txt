@@ -135,3 +135,6 @@ Sunday:
     - Went through each C++ and header file that I wrote added comments where approrpiate and added Printing using the ROS logging
         environment on each Node to do some adequate printing for debugging. This is all enabled using a debugging variable
         which can be set and removed
+        - Finished writing documents in the ros package
+
+    

@@ -1,5 +1,5 @@
 /*
- *@(#) Utility.DataChecker.java 0.1 2023/03/17
+ *@(#) Client.IRCClient.java 0.1 2023/04/30
  *
  * Copyright (c) Omar Ibrahim
  * All rights reserved.
@@ -17,12 +17,17 @@ import java.net.Socket;
 /**
  * IRCClient - Interactive Robot Chess Client class is responsible for the communication with the
  * Interactive Robot Chess Server, which is run within a ROS system on a Linux machine.
+ *
  * @author Omar Ibrahim
  * @version 0.1 ( Initial development ).
+ * @version 1.0 ( Initial release ).
+ *
  * @see DataChecker
  * @see ProtocolObject
  * @see InvalidDataException
- * @see Protocol.APIObjectInterface
+ * @see Protocol.ChessEngine
+ * @see ChessSpecific.ChessBoard
+ * @see Protocol.User
  */
 public class IRCClient {
 
@@ -83,8 +88,14 @@ public class IRCClient {
      * @throws InvalidDataException thrown by invalid IPv4 address
      */
     public IRCClient(String ipAddress, int port, boolean autoConnect) throws IOException, InvalidDataException {
+
+        // Set the ip Address
         setIpAddress(ipAddress);
+
+        // Set the port
         setPort(port);
+
+        // Checking if we should auto connect. If yes open connection
         if(autoConnect) openConnection();
     }
 
@@ -144,23 +155,34 @@ public class IRCClient {
      * @throws IOException thrown by OutputStream write
      */
     public void send(ProtocolObject sendData) throws IOException {
+
+        // Sends supplied  ProtocolObject.toByteArray()
         out.write(sendData.toByteArray());
     }
 
     /**
      * Receives data from the clientSocket as a byte array and returns a protocol object.
      *
+     * Current version has no timeout build in. This needs to be expanded on in the future.
+     *
      * @return returns the read buffer as a byte array
      * @throws IOException thrown by InputStream read
      */
     public ProtocolObject receive() throws IOException {
 
+        // Create a new ProtocolObjects
         ProtocolObject protocolObject = new ProtocolObject();
 
+        // Read the first byte and set that as the cmd byte
         protocolObject.setCmdByte((byte) in.read());
+
+        // Read the next 4 bytes which represent the DataSize and set them to the protocolObject
         protocolObject.setDataSize(in.readNBytes(4));
+
+        // Read n amounts of bytes specified by the dataSize from the previous 4 bytes
         protocolObject.setData(in.readNBytes(protocolObject.getDataSize()));
 
+        // Return the protocol
         return protocolObject;
     }
 
@@ -178,6 +200,7 @@ public class IRCClient {
         out = clientSocket.getOutputStream();
         in = clientSocket.getInputStream();
 
+        // Set up the sendOpen Connection protocol and send it
         ProtocolObject sendOpenConnection = new ProtocolObject();
         sendOpenConnection.setCmdByte((byte) 0x01);
         sendOpenConnection.setDataSize(0);
@@ -199,13 +222,17 @@ public class IRCClient {
      * @throws java.io.IOException throws an IOException
      */
     public void closeConnection() throws java.io.IOException{
+
+        //Set up the disconnect protocol objects
         ProtocolObject sendCloseConnection = new ProtocolObject();
         sendCloseConnection.setCmdByte((byte) 0x00);
         sendCloseConnection.setDataSize(0);
 
+
+        // Send the disconnect protocol
         send(sendCloseConnection);
 
-
+        // Close the reader and writer and the socket
         in.close();
         out.close();
         clientSocket.close();

@@ -1,5 +1,22 @@
+/*
+ *@(#) Enum.ProtocolErrors.java 0.1 2023/04/30
+ *
+ * Copyright (c) Omar Ibrahim
+ * All rights reserved.
+ */
 package Enum;
 
+/**
+ * ProtocolErrors - Enum for Protocol Errors
+ * <p>
+ * Enum used for Protocol Errors
+ * @author Omar Ibrahim
+ * @version 0.1 ( Initial development ).
+ * @version 1.0 ( Initial release ).
+ * @see Protocol.User
+ * @see Protocol.ChessEngine
+ *
+ */
 public enum ProtocolErrors {
     User_DOES_NOTEXIST,
     UNEXPECTED_RETURN_CMD,

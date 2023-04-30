@@ -10,14 +10,13 @@ import Client.IRCClient;
 import CustomException.ProtocolException;
 import Protocol.ChessEngine;
 import ibo1.Application.Main;
+import ibo1.UIElements.UIChessBoard;
 import ibo1.Utility.PopUpMessages;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import Enum.ProtocolErrors;
 import javafx.scene.layout.*;
 import java.io.IOException;
-import java.util.List;
 
 /**
  * HomePageUserController - Is the controller for the HomePageUser.fxml file, defining which
@@ -45,15 +44,15 @@ public class HomePageUserController {
     // ////////////// //
 
     @FXML
-    private void startChessGame( javafx.event.ActionEvent event ){
+    private void startChessGame( javafx.event.ActionEvent event ) throws ProtocolException, IOException {
 
         // Start selection of the chess Engine
-        String selectedSimState = PopUpMessages.showChoiceDialogChessEngine(chessEngine.getSimChoices());
+        String selectedSimState = PopUpMessages.showChoiceDialogChessEngine(chessEngine.getSystemStateChoices());
 
         boolean setSimulation = false;
 
         try{
-            setSimulation = chessEngine.setSimulation(ircClient, selectedSimState);
+            setSimulation = chessEngine.setSystemState(ircClient, selectedSimState);
         } catch (IOException e){
             PopUpMessages.showAlert("IOException", "SENDING OR RECEIVING ERROR",
                     "There was an error with sending or receiving using the client. " +

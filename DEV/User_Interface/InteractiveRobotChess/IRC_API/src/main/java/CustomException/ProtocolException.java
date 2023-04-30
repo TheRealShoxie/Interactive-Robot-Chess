@@ -1,5 +1,5 @@
 /*
- *@(#) Utility.DataChecker.java 0.1 2023/03/17
+ *@(#) CustomException.ProtocolException.java 0.1 2023/04/30
  *
  * Copyright (c) Omar Ibrahim
  * All rights reserved.
@@ -7,12 +7,14 @@
 package CustomException;
 
 /**
- * ClassName - ClassDescription initial
- * <p>
- * What it does
+ * ProtocolException - Custom Exception used for Protocol errors
+ *
  * @author Omar Ibrahim
  * @version 0.1 ( Initial development ).
- * @see Exception
+ * @version 1.0 ( Initial release ).
+ * @see Protocol.User
+ * @see Protocol.ChessEngine
+ * @see ChessSpecific.ChessBoard
  */
 public class ProtocolException extends Exception {
     // ////////// //

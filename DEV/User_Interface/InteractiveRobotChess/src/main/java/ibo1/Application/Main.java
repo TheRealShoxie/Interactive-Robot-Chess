@@ -1,5 +1,5 @@
 /*
- *@(#) Utility.DataChecker.java 0.1 2023/03/17
+ *@(#) Application.ibo1.java 0.1 2023/03/17
  *
  * Copyright (c) Omar Ibrahim
  * All rights reserved.
@@ -28,6 +28,8 @@ import java.io.IOException;
  * @author Omar Ibrahim
  * @version 0.1 ( Initial development ).
  * @see StartUpController
+ * @see ibo1.UI.LoginController
+ * @see ibo1.UI.HomePageUserController
  */
 public class Main extends Application {
     // //////////////// //

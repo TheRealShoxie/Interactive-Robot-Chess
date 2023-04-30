@@ -13,7 +13,9 @@ import Utility.DataChecker;
  * <p>
  * This class enables to throw InvalidDataException for the Utility.DataChecker.
  * @author Omar Ibrahim
- * @version 0.1 ( Initial development ).
+ * @version 0.2 ( Second development ).
+ * @version 1.0 ( Initial release ).
+ *
  * @see Exception
  */
 public class InvalidDataException extends Exception {

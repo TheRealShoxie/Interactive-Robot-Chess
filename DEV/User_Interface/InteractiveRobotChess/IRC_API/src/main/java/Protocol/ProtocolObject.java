@@ -1,5 +1,5 @@
 /*
- *@(#) Utility.DataChecker.java 0.1 2023/03/17
+ *@(#) Protocol.ProtocolObject.java 0.1 2023/03/17
  *
  * Copyright (c) Omar Ibrahim
  * All rights reserved.
@@ -12,7 +12,10 @@ import java.nio.ByteBuffer;
  * ProtocolObject - Represents the core structure of the protocol
  * @author Omar Ibrahim
  * @version 0.1 ( Initial development ).
+ * @version 1.0 ( Initial release ).
  * @see ByteBuffer
+ * @see User
+ * @see Client.IRCClient
  */
 public class ProtocolObject {
 
