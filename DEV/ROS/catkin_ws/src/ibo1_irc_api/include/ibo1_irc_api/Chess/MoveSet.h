@@ -1,5 +1,36 @@
 #ifndef MOVESET_H
 #define MOVESET_H
+
+/*
+ * MoveSet - MoveSet class definition
+ * <p>
+ * Used for defining a move set. Move sets are 2d cell movements for chesspieces. It defines these move sets and 
+ * has the possibility to convert to a cellPos for chessboards which use 1dimensional storage for cells
+ * 
+ * <p>
+ * 3rd party code is used in this class. It is a C++ version with adaptions from github user: Stevoisiak.
+ * Link to the original code: https://github.com/Stevoisiak/JavaFX-Online-Chess
+ * 
+ * This is an adaption from the Space.java file
+ * This also adds additional functionality
+ * 
+ * @author Omar Ibrahim
+ * @version 0.1 ( Initial development ).
+ * @version 1.0 ( Initial release ).
+ * 
+ * @see ChessBoard.h
+ * @see ChessPiece.h
+ * @see Rook.h
+ * @see Bishop.h
+ * @see Knight.h
+ * @see Queen.h
+ * @see King.h
+ * @see Pawn.h
+*/
+
+    // ////////// //
+    // Includes.  //
+    // ////////// //
    
     // ////////// //
     // Constants. //
@@ -12,6 +43,7 @@ class MoveSet{
         // Constructors. //
         // ///////////// //
 
+        // Constructor for creating a moveset
         MoveSet(int xPos, int yPos){
             x = xPos;
             y = yPos;
@@ -21,6 +53,8 @@ class MoveSet{
         // Methods. //
         // //////// //
 
+        // Method returns the move for a 1dimensional container
+        // The container must represent a chess board with a1 is 0 and h8 is 63
         int getCellPos(int multiple, int cellOffset){
             int newX = x*multiple;
             int newY = y*multiple;
@@ -37,6 +71,7 @@ class MoveSet{
             return actualX+actualY*8;
         }
 
+        // Method returns a string representation of the move in x and y
         string toString() const{
             return "x:" +to_string(x) +"/" +"y:" +to_string(y);
         }
@@ -44,6 +79,16 @@ class MoveSet{
         // ////////////////////// //
         // Read/Write properties. //
         // ////////////////////// //
+
+        // Method returns the cells to move in X
+        int getXMovement(){
+            return x;
+        }
+
+        // Method returns the cells to move in y
+        int getYMovement(){
+            return y;
+        }
 
         // ///////////////////// //
         // Read-only properties. //
@@ -67,6 +112,9 @@ class MoveSet{
         int y;
 };
 
+
+
+// Defines standard movesets
 const MoveSet UP(0,-1);
 const MoveSet UP_LEFT(-1,-1);
 const MoveSet UP_RIGHT(1,-1);

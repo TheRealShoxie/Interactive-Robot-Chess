@@ -1,3 +1,16 @@
+/*
+ * uTestDataManipulation - Class which tests DataManipulation.h
+ * <p>
+ * This class tests the functionality of DataManipulation.h
+ * 
+ * 
+ * @author Omar Ibrahim
+ * @version 0.1 ( Initial development ).
+ * @version 1.0 ( Initial release ).
+ * 
+ * @see DataManipulation.h
+*/
+
 #include <ros/ros.h>
 
 #include "ibo1_irc_api/Utility/DataManipulation.h"

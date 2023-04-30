@@ -1,10 +1,32 @@
 #ifndef CELLEXTRACTION_H
 #define CELLEXTRACTION_H
 
+/*
+ * CellExtration 
+ * <p>
+ * This header file defines structs used for ChessBoardCellDetectionNode.cpp
+ * 
+ * @author Omar Ibrahim
+ * @version 0.1 ( Initial development ).
+ * @version 1.0 ( Initial release ).
+ * 
+ * @see ChessBoardCellDetectionNode.cpp
+*/
+
+    // ////////// //
+    // Includes.  //
+    // ////////// //
+
 using namespace std;
 
+/*
+---------------------------------------------------------------------------------------------------------------------------------
+*/
+    // ////////////////// //
+    //  Global variables. //
+    // ////////////////// //
 
-int pixelOffSet = 5;
+static const int pixelOffSet = 5;
 
 /*
 ---------------------------------------------------------------------------------------------------------------------------------
@@ -18,10 +40,12 @@ int pixelOffSet = 5;
         int x = 0;
         int y = 0;
 
+        // Defines == operator
         inline bool operator==(const Image2dPoints& e) const{
             return (x == e.x && y == e.y);
         }
 
+        // Defines < operator
         inline bool operator<(const Image2dPoints& e) const{
             if(x == e.x){
                 //if(y == e.y) return false;
@@ -38,10 +62,12 @@ int pixelOffSet = 5;
         int x2 = 0;
         int y2 = 0;
 
+        // Defines == operator
         inline bool operator==(const ImageSquares& e) const{
             return (x1 == e.x1 && y1 == e.y1);
         }
 
+        // Defines < operator
         inline bool operator<(const ImageSquares& e) const{
             // Checking if the pixel is within a range of another then we sort by y
             if((x1-pixelOffSet <= e.x1 && x1+pixelOffSet >= e.x1)){
@@ -58,6 +84,7 @@ int pixelOffSet = 5;
         float depth = 0;
         bool isOccupied = false;
 
+        // Defines == operator
         inline bool operator==(const ImageChessPieceDepth& e) const{
             return (x == e.x && y == e.y);
         }
@@ -69,6 +96,7 @@ int pixelOffSet = 5;
         ImageChessPieceDepth chessPieceDepth;
         bool isWhite = false;
 
+        // Defines == operator
         inline bool operator==(const ImageChessCell& e) const{
             return (chessPieceDepth == e.chessPieceDepth);
         }

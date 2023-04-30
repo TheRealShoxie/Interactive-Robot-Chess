@@ -1,9 +1,33 @@
 #ifndef NODEHELPER_H
 #define NODEHELPER_H
 
+/*
+ * NodeHelper
+ * <p>
+ * The NodeHelper class is used for general node helping.
+ * 
+ * Its current main implementation is used for forwarding protocols between nodes and defining the expected returns from those nodes where the communication
+ * started.
+ * 
+ * 
+ * @author Omar Ibrahim
+ * @version 0.1 ( Initial development ).
+ * @version 1.0 ( Initial release ).
+ * 
+ * @see SystemStateMachineHelper.h
+ * @see ServerNode.cpp
+ * @see SystemStateMachineNode.cpp
+*/
+
+    // ////////// //
+    // Includes.  //
+    // ////////// //
+
 #include <ros/ros.h>
 
 #include <ibo1_irc_api/Protocol.h>
+
+#include <ibo1_irc_api/ProtocolAPI/InternalProtocolDefinition.h>
    
     // ////////// //
     // Constants. //
@@ -21,16 +45,23 @@ class NodeHelper{
         // Methods. //
         // //////// //
 
-
+        // Method for forwarding internal protocols inside the system
         static void forwarder(ibo1_irc_api::Protocol& returnedProtocol, const vector<BYTE>& dataToSend, const BYTE& protocolCmd, const BYTE& sender, const BYTE& receiveFrom, vector<BYTE>& returnedInternalProtocolData, 
                               BYTE& returnedCMD, ros::Publisher* publisher){
+
+            //Calling internal forwarder which sends a protocol to the supplied publisher
             internalForwarder(dataToSend, protocolCmd, sender, publisher);
 
+
+            //Getting the expected return from internal command send
             vector<BYTE> expectedReturn = getExpectedReturnInternal(protocolCmd);
 
 
             bool foundExpectedCmd = false;
 
+            //While we did not find the expected return keep going
+            // Currently there is a possibility we will go into a infinite loop
+            // This system needs to be revamped
             while(!foundExpectedCmd){
 
                 if(returnedProtocol.sender == receiveFrom){
@@ -55,6 +86,8 @@ class NodeHelper{
         // ////////////// //
         // Class methods. //
         // ////////////// //
+
+        // Method that forwards a protocol from supplied data, cmd and the sender to the supplied publisher
         static void internalForwarder(const vector<BYTE>& sendData, const BYTE& cmd, const BYTE &sender, ros::Publisher* publisher){
             ibo1_irc_api::Protocol forwardProtocol;
             forwardProtocol.cmd = cmd;
@@ -65,6 +98,8 @@ class NodeHelper{
             publisher->publish(forwardProtocol);
         }
 
+
+        // This method checks if the supplied received Protocol cmd matches the supplied expected values. It then overrides the protocol data and cmd if it finds a match
         static bool internalReceiver(const ibo1_irc_api::Protocol& received, BYTE &returnedCMD, vector<BYTE>& returnedInternalProtocolData, const vector<BYTE>& expectedReturn){
             returnedCMD  = received.cmd;
 

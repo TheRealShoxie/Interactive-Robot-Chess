@@ -1,6 +1,49 @@
 #ifndef SUBPROCESSHANDLER_H
 #define SUBPROCESSHANDLER_H
 
+/*
+ * SubProcessHandler File
+ * <p>
+ * The SubProcessHandler file defines the SubProcessHandler class, the SubProcess Class and cpipe class.
+ * 
+ * <p>
+ * cpipe class:
+ * 
+ * 3rd party code is used in this class. It was the created by github user konstantin from following link: https://gist.github.com/konstantint/d49ab683b978b3d74172
+ * It was taken on the day 20.03.2023
+ * This class is the original code
+ * 
+ * Used for linux piping.
+ * 
+ * 
+ * <p>
+ * SubProcess class:
+ * 
+ * 3rd party code is used in this class. It was the created by github user konstantin from following link: https://gist.github.com/konstantint/d49ab683b978b3d74172
+ * It was taken on the day 20.03.2023
+ * Its current implementation has differently named class name and was expanded on with the help of Maxim Buzdalov from lines 58-62.
+ * 
+ * Its usage is for creating child processes
+ * 
+ * 
+ * <p>
+ * SubProcessHandler class:
+ * 
+ * A class written to interact with the subProcess created. Main Implementation is for usage in starting chessEngines. Should be able to start any kind of process though
+ * It is used inside of UCIHandler.h
+ * 
+ * 
+ * @author Omar Ibrahim
+ * @version 0.1 ( Initial development ).
+ * @version 1.0 ( Initial release ).
+ * 
+ * @see UCIHandler.h
+*/
+
+    // ////////// //
+    // Includes.  //
+    // ////////// //
+
 #include <ext/stdio_filebuf.h> // NB: Specific to libstdc++
 #include <sys/wait.h>
 #include <string.h>
@@ -13,14 +56,10 @@
 
 using namespace std;
 
+
 /*
-    - This class was written using https://gist.github.com/konstantint/d49ab683b978b3d74172,
-      this enables the starting of a subprocess and handling in and output.
+    ---------------------------------------------------------------------------------------------
 */
-
-
-// The following classes were taken from the above mentioned link. These are used to enable the functionality of the above class.
-// Wrapping pipe in a class makes sure they are closed when we leave scope
 class cpipe {
 private:
     int fd[2];
@@ -32,6 +71,9 @@ public:
     ~cpipe() { close(); }
 };
 
+/*
+    ---------------------------------------------------------------------------------------------
+*/
 class SubProcess {
 private:
     cpipe write_pipe;
@@ -45,7 +87,6 @@ public:
 
     SubProcess(): stdin(NULL), stdout(NULL){}
 
-    // Contribution from maxim line 58-62
     SubProcess(vector<string> const &argvSource, bool with_path = false, const char* const envp[] = 0): stdin(NULL), stdout(NULL){
         child_pid = fork();
         if (child_pid == -1) throw runtime_error("Failed to start child process"); 
@@ -98,11 +139,9 @@ public:
 
 
    
-   
-   
-    // ////////// //
-    // Constants. //
-    // ////////// //
+/*
+    ---------------------------------------------------------------------------------------------
+*/   
 
 class SubProcessHandler{
 
@@ -112,16 +151,45 @@ class SubProcessHandler{
         // Constructors. //
         // ///////////// //
 
-        SubProcessHandler();
-        SubProcessHandler(string const &processFilePathName);
+        // Default constructor
+        SubProcessHandler(){}
+
+        // Constructor which specifies a filepath to a process to start or a command
+        SubProcessHandler(string const &processFilePathName)
+            : subProcess({processFilePathName}) {
+        }
 
         // //////// //
         // Methods. //
         // //////// //
 
-        void getLine(string &returnedLine);
-        void write(string const &message);
-        ~SubProcessHandler();
+        // Gets the stdout line from the process that has been started
+        void getLine(string &returnedLine){
+            
+            // Checking if the child pid is not -1
+            if(subProcess.child_pid == -1) return;
+            getline(subProcess.stdout, returnedLine);
+        }
+
+        // Writes to the stdin  of the started process
+        void write(string const &message){
+
+            // Checking if the child pid is not -1
+            if(subProcess.child_pid == -1) return;
+            subProcess.stdin << message << endl;
+        }
+
+
+        // Deconstructor for SubProcessHandler
+        ~SubProcessHandler() {
+
+            // Checking if the child pid is not -1
+            if(subProcess.child_pid == -1) return;
+            subProcess.send_eof();
+
+            cout << "Waiting to terminate..." << endl;
+            cout << "Status: " << subProcess.wait() << endl;
+        }
 
         // ////////////////////// //
         // Read/Write properties. //

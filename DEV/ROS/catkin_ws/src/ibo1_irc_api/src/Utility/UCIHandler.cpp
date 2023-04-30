@@ -1,11 +1,28 @@
+/*
+ * UCIHandler - Class which defines a UCIHandler
+ * <p>
+ * This file is the implementation of the class definition in UCIHandler.h
+ * Please refer to UCIHandler.h for more information.
+ * 
+ * @author Omar Ibrahim
+ * @version 0.1 ( Initial development ).
+ * @version 1.0 ( Initial release ).
+ * 
+ * @see UCIHandler.h
+*/
+
+    // ////////// //
+    // Includes.  //
+    // ////////// //
+
 #include "ibo1_irc_api/Utility/UCIHandler.h"
 
     // ///////////// //
     // Constructors. //
     // ///////////// //
 
-    UCIHandler::UCIHandler(){}
-    
+    // Constructor for initializing a uci handler and starting a process
+        // with the supplied processFilePath
     UCIHandler::UCIHandler(string const &processFilePathName)
         :subProcessHandler(processFilePathName){
 
@@ -30,18 +47,22 @@
     // Methods. //
     // //////// //
 
+    // Checking if the engine is ready
     bool UCIHandler::isEngineReady(){
         string returnedLine = "";
 
+        //Sending the command is ready
         subProcessHandler.write("isready");
 
         subProcessHandler.getLine(returnedLine);
 
+        //Checking if returned line is readyok
         return (returnedLine.compare("readyok") == 0);
 
     }
 
 
+    // Starting UCI interfacing with the chess engine
     bool UCIHandler::startUCI(vector<EngineOption> &engineOptions){
         EngineOption engineOption;
         string returnedLine;
@@ -73,11 +94,10 @@
             }
         }
         return true;
-
-        //Case for when it needs to false? Maybe if uciok doesnt show up after a certain amount of time?
-        //return false;
     }
 
+
+    // Method to make the chess engine do a move, maniupulates the supplied chessEngineMove
     void UCIHandler::makeMove(string const &fenPosition, string const &searchSettings, string &chessEngineMove){
         string returnedLine;
         string startOfData = "bestmove ";
@@ -112,10 +132,12 @@
         }
     }
 
+    // Method to set a engine option
     void UCIHandler::setEngineOption(string const &optionName, string const &value){
         subProcessHandler.write("set " +optionName +" value " +value);
     }
 
+    // Method to start a new chess game
     bool UCIHandler::startNewGame(){
         string returnedLine;
         
@@ -128,6 +150,7 @@
 
     }
     
+    // Deconstructor for UCIHandler
     UCIHandler::~UCIHandler(){
         subProcessHandler.write("quit");
     }

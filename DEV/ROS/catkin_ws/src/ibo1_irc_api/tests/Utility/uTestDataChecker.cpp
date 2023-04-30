@@ -1,3 +1,17 @@
+/*
+ * uTestDataChecker- Class which tests DataChecker.h
+ * <p>
+ * This class tests the functionality of DataChecker.h
+ * 
+ * 
+ * @author Omar Ibrahim
+ * @version 0.1 ( Initial development ).
+ * @version 1.0 ( Initial release ).
+ * 
+ * @see DataChecker.h
+*/
+
+
 #include <ros/ros.h>
 
 #include "ibo1_irc_api/Utility/DataChecker.h"

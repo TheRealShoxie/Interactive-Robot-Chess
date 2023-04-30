@@ -1,3 +1,48 @@
+/*
+ * RobotArmStateMachineNode - Ros node which is used for ircRobotArmStateMachine
+ * <p>
+ * This file describes the internal communication and execution of its respective commands.
+ * It communicates with the ircSystemState machine to receive and respond with commands.
+ * For how it is connected to the internal system refer to SystemStateMachineNode.cpp
+ * 
+ * The definition of the internal protocol is defined in the folder data/Protocol/InternalProtocol.h
+ * 
+ * <p>
+ * This Node listens to the ChessBoardCellDetectionNode and uses that information check if a cell 
+ * is occupied or not. It uses the frames set by CreateTarget to know where it needs to move it.
+ * It has predefined move sets it goes through to pick and place chess pieces.
+ * This Node uses the moveit interface to execute robot arm movements.
+ * 
+ * <p>
+ * This Node provides following functionality:
+ * 
+ *  - Robot arm movement
+ * 
+ * <p>
+ * This file is launched with the ircSystem.launch file
+ * 
+ * <p>
+ * It uses the paramServer to get the systemDebug value if debugging is enabled or disabled
+ * 
+ * @author Omar Ibrahim
+ * @version 0.1 ( Initial development ).
+ * @version 1.0 ( Initial release ).
+ * @see CMakeLists.txt
+ * @see ircSystem.launch
+ * @see SystemStateMachineNode.cpp
+ * @see CreateTargetNode.cpp
+ * @see ChessBoardCellDetectionNode.cpp
+ * @see DataCreator.h
+ * @see DataChecker.h
+ * @see InternalProtocol.h
+*/
+
+
+
+    // ////////// //
+    // Includes.  //
+    // ////////// //
+
 #include <ros/ros.h>
 
 
@@ -63,9 +108,6 @@ int cellPosDrop = -1;
 geometry_msgs::TransformStamped startFrameTransform;
 geometry_msgs::TransformStamped endFrameTransform;
 
-
-
-
 // Transform global variables
 tf2_ros::Buffer* tfBuffer_ptr;
 
@@ -103,7 +145,7 @@ double movePieceOffsets[4][3] = {
     {0, -0.0128, chessPieceMoveDropStandardOffsetHeigh},
 };
 
-// Speed values
+
 
 // Robot variables
 moveit::planning_interface::MoveGroupInterface* move_group_arm_ptr;
@@ -120,6 +162,9 @@ static const double speedValuesArm[2][2] = {
 bool gripperFinished = false;
 bool transformFramesUpdated = false;
 
+// For debug
+bool systemDebug = false;
+
 
 /*
 ---------------------------------------------------------------------------------------------------------------------------------
@@ -127,20 +172,20 @@ bool transformFramesUpdated = false;
     // ////////// //
     // Callbacks. //
     // ////////// //
+
+// Callback function for subscriber on /my_gen3/ircRobotArmStateMachine
 void robotArmStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
     returnedProtocol = msg;
-    cout << "----------------------------------------------------------" << endl;
-    cout << "I received following on RobotArmStateMachine: " << endl;
-    cout << "I received from: " << (int)returnedProtocol.sender << endl;
-    cout << "CmdByte: " << (int)returnedProtocol.cmd << endl;
-    cout << "----------------------------------------------------------" << endl;
+
+    //Only prints if systemDebug true
+    ROS_INFO_COND(systemDebug, "I received from: %d", returnedProtocol.sender);
+    ROS_INFO_COND(systemDebug, "I received the CMD: %d", returnedProtocol.cmd);
+
 }
 
+//Callback on /imageProcessing/chessCellDetection
 void chessCellDetectionMessageReceived(const ibo1_irc_api::ChessCells& msg){
     returnedChessCells = msg;
-    // cout << "----------------------------------------------------------" << endl;
-    // cout << "I received following on createTarget from chessCellDetection: " << endl;
-    // cout << "----------------------------------------------------------" << endl;
 }
 
 /*
@@ -150,13 +195,16 @@ void chessCellDetectionMessageReceived(const ibo1_irc_api::ChessCells& msg){
     // ///////////////// //
     // Setup Functions.  //
     // ///////////////// //
+
+    // Function to setup the planning interface
+    // This includes creating the ground objects for collision and the camera and chessboard
     void settingUpPlanningInterface(){
 
         //Clearing previous planning scene objects
         planning_scene_interface_ptr->removeCollisionObjects(object_ids);
 
 
-        ROS_INFO("Adding ground to planning scene");
+        ROS_INFO_COND(systemDebug, "Adding ground to planning scene");
 
         // Adding/Removing Objects and Attaching/Detaching Objects
         // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -304,7 +352,7 @@ void chessCellDetectionMessageReceived(const ibo1_irc_api::ChessCells& msg){
 
         collision_objects[5].operation = collision_objects[5].ADD;
 
-        ROS_INFO("applying collision objects");
+        ROS_INFO_COND(systemDebug, "applying collision objects");
         planning_scene_interface_ptr->applyCollisionObjects(collision_objects);
     }
 
@@ -321,6 +369,10 @@ void chessCellDetectionMessageReceived(const ibo1_irc_api::ChessCells& msg){
 
     // Function to publish to a specific sender with a supplied Protocol
     void sendToSender(BYTE sender, const ibo1_irc_api::Protocol& sendProtocol){
+        
+        //Only prints if systemDebug true
+        ROS_INFO_COND(systemDebug, "I am sending to: %d", sender);
+        ROS_INFO_COND(systemDebug, "I am sending cmd: %d", sendProtocol.cmd);
 
         // Checking which sender it should return to
         switch (sender)
@@ -337,7 +389,7 @@ void chessCellDetectionMessageReceived(const ibo1_irc_api::ChessCells& msg){
     }
 
 
-    //Converts movement to CellPosition
+    //Converts chess movement to CellPosition
     void getVecPosFromMove(string const &move, int &cellPosPickup, int &cellPosDrop){
 
         int rowMoveFrom = (int)move[0] - 97;
@@ -352,13 +404,17 @@ void chessCellDetectionMessageReceived(const ibo1_irc_api::ChessCells& msg){
 
 
 
-    // Setting the target cellPos
+    // Checks if the target cells are occupied and edits the supplied booleans
+    // It returns false if it could not get the data needed
     bool getTargetCellsOccupied(vector<BYTE>& targetData, bool& pickUpOccupied, bool& dropOccupied){
         string moveCommand = "";
         DataCreator::convertBytesToString(targetData, moveCommand);
 
         transform(moveCommand.begin(), moveCommand.end(), moveCommand.begin(), ::tolower);
 
+        ROS_INFO_COND(systemDebug, "Getting target cells for move: %s", moveCommand.c_str());
+
+        // Checks if the movement command format is correct
         if(DataChecker::isCorrectMoveFormat(moveCommand)){
             
             int targetCellPickUp = 0;
@@ -366,13 +422,13 @@ void chessCellDetectionMessageReceived(const ibo1_irc_api::ChessCells& msg){
 
             getVecPosFromMove(moveCommand, targetCellPickUp, targetCellDrop);
 
+            // Checks if we have data from the ChessBoardCellDetectionNode
             if (!returnedChessCells.chessCells.empty())
             {
                 pickUpOccupied = returnedChessCells.chessCells.at(targetCellPickUp).isOccupied;
                 dropOccupied = returnedChessCells.chessCells.at(targetCellDrop).isOccupied;
                 return true;
             }
-            
 
             return false;
         }
@@ -381,10 +437,9 @@ void chessCellDetectionMessageReceived(const ibo1_irc_api::ChessCells& msg){
 
     }
 
-    bool updateTransform(const string& targetFrame, geometry_msgs::TransformStamped& transformToUpdate){
 
-        // Deciding which targetet frame to go for
-        // cout << "Frame to get transform:" << targetFrame << endl;
+    // Updates the transform variable supplied to the specified targetFrame
+    bool updateTransform(const string& targetFrame, geometry_msgs::TransformStamped& transformToUpdate){
         
         try{
             transformToUpdate = tfBuffer_ptr->lookupTransform("base_link", targetFrame, ros::Time(0));
@@ -398,6 +453,7 @@ void chessCellDetectionMessageReceived(const ibo1_irc_api::ChessCells& msg){
         return true;
 
     }
+
 
     //Moving arm to specified frame
     bool moveArm( const string& targetFrame, const double speedValues[2]){
@@ -436,17 +492,23 @@ void chessCellDetectionMessageReceived(const ibo1_irc_api::ChessCells& msg){
 
         moveit::planning_interface::MoveGroupInterface::Plan my_plan;
 
+        // Checking if we have successfully planned a movement
         bool success = (move_group_arm_ptr->plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
 
-
+        // Checking if our plan was successful 
         if(success){
+            // Try to execute the plan and return successful or not as true or false
             return (move_group_gripper_ptr->execute(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
         }
         
+        // If plan not successful return false
         return false;
     }
 
-    // Gripper Controller
+
+    // Used to control the grippers and put them to a specified value
+    // This is specific to how the used Robot arm from Kinova works this most likely
+    // needs to be rewritten if a different robot arm model is used
     bool gripperControl(const double& gripperValue){
         string joint = "finger_joint";
 
@@ -470,6 +532,7 @@ void chessCellDetectionMessageReceived(const ibo1_irc_api::ChessCells& msg){
     }
 
 
+    // Checks if we arrived at the supplied target pose
     bool arrivedAtPosition(const geometry_msgs::TransformStamped& targetPose){
         geometry_msgs::PoseStamped currentPose = move_group_arm_ptr->getCurrentPose();
 
@@ -490,12 +553,13 @@ void chessCellDetectionMessageReceived(const ibo1_irc_api::ChessCells& msg){
     }
 
 
-
+    // This Method tries to move to the supplied targetFrame with its supplied offset and rotation 
     bool moveToTarget(const tf2::Quaternion rotation, geometry_msgs::TransformStamped& targetTransform, const double offSet[3], const double speedValues[2]){
 
         static tf2_ros::TransformBroadcaster br;
         geometry_msgs::TransformStamped transformStamped;
 
+        // Create our target frame and publish it
         transformStamped.header.stamp = ros::Time::now();
         transformStamped.header.frame_id = "base_link";
         transformStamped.child_frame_id = "updated_Target";
@@ -511,40 +575,52 @@ void chessCellDetectionMessageReceived(const ibo1_irc_api::ChessCells& msg){
         transformStamped.transform.rotation.z = rotation.z();
         transformStamped.transform.rotation.w = rotation.w();
 
-
-
         br.sendTransform(transformStamped);
 
+
+        // Trying to move the arm to the updated target
         bool finishedMovement = moveArm("updated_Target", speedValues);
+
+        // Returns true or false depending on if we moved and we arrived at the position
         if(finishedMovement && arrivedAtPosition(transformStamped)) return true;
         return false;
 
     }
 
-    // Going to rest Position
+
+    // Method used to set the robot arm into the rest position
     void moveToRestPosition(){
         double emptyOffset[3] = {0,0,0};
 
         //Going to rest position
         bool gotToRestPosition = false;
+
+        // Keeps going till we are at rest position
         while(!gotToRestPosition){
             ros::Duration(0.5).sleep();
 
+            // Checks if our update transform to the restposition frame was correct
             if(updateTransform(goalFrames[3], startFrameTransform)){
+
+                // If yes move to the target
                 gotToRestPosition = moveToTarget(quaternionPickDrop, startFrameTransform, emptyOffset, speedValuesArm[0]);
             }
             
         }
 
+        // Reset the gripper and set it to fully open
         gripperControl(0);
     }
 
     
+
+
     // Pick Up and Drop State stepper
     void pickUpAndDrop(double offSets[][3]){
 
         // Move back to rest Position set that we already updated TransformFrames
         if(pickDropState == 9){
+            ROS_INFO_COND(systemDebug, "PickDropState: 9");
             moveToRestPosition();
             robotArmState++;
             pickDropState = 0;
@@ -553,11 +629,13 @@ void chessCellDetectionMessageReceived(const ibo1_irc_api::ChessCells& msg){
 
         // Go back to intermediate Position for the frame to drop at
         else if(pickDropState == 8){
+            ROS_INFO_COND(systemDebug, "PickDropState: 8");
             if(moveToTarget(quaternionPickDrop, endFrameTransform, offSets[2], speedValuesArm[1])) pickDropState++;
         }
 
         // Let go of the Piece
         else if(pickDropState == 7){
+            ROS_INFO_COND(systemDebug, "PickDropState: 7");
             gripperFinished = gripperControl(gripperValues[0]);
             if(gripperFinished){
                 pickDropState++;
@@ -567,21 +645,25 @@ void chessCellDetectionMessageReceived(const ibo1_irc_api::ChessCells& msg){
 
         //Move to Drop position
         else if(pickDropState == 6){
+            ROS_INFO_COND(systemDebug, "PickDropState: 6");
             if(moveToTarget(quaternionPickDrop, endFrameTransform, offSets[3], speedValuesArm[1])) pickDropState++;
         }
         
         // Move to intermediate Position for the frame to drop at
         else if(pickDropState == 5){
+            ROS_INFO_COND(systemDebug, "PickDropState: 5");
             if(moveToTarget(quaternionPickDrop, endFrameTransform, offSets[2], speedValuesArm[1])) pickDropState++;
         }
 
         // Move back up to intermediate Position
         else if(pickDropState == 4){
+            ROS_INFO_COND(systemDebug, "PickDropState: 4");
             if(moveToTarget(quaternionPickDrop,startFrameTransform,  offSets[0], speedValuesArm[1])) pickDropState++;
         }
 
         // Close the Grippers to grip the piece
         else if(pickDropState == 3){
+            ROS_INFO_COND(systemDebug, "PickDropState: 3");
             gripperFinished = gripperControl(gripperValues[1]);
             if(gripperFinished){
                 pickDropState++;
@@ -591,11 +673,13 @@ void chessCellDetectionMessageReceived(const ibo1_irc_api::ChessCells& msg){
 
         // Move down to get the piece
         else if(pickDropState == 2){
+            ROS_INFO_COND(systemDebug, "PickDropState: 2");
             if(moveToTarget(quaternionPickDrop, startFrameTransform, offSets[1], speedValuesArm[1])) pickDropState++;
         }
 
         // Close Gripper slightly to get between chessPieces
         else if(pickDropState == 1){
+            ROS_INFO_COND(systemDebug, "PickDropState: 1");
             gripperFinished = gripperControl(gripperValues[0]);
             if(gripperFinished){
                 pickDropState++;
@@ -605,6 +689,7 @@ void chessCellDetectionMessageReceived(const ibo1_irc_api::ChessCells& msg){
 
         // Move to intermediate Position
         else if(pickDropState == 0){
+            ROS_INFO_COND(systemDebug, "PickDropState: 0");
             if(moveToTarget(quaternionPickDrop, startFrameTransform, offSets[0], speedValuesArm[0])) pickDropState++;
         }
     }
@@ -613,18 +698,29 @@ void chessCellDetectionMessageReceived(const ibo1_irc_api::ChessCells& msg){
 
     // Decides if we remove a piece or pick up a piece
     void makeMove(const bool& isRemovePiece){
+
+        // Do we need to remove a piece
         if(isRemovePiece){
+
+            // Checking if our transformFrames were updated
             if(!transformFramesUpdated){
+
+                // Update to new transform frames
                 bool updatedStartFrame = updateTransform(goalFrames[0], startFrameTransform);
                 bool updateEndFrame = updateTransform(goalFrames[2], endFrameTransform);
 
                 // If one of the transform updates failed return
                 if(!updatedStartFrame || !updateEndFrame) return;
 
+                ROS_INFO_COND(systemDebug, "Starting to remove a piece");
                 transformFramesUpdated = true;
             }
-            pickUpAndDrop(removePieceOffsets);
+            else{
+                pickUpAndDrop(removePieceOffsets);
+            }
+            
         }
+        // Otherwise we are trying to move a piece
         else{
             if(!transformFramesUpdated){
                 bool updatedStartFrame = updateTransform(goalFrames[1], startFrameTransform);
@@ -632,11 +728,14 @@ void chessCellDetectionMessageReceived(const ibo1_irc_api::ChessCells& msg){
 
                 // If one of the transform updates failed return
                 if(!updatedStartFrame || !updateEndFrame) return;
-
+                ROS_INFO_COND(systemDebug, "Starting to move the piece");
                 transformFramesUpdated = true;
             }
+            else{
+                pickUpAndDrop(movePieceOffsets);
+            }
             
-            pickUpAndDrop(movePieceOffsets);
+            
         }
         
     }
@@ -649,6 +748,7 @@ void chessCellDetectionMessageReceived(const ibo1_irc_api::ChessCells& msg){
 
         // Waiting for move Command
         if(robotArmState == 0 && gotCmd == CMD_INTERNAL_ROBOTARMMOVE){
+            ROS_INFO_COND(systemDebug, "We got the command to move");
             
             // Getting the chessCells which we are trying to pickUp from and drop into
             bool pickUpCellOccupied = false;
@@ -657,12 +757,21 @@ void chessCellDetectionMessageReceived(const ibo1_irc_api::ChessCells& msg){
             // Checking if we could get the data, if not return and send error
             if(!getTargetCellsOccupied(returnedProtocol.data, pickUpCellOccupied, dropCellOccupied)){
                 //Send something went wrong
+                ROS_WARN("Encountered an error for getTargetCellsOccupied -  This is not implemented yet!");
                 return;
             }
 
             // Checking if pickUp Cell is not occupied
             if(!pickUpCellOccupied){
                 //Send error pickup cell not occupied and return
+                ROS_WARN("The cell to move from is not occupied. Mismatch between real chessboard and internal");
+
+                // Create the error protocol and send it back to initial sender
+                ibo1_irc_api::Protocol errorProtocol;
+                errorProtocol.cmd = ERROR_INTERNAL_CMD_PICKUPCELLEMPTY;
+                errorProtocol.sender = SENDER_ROBOTARMSTATEMACHINE;
+                sendToSender(initialSender, errorProtocol);
+                robotArmState = 0;
                 return;
             }
 
@@ -673,12 +782,14 @@ void chessCellDetectionMessageReceived(const ibo1_irc_api::ChessCells& msg){
             if(dropCellOccupied){
                 robotArmState = 1;
                 pickDropState = 0;
+                ROS_INFO_COND(systemDebug, "RobotArmState now state: 1");
             }
 
             // Otherwise we need can pick up and move
             else{
                 robotArmState = 2;
                 pickDropState = 0;
+                ROS_INFO_COND(systemDebug, "RobotArmState now state: 2");
             }
 
         }
@@ -695,6 +806,9 @@ void chessCellDetectionMessageReceived(const ibo1_irc_api::ChessCells& msg){
 
         // Finished move send finished command back
         else if(robotArmState == 3){
+            ROS_INFO_COND(systemDebug, "RobotArmState now state: 3");
+
+            // Prepare protocol to send back
             ibo1_irc_api::Protocol sendProtocol;
             sendProtocol.cmd = CMD_INTERNAL_ROBOTARMMOVE;
             sendProtocol.sender = SENDER_ROBOTARMSTATEMACHINE;
@@ -702,9 +816,7 @@ void chessCellDetectionMessageReceived(const ibo1_irc_api::ChessCells& msg){
             robotArmState = 0;
         }
 
-
-
-        returnedProtocol.cmd == (BYTE)0x00;
+        returnedProtocol.cmd = (BYTE)0x00;
     }
 
 
@@ -714,22 +826,38 @@ void chessCellDetectionMessageReceived(const ibo1_irc_api::ChessCells& msg){
 */
 
 int main (int argc, char **argv){
+    // ROS node and spinner setup
     ros::init(argc, argv, "robotArmStateMachine");
     ros::NodeHandle nh;
     ros:: AsyncSpinner spinner(1);
     spinner.start();
 
+    // Subscriber and publisher setup
     ros::Subscriber robotArmStateMachine_sub = nh.subscribe("/my_gen3/ircRobotArmStateMachine", 1, &robotArmStateMachineMessageReceived);
     ros::Subscriber chessCellDetection_sub = nh.subscribe("/imageProcessing/chessCellDetection", 1, &chessCellDetectionMessageReceived);
 
-    ros::Publisher systemStateMachine_pub = nh.advertise<ibo1_irc_api::Protocol>("/ircSystemStateMachine", 10);
+    ros::Publisher systemStateMachine_pub = nh.advertise<ibo1_irc_api::Protocol>("/ircSystem/ircSystemStateMachine", 10);
+    systemStateMachine_pub_ptr = &systemStateMachine_pub;
 
+    // Transform listener setup
     tf2_ros::Buffer tfBuffer;
     tfBuffer_ptr = &tfBuffer;
 
     tf2_ros::TransformListener tfListener(tfBuffer);
 
-    systemStateMachine_pub_ptr = &systemStateMachine_pub;
+    // Getting System debug param
+    string systemDebugString = "";
+    ros::param::param<string>("/systemDebug", systemDebugString, "false");
+
+    // Trying to convert debug string to bool, if wrong we send a warning
+    try{
+        systemDebug = DataCreator::stringToBool(systemDebugString);
+    } catch(invalid_argument e){
+        // Printing warning message and setting to a default value of false
+        ROS_WARN("Error converting debug param to bool: '%s' - set to default 'false'",e.what());
+        systemDebug = false;
+    }
+
 
     
     // Setting up the movegroup for arm and gripper
@@ -766,11 +894,9 @@ int main (int argc, char **argv){
         }
     }
 
-
+    // Setting up MoveGroup Interface for arm and gripper
     moveit::planning_interface::MoveGroupInterface move_group_arm("arm");
     move_group_arm_ptr = &move_group_arm;
-
-    
 
     moveit::planning_interface::MoveGroupInterface move_group_gripper("gripper");
     move_group_gripper_ptr = &move_group_gripper;
@@ -782,7 +908,7 @@ int main (int argc, char **argv){
     planning_scene_interface_ptr = &planning_scene_interface;
     settingUpPlanningInterface();
 
-
+    // Moving to rest position 
     moveToRestPosition();
 
     ros::Rate rate(10);

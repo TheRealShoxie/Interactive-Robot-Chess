@@ -1,9 +1,36 @@
+/*
+ * ProtocolDefinitions
+ * <p>
+ * This header file defines the values for the Cmds and errors used by the external protocol.
+ * Changing a value here will change it for all usages of the #define variable.
+ * 
+ * This file mimics the Internal protocol defined in the file found under: data/Protocol/Protocol
+ * 
+ * 
+ * @author Omar Ibrahim
+ * @version 0.1 ( Initial development ).
+ * @version 1.0 ( Initial release ).
+ * 
+ * @see ServerNode.cpp
+ * @see IRCServerNodeHelper.h
+ * 
+*/
+
+    // ////////// //
+    // Includes.  //
+    // ////////// //
+
 #include "iostream"
 
 using namespace std;
 
 // Datatype
 typedef uint8_t BYTE;
+
+
+    // ///////// //
+    // Defines.  //
+    // ///////// //
 
 // Protocol Commands
 #define CMD_DISCONNECT                                  (BYTE)0x00

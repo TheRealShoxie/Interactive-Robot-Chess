@@ -1,3 +1,21 @@
+/*
+ * IRCServer - Class which represents a IRCServer
+ * <p>
+ * This file is the implementation of the class definition in IRCServer.h
+ * Please refer to IRCServer.h for more information.
+ * 
+ * @author Omar Ibrahim
+ * @version 0.1 ( Initial development ).
+ * @version 1.0 ( Initial release ).
+ * 
+ * @see IRCServer.h
+*/
+
+    // ////////// //
+    // Includes.  //
+    // ////////// //
+
+// Including header file
 #include "ibo1_irc_api/Server/IRCServer.h"
 
 
@@ -15,12 +33,12 @@ IRCServer::IRCServer(unsigned int setPort)
     // ////////////// //
 
 
-//Implementation of closing client Socket
+//Method to close the client socket
 void IRCServer::closeClientSocket(){
     close(clientSocket);
 }
 
-// Implementation of client connected
+// Sets clientConnected bool to true
 void IRCServer::connectClient(){
     clientConnected = true;
 }
@@ -39,7 +57,6 @@ int IRCServer::receiveBuffer(vector<BYTE>& receivingBuffer){
 
 
 // Converts vector Byte to integer
-// https://stackoverflow.com/questions/34943835/convert-four-bytes-to-integer-using-c
 int IRCServer::convertBufferDataSizeToInt(vector<BYTE> buffer){
 
     return int( (buffer[1]) << 24 |
@@ -64,10 +81,12 @@ vector<BYTE> IRCServer::convertIntToBufferDataSize(int dataSize){
     // Read/Write properties. //
     // ////////////////////// //
 
+// Sets the client command
 void IRCServer::setClientCommand(BYTE setClientCommand){
     clientCommand = setClientCommand;
 }
 
+// Gets the client command
 BYTE IRCServer::getClientCommand(){
     return clientCommand;
 }
@@ -80,14 +99,17 @@ BYTE IRCServer::getClientCommand(){
     // ///////////////////// //
 
 
+// Gets the current port
 unsigned int IRCServer::getPort(){
     return port;
 }
 
+// Gets the current clientSocket
 int IRCServer::getClientSocket(){
     return clientSocket;
 }
 
+// Checks if a client is connected
 bool IRCServer::getClientConnected(){
     return clientConnected;
 }
@@ -161,22 +183,28 @@ int IRCServer::commandExtraction(){
     cmdBuffer.resize(5);
 
     int bytesRecv = receiveBuffer(cmdBuffer);
-    cout << "Received Bytes: " << bytesRecv << endl;
-    cout << "Cmd Byte: " << (int)cmdBuffer[0] << endl;
 
+    // Checks if the bytes recv for cmd and dataSize are not 5 then we have a protocol error
     if(bytesRecv != 5){
         return -4;
     }
 
-
+    // Checking if a client is already connected
     if(clientConnected == false){
+
+        // If not then check if we get dont get a connect command
         if(cmdBuffer[0] != CMD_CONNECT){
+
+            // If we do not receive a connect command return Error client needs to connect first
             clientCommand = ERROR_CONNECT;
             return -1;
         }
+
+        // Otherwise connect
         else connectClient();
     }
 
+    // Checks if the send command exists if yes sets the client command to it
     switch (cmdBuffer[0])
     {
 
@@ -240,12 +268,14 @@ int IRCServer::commandExtraction(){
             return -2;
             break;
 
+        // We received a unrecognizable command
         default:
             clientCommand = ERROR_CMD_UNRECOGNIZABLE;
             return -3;
             break;
     }
 
+    // Converts the dataSizeBytes into an integer and returns those
     return convertBufferDataSizeToInt(cmdBuffer);
 
 }

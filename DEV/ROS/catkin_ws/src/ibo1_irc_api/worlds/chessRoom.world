@@ -1,3 +1,35 @@
+<!--
+ * chesRoom.world
+ * <p>
+ * This file defines the world used for the system. This mainly defines the chessboard and the chessPieces and their positions.
+ * 
+ * <p>
+ * 3rd party model used for chessBoards. In the folder models chessboard and chessboard2 are taken from link:
+ * https://gitioc.upc.edu/rostutorials/gazebo_sensors_tutorial/-/tree/ab3ed9f585e19d5899b1a1fd356a4746b57ff68f/models 
+ * Accessed 30th of April 2023.
+ *
+ * 
+ * @author Omar Ibrahim
+ * @version 0.1 ( Initial development ).
+ * @version 1.0 ( Initial release ).
+ * 
+ * @see robotGazebo.launch
+ * @see models/chessboard
+ * @see models/chessboard2
+ * @see models/bishopBlack
+ * @see models/bishopWhite
+ * @see models/kingBlack
+ * @see models/kingWhite
+ * @see models/knightBlack
+ * @see models/knightWhite
+ * @see models/pawnBlack
+ * @see models/pawnWhite
+ * @see models/queenBlack
+ * @see models/queenWhite
+ * @see models/rookBlack
+ * @see models/rookWhite
+-->
+
 <sdf version='1.7'>
   <world name='chessRoom'>
 

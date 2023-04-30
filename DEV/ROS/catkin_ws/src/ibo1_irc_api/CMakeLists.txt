@@ -142,14 +142,12 @@ add_library(ibo1_nodeLibrary
   src/User/Users.cpp
   src/User/User.cpp
   #-----ChessWrapper Libraries-----
-  src/Utility/SubProcessHandler.cpp
   src/Chess/ChessEngine.cpp
   src/Chess/ChessBoard.cpp
   #-----Utility Libraries-----
   src/Utility/UCIHandler.cpp
   src/Utility/FileHandler.cpp
 )
-
 
 
 
@@ -259,6 +257,21 @@ catkin_add_gtest(${PROJECT_NAME}-uTestChessEngine tests/Chess/uTestChessEngine.c
   target_link_libraries(${PROJECT_NAME}-uTestChessEngine ${catkin_LIBRARIES} ibo1_nodeLibrary)
   
 #endif()
+
+
+# if(CATKIN_ENABLE_TESTING)
+# 	find_package(rostest REQUIRED)
+
+# 	catkin_add_gtest(UnitTest_ChessEngine tests/Chess/uTestChessEngine.cpp)
+#   catkin_add_gtest(UnitTest_ChessBoard tests/Chess/uTestChessBoard.cpp)
+
+#   target_link_libraries(UnitTest_ChessEngine ${catkin_LIBRARIES} ibo1_nodeLibrary)
+#   target_link_libraries(UnitTest_ChessBoard ${catkin_LIBRARIES} ibo1_nodeLibrary)
+
+#   #All tests as one
+#   # catkin_add_gtest(UnitTest_all tests/Chess/uTestChessEngine.cpp)
+#   # target_link_libraries(UnitTest_all ${catkin_LIBRARIES} ibo1_nodeLibrary)
+# endif()
 
 
 ## Add folders to be run by python nosetests

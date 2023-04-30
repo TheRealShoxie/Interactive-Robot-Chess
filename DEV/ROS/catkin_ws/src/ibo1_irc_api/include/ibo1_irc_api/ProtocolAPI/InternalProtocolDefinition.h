@@ -1,3 +1,30 @@
+/*
+ * InternalProtocolDefinition
+ * <p>
+ * This header file defines the values for the Cmds and errors and senders used by the internal protocol.
+ * Changing a value here will change it for all usages of the #define variable.
+ * 
+ * This file mimics the Internal protocol defined in the file found under: data/Protocol/InternalProtocol
+ * 
+ * 
+ * @author Omar Ibrahim
+ * @version 0.1 ( Initial development ).
+ * @version 1.0 ( Initial release ).
+ * 
+ * @see ChessBoardCellDetectionNode.cpp
+ * @see ChessWrapperNode.cpp
+ * @see CreateTargetNode.cpp
+ * @see RobotArmStateMachineNode.cpp
+ * @see SystemStateMachineNode.cpp
+ * @see ServerNode.cpp
+ * @see IRCServerNodeHelper.h
+ * @see ChessEngine.cpp
+*/
+
+    // ////////// //
+    // Includes.  //
+    // ////////// //
+
 #include "iostream"
 
 using namespace std;
@@ -5,6 +32,10 @@ using namespace std;
 // Datatype
 typedef uint8_t BYTE;
 
+
+    // ///////// //
+    // Defines.  //
+    // ///////// //
 
 // Receiver
 #define SENDER_SYSTEMSTATEMACHINE                                   (BYTE)0x00

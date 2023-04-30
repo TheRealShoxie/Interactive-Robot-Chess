@@ -1,3 +1,42 @@
+<!--
+ * robotGazebo.launch
+ * <p>
+ * This launch file starts the gazebo and rviz environment with respective arguments.
+ * 
+ * <p>
+ * 3rd party code used here. The launch file is an adaption from the original ros kortex ros library for ros-noetic.
+ * Link to the github repository: https://github.com/Kinovarobotics/ros_kortex. Accesses 30th of April 2023
+ * It uses the ros kortex package. This file is an adaption from the original spawn_kortex_robot.launch found under the kortex_gazebo
+ * folder and then inside the launch folder.
+ * 
+ * <p>
+ * Adaptions made are the removal of chaning to different robot arms.
+ * Current version still uses a lot of args which should not be edited.
+ * Current version only allows the change of following args:
+ * - start_rviz
+ * - use_sim_time
+ * - debu
+ * - gui
+ * - paused
+ * - start_delay_seconds
+ * 
+ * This file further spawns the external camera. It also changes the gazebo model path for the models used
+ * in the gazebo world.
+ * 
+ * 
+ * 
+ * 
+ * @author Omar Ibrahim
+ * @version 0.1 ( Initial development ).
+ * @version 1.0 ( Initial release ).
+ * 
+ * @see main.launch
+ * @see ros kortex_gazebo package
+ * @see worlds/chessRoom.world
+ * @see description external_camera.xacro
+ * @see full_robot.xacro
+-->
+
 <launch>
 
     <!-- Tell Gazebo where to find our custom object models -->

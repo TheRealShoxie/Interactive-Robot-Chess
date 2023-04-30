@@ -1,3 +1,69 @@
+/*
+ * SystemStateMachineNode - Ros node which is used for ircSystemStateMachine
+ * <p>
+ * This Node connects the whole system together. It has multiple different states.
+ * The system can be set into a full robot simulation, partial simulation, no simulation, and real with robot.
+ * 
+ * Currently only full simulation and no simulation is implemented.
+ * 
+ * It connects on how a playerMove and chessMove are done by their retrospective state machines.
+ * 
+ * In the idle state the system functions as a execture and forwarder.
+ * If a chess engine gets started it goes into its corresponding simulation, no simulation and real robot states.
+ * There it defines how player moves and chess moves are to be processed.
+ * 
+ * It can exit that system state and returning into idle by getting a chess engine stop move.
+ * 
+ * 
+ * This file describes the internal communication and execution of its respective commands.
+ * It communicates with the ircSystemState machine to receive and respond with commands.
+ * For how it is connected to the internal system refer to SystemStateMachineNode.cpp
+ * 
+ * The definition of the internal protocol is defined in the folder data/Protocol/InternalProtocol.h
+ * 
+ * 
+ * <p>
+ * 
+ * 
+ * <p>
+ * This Node provides following functionality:
+ * 
+ *  - Get possible chess engines
+ *  - Start a chess engine
+ *  - Stop a chess engine
+ *  - Player move
+ *  - Chess engine move
+ *  - last move castle move
+ *  - Robot arm move
+ * 
+ * <p>
+ * This file is launched with the ircSystem.launch file
+ * 
+ * <p>
+ * It uses the paramServer to get the systemDebug value if debugging is enabled or disabled
+ * 
+ * @author Omar Ibrahim
+ * @version 0.1 ( Initial development ).
+ * @version 1.0 ( Initial release ).
+ * @see ChessEngine.h
+ * @see CMakeLists.txt
+ * @see ircSystem.launch
+ * @see ChessWrapperNode.cpp
+ * @see CreateTargetNode.cpp
+ * @see RobotArmStateMachineNode.cpp
+ * @see SystemStateMachineHelper.h
+ * @see ServerNode.cpp
+ * @see DataCreator.h
+ * @see DataChecker.h
+ * @see Protocol.h
+ * @see InternalProtocol.h
+*/
+
+
+    // ////////// //
+    // Includes.  //
+    // ////////// //
+
 #include <ibo1_irc_api/SystemStateMachine/SystemStateMachineHelper.h>
 
 #include <ibo1_irc_api/Utility/DataCreator.h>
@@ -42,6 +108,9 @@ vector<BYTE> inSimulationDataStorage;
 bool didCastle = false;
 vector<BYTE> inSimulationDataStorageForCastling;
 
+// For debug
+bool systemDebug = false;
+
 
 /*
 ---------------------------------------------------------------------------------------------------------------------------------
@@ -51,13 +120,12 @@ vector<BYTE> inSimulationDataStorageForCastling;
     // Callbacks. //
     // ////////// //
 
+// Callback function for subscriber on /ircSystem/ircSystemStateMachine
 void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
     returnedProtocol = msg;
-    cout << "----------------------------------------------------------" << endl;
-    cout << "I received following on systemStateMachine: " << endl;
-    cout << "I received from: " << (int)returnedProtocol.sender << endl;
-    cout << "CmdByte: " << (int)returnedProtocol.cmd << endl;
-    cout << "----------------------------------------------------------" << endl;
+    //Only prints if systemDebug true
+    ROS_INFO_COND(systemDebug, "I received from: %d", returnedProtocol.sender);
+    ROS_INFO_COND(systemDebug, "I received the CMD: %d", returnedProtocol.cmd);
 }
 
 
@@ -73,6 +141,10 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
 
     // Function to publish to a specific sender with a supplied Protocol
     void sendToSender(BYTE sender, const ibo1_irc_api::Protocol& sendProtocol){
+
+        //Only prints if systemDebug true
+        ROS_INFO_COND(systemDebug, "I am sending to: %d", sender);
+        ROS_INFO_COND(systemDebug, "I am sending cmd: %d", sendProtocol.cmd);
 
         // Checking which sender it should return to
         switch (sender)
@@ -106,9 +178,6 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
         string moveCmd = "";
         string newMoveCmd = "";
         DataCreator::convertBytesToString(inSimulationDataStorage, moveCmd);
-        cout << "______________________________________________________________________________________" << endl;
-        cout << moveCmd << endl;
-
 
 
         //White Castle King side
@@ -149,6 +218,7 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
             //Checking if the sender is not ChessWrapper, then return
             if(returnedProtocol.sender != SENDER_CHESSWRAPPER) return;
 
+
             //Checking if we got an incorrect Command back
             if(returnedProtocol.cmd != CMD_INTERNAL_LASTMOVECASTLEMOVE){
 
@@ -165,7 +235,7 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
                     inSimulationState = 0;
                     return;
                 }
-
+                ROS_INFO_COND(systemDebug, "inSimulationRobotMoveState: 6");
                 // As we got back the not castle move we increase the inSimulationRobotMoveState
                 inSimulationRobotMoveState++;
             }else{
@@ -179,6 +249,7 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
 
         // Waiting till we cleared the target then we go into next stage
         if(inSimulationRobotMoveState == 4 && returnedProtocol.cmd != (BYTE)0x00){
+
             // Checking if the sender is not CreateTarget, then return
             if(returnedProtocol.sender != SENDER_CREATETARGET) return;
 
@@ -204,16 +275,19 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
             //Sending setTarget command to Create target
             sendToSender(SENDER_CHESSWRAPPER, sendChessWrapperProtocol);
 
+            ROS_INFO_COND(systemDebug, "inSimulationRobotMoveState: 5");
+            ROS_INFO_COND(systemDebug, "inSimulationRobotMoveState: 5 - Did we already castle: %s", didCastle);
+
             // Checking if we just did a castle move
             // If reset didCastle and skip check for castling move and set internalSimulationDataStorage back to original
             if(didCastle){
-                
+
+
                 // Reset didCastle
                 didCastle = false;
 
                 // Increase to next state twice as we already did castle check
                 inSimulationRobotMoveState = inSimulationRobotMoveState + 2;
-                cout << "Should have increased inSimulationRobot state by 2 to 6:" << inSimulationRobotMoveState << endl;
 
                 //Setting original data back into inSimulation and clearing temp castling data to free up memory
                 inSimulationDataStorage = inSimulationDataStorageForCastling;
@@ -222,6 +296,7 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
             }
             // Otherwise just increase inSimulationRobotMoveState
             else{
+                
                 // Increase to next state for chessEngineMove
                 inSimulationRobotMoveState++;
             }
@@ -229,6 +304,7 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
 
         //Waiting till robot arm finished moving
         else if(inSimulationRobotMoveState == 3 && returnedProtocol.cmd != (BYTE)0x00){
+
 
             // Checking if the sender is not RobotArmStateMachine, then return
             if(returnedProtocol.sender != SENDER_ROBOTARMSTATEMACHINE) return;
@@ -247,6 +323,8 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
                 return;
             }
 
+            ROS_INFO_COND(systemDebug, "inSimulationRobotMoveState: 4");
+
             //Create the protocol for setting the targets
             ibo1_irc_api::Protocol sendResetTargetProtocol;
             sendResetTargetProtocol.cmd = CMD_INTERNAL_CLEARTARGET;
@@ -262,6 +340,7 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
 
         //ChessEngineMove state 2, waiting for CreateTargetNode to reply
         else if(inSimulationRobotMoveState == 2 && returnedProtocol.cmd != (BYTE)0x00){
+
 
 
             // Checking if the sender is not CreateTarget, then return
@@ -281,6 +360,8 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
 
             }
 
+            ROS_INFO_COND(systemDebug, "inSimulationRobotMoveState: 3");
+
             // Now that we set the target we want to have the robnot arm do its movements
             // Create the protocol for the robot arm
             ibo1_irc_api::Protocol sendRobotArmMoveProtocol;
@@ -297,27 +378,24 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
 
         //ChessEngineMove state 1, sending set target with ChessMove to CreateTargetNode
         else if(inSimulationRobotMoveState == 1){
+            
+            ROS_INFO_COND(systemDebug, "inSimulationRobotMoveState: 1");
 
-            cout << "Do I die in here?" << endl;
             //Create the protocol for setting the targets
             ibo1_irc_api::Protocol sendCreateTargetProtocol;
             sendCreateTargetProtocol.cmd = CMD_INTERNAL_SETTARGET;
             sendCreateTargetProtocol.sender = SENDER_SYSTEMSTATEMACHINE;
-            cout << "DIE1" << endl;
             string test = "";
             DataCreator::convertBytesToString(inSimulationDataStorage, test);
-            cout << "Move Command after castle yes:" << test << endl;
             sendCreateTargetProtocol.data = inSimulationDataStorage;
 
-            cout << "DIE2" << endl;
             //Sending setTarget command to Create target
             sendToSender(SENDER_CREATETARGET, sendCreateTargetProtocol);
 
-            cout << "DIE3" << endl;
+            ROS_INFO_COND(systemDebug, "inSimulationRobotMoveState: 2");
             //Increase to next state for chessEngineMove
             inSimulationRobotMoveState++;
 
-            cout << "I did not die in here!" << endl;
         }
     }
 
@@ -331,6 +409,8 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
             sendProtocolToInitialSender.cmd = initialSenderMoveCmd;
             sendProtocolToInitialSender.sender = SENDER_SYSTEMSTATEMACHINE;
             sendProtocolToInitialSender.data = inSimulationDataStorage;
+
+            ROS_INFO_COND(systemDebug, "inSimulationPlayerMoveState: 6");
 
 
             sendToSender(initialSenderMove, sendProtocolToInitialSender);
@@ -380,6 +460,7 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
 
 
             sendToSender(initialSenderMove, sendProtocolToInitialSender);
+            ROS_INFO_COND(systemDebug, "inSimulationChessEngineMoveState: 6");
             inSimulationState = 0;
         }
 
@@ -435,17 +516,29 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
             switch (returnedProtocol.cmd)
             {
                 case CMD_INTERNAL_PLAYERMOVE:{
-                    //Getting the initial sender
 
+                    ROS_INFO_COND(systemDebug, "systemState: 1 - Inside FullSim State - Player move");
+                    if(systemDebug){
+                        string chessEngineMove = "";
+                        DataCreator::convertBytesToString(returnedProtocol.data, chessEngineMove);
+                        ROS_INFO_COND(systemDebug, "Player Move: %s", chessEngineMove.c_str());
+                    }
+
+                    // Getting protocol to send to chess wrapper
                     ibo1_irc_api::Protocol getPlayerMoveProtocol;
                     getPlayerMoveProtocol.cmd = returnedProtocol.cmd;
                     getPlayerMoveProtocol.data = returnedProtocol.data;
                     getPlayerMoveProtocol.sender = SENDER_SYSTEMSTATEMACHINE;
                     sendToSender(SENDER_CHESSWRAPPER, getPlayerMoveProtocol);
 
+
+                    //Storing initial data received
                     initialSenderMove = returnedProtocol.sender;
                     initialSenderMoveCmd = returnedProtocol.cmd;
                     inSimulationDataStorage = returnedProtocol.data;
+
+                    ROS_INFO_COND(systemDebug, "inSimulationState: 2");
+                    ROS_INFO_COND(systemDebug, "inSimulationPlayerMoveState: 0");
 
                     inSimulationState = 2;
                     inSimulationPlayerMoveState = 0;
@@ -455,26 +548,38 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
 
                 case CMD_INTERNAL_CHESSENGINEMOVE:{
 
+                    ROS_INFO_COND(systemDebug, "systemState: 1 - Inside FullSim State - Stop Chess Engine");
+
+                    // Getting protocol to send to chess wrapper
                     ibo1_irc_api::Protocol getChessEngineMoveProtocol;
                     getChessEngineMoveProtocol.cmd = returnedProtocol.cmd;
                     getChessEngineMoveProtocol.data = returnedProtocol.data;
                     getChessEngineMoveProtocol.sender = SENDER_SYSTEMSTATEMACHINE;
                     sendToSender(SENDER_CHESSWRAPPER, getChessEngineMoveProtocol);
 
+                    ROS_INFO_COND(systemDebug, "inSimulationState: 1");
+                    ROS_INFO_COND(systemDebug, "inSimulationChessEngineMoveState: 0");
+
+                    //Storing initial data received
+                    initialSenderMove = returnedProtocol.sender;
+                    initialSenderMoveCmd = returnedProtocol.cmd;
+
                     // Increasing the inSimulation state to 1 as we need to go down the chessEngineMove state
                     inSimulationState = 1;
                     inSimulationChessEngineMoveState = 0;
                     didCastle = false;
-                    initialSenderMove = returnedProtocol.sender;
-                    initialSenderMoveCmd = returnedProtocol.cmd;
+
                     break;
                 }
 
                 case CMD_INTERNAL_STOPCHESSENGINE:{
+
+                    ROS_INFO_COND(systemDebug, "systemState: 1 - Inside FullSim State - Stop Chess Engine");
+
                     //Getting the initial sender
                     BYTE initialSender = returnedProtocol.sender;
 
-                    sendToSender(initialSender, SystemStateMachineHelper::systemStateMachineChessEngineForwarder(returnedProtocol, chessWrapper_pub_ptr));
+                    sendToSender(initialSender, SystemStateMachineHelper::systemStateMachineChessWrapperForwarder(returnedProtocol, chessWrapper_pub_ptr));
 
                     // After stopping the chessEngine we go back to initial idle state
                     systemState = 0;
@@ -510,18 +615,15 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
                 //Getting the initial sender
                 BYTE initialSender = returnedProtocol.sender;
 
-                ibo1_irc_api::Protocol testProtocol = SystemStateMachineHelper::systemStateMachineChessEngineForwarder(returnedProtocol, chessWrapper_pub_ptr);
+                ROS_INFO_COND(systemDebug, "systemState: 1 - Inside noRobotArm State - Player Move");
 
-                cout << "----------------Player Move in No Robot Arm State----------------" << endl;
-                cout << "Sending to:" << (int)initialSender << endl;
-                cout << "Cmd to send back: " << (int)testProtocol.cmd << endl;
-                cout << "Data to send back: ";
-                for(auto &b : testProtocol.data){
-                    cout << (char)(int(b));
+                if(systemDebug){
+                    string chessEngineMove = "";
+                    DataCreator::convertBytesToString(returnedProtocol.data, chessEngineMove);
+                    ROS_INFO_COND(systemDebug, "Player Move: %s", chessEngineMove.c_str());
                 }
-                cout << endl;
-                cout << "Sender inside Protocol: " << (int)testProtocol.sender << endl;
-                cout << "-----------------------------------------------------------------" << endl;
+
+                ibo1_irc_api::Protocol testProtocol = SystemStateMachineHelper::systemStateMachineChessWrapperForwarder(returnedProtocol, chessWrapper_pub_ptr);
 
                 sendToSender(initialSender, testProtocol);
                 break;
@@ -531,18 +633,15 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
                 //Getting the initial sender
                 BYTE initialSender = returnedProtocol.sender;
 
-                ibo1_irc_api::Protocol testProtocol = SystemStateMachineHelper::systemStateMachineChessEngineForwarder(returnedProtocol, chessWrapper_pub_ptr);
+                ROS_INFO_COND(systemDebug, "systemState: 1 - Inside noRobotArm State - Chess Engine Move");
 
-                cout << "----------------ChessEngine Move in No Robot Arm State----------------" << endl;
-                cout << "Sending to:" << (int)initialSender << endl;
-                cout << "Cmd to send back: " << (int)testProtocol.cmd << endl;
-                cout << "Data to send back: ";
-                for(auto &b : testProtocol.data){
-                    cout << (char)(int(b));
+                ibo1_irc_api::Protocol testProtocol = SystemStateMachineHelper::systemStateMachineChessWrapperForwarder(returnedProtocol, chessWrapper_pub_ptr);
+
+                if(systemDebug){
+                    string chessEngineMove = "";
+                    DataCreator::convertBytesToString(returnedProtocol.data, chessEngineMove);
+                    ROS_INFO_COND(systemDebug, "Player Move: %s", chessEngineMove.c_str());
                 }
-                cout << endl;
-                cout << "Sender inside Protocol: " << (int)testProtocol.sender << endl;
-                cout << "-----------------------------------------------------------------" << endl;
 
                 sendToSender(initialSender, testProtocol);
                 break;
@@ -552,18 +651,11 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
                 //Getting the initial sender
                 BYTE initialSender = returnedProtocol.sender;
 
-                ibo1_irc_api::Protocol testProtocol = SystemStateMachineHelper::systemStateMachineChessEngineForwarder(returnedProtocol, chessWrapper_pub_ptr);
+                ibo1_irc_api::Protocol testProtocol = SystemStateMachineHelper::systemStateMachineChessWrapperForwarder(returnedProtocol, chessWrapper_pub_ptr);
 
-                cout << "----------------Stop Chess Engine in No Robot Arm State----------------" << endl;
-                cout << "Sending to:" << (int)initialSender << endl;
-                cout << "Cmd to send back: " << (int)testProtocol.cmd << endl;
-                cout << "Data to send back: ";
-                for(auto &b : testProtocol.data){
-                    cout << (char)(int(b));
-                }
-                cout << endl;
-                cout << "Sender inside Protocol: " << (int)testProtocol.sender << endl;
-                cout << "-----------------------------------------------------------------" << endl;
+                ROS_INFO_COND(systemDebug, "systemState: 1 - Inside noRobotArm State - Stopping Chess Engine");
+
+            
 
                 sendToSender(initialSender, testProtocol);
                 
@@ -598,19 +690,23 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
         switch (gotCMD)
         {
             case CMD_INTERNAL_GETCHESSENGINES:{
+                ROS_INFO_COND(systemDebug, "systemState: 0 - Forwarding getChessEngine Move");
+
                 //Getting the initial sender
                 BYTE initialSender = returnedProtocol.sender;
 
-                sendToSender(initialSender, SystemStateMachineHelper::systemStateMachineChessEngineForwarder(returnedProtocol, chessWrapper_pub_ptr));
+                sendToSender(initialSender, SystemStateMachineHelper::systemStateMachineChessWrapperForwarder(returnedProtocol, chessWrapper_pub_ptr));
                 break;
             }
 
             case CMD_INTERNAL_STARTCHESSENGINE:{
+                ROS_INFO_COND(systemDebug, "systemState: 0 - Forwarding startChessEngine");
                 //Getting the initial sender
                 BYTE initialSender = returnedProtocol.sender;
 
-                sendToSender(initialSender, SystemStateMachineHelper::systemStateMachineChessEngineForwarder(returnedProtocol, chessWrapper_pub_ptr));
+                sendToSender(initialSender, SystemStateMachineHelper::systemStateMachineChessWrapperForwarder(returnedProtocol, chessWrapper_pub_ptr));
 
+                ROS_INFO_COND(systemDebug, "systemState: 1");
                 //Moving to next state
                 systemState = 1;
                 break;
@@ -622,9 +718,7 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
                 isPartialSimulation = false;
                 isSimulationFull = false;
 
-                cout << "___________________________________" << endl;
-                cout << "SET SYSTEM WITHOUT SIM" << endl;
-                cout << "___________________________________" << endl;
+                ROS_INFO_COND(systemDebug, "Set system without sim");
 
 
                 // Sending back to sender unrecognizable cmd
@@ -641,9 +735,7 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
                 isPartialSimulation = false;
                 isSimulationFull = true;
 
-                cout << "___________________________________" << endl;
-                cout << "SET SYSTEM FULL SIM" << endl;
-                cout << "___________________________________" << endl;
+                ROS_INFO_COND(systemDebug, "Set system with full sim");
 
                 // Sending back to sender unrecognizable cmd
                 ibo1_irc_api::Protocol sendSystemFullSimProtocol;
@@ -658,6 +750,7 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
             }
         
             default:{
+
                 // Getting the initial sender
                 BYTE initialSender = returnedProtocol.sender;
 
@@ -691,15 +784,15 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
             }
             // Otherwise checking if we are in real Simulation 
             else if(isReal){
-                cout << "Not Implemented!" << endl;
+                ROS_WARN("Not yet implemented");
             }
             // Simulation for chess engine and player move done not by robot arm
             else if(isPartialSimulation){
-                cout << "Not Implemented!" << endl;
+                ROS_WARN("Not yet implemented");
             }
             // None set error
             else{
-                cout << "Error not implemented!" << endl;
+                ROS_ERROR("No System state defined for simulation/real/partial/noSimulation");
             }
         }
         else if(systemState == 0){
@@ -719,17 +812,31 @@ int main (int argc, char **argv){
     ros:: AsyncSpinner spinner(1);
     spinner.start();
 
-    ros::Subscriber systemStateMachine_sub = nh.subscribe("/ircSystemStateMachine", 1, &systemStateMachineMessageReceived);
+    // Setting up ros subscribers and publishers
+    ros::Subscriber systemStateMachine_sub = nh.subscribe("/ircSystem/ircSystemStateMachine", 1, &systemStateMachineMessageReceived);
 
     ros::Publisher server_pub = nh.advertise<ibo1_irc_api::Protocol>("ircServer", 10);
     ros::Publisher chessWrapper_pub = nh.advertise<ibo1_irc_api::Protocol>("ircChessWrapper", 10);
     ros::Publisher createTarget_pub = nh.advertise<ibo1_irc_api::Protocol>("ircCreateTarget", 10);
-    ros::Publisher robotArmStateMachine_pub = nh.advertise<ibo1_irc_api::Protocol>("my_gen3/ircRobotArmStateMachine", 10);
+    ros::Publisher robotArmStateMachine_pub = nh.advertise<ibo1_irc_api::Protocol>("/my_gen3/ircRobotArmStateMachine", 10);
 
     server_pub_ptr = &server_pub;
     chessWrapper_pub_ptr = &chessWrapper_pub;
     createTarget_pub_ptr = &createTarget_pub;
     robotArmStateMachine_pub_ptr = &robotArmStateMachine_pub;
+
+    // Getting System debug param
+    string systemDebugString = "";
+    ros::param::param<string>("/systemDebug", systemDebugString, "false");
+
+    // Trying to convert debug string to bool, if wrong we send a warning
+    try{
+        systemDebug = DataCreator::stringToBool(systemDebugString);
+    } catch(invalid_argument e){
+        // Printing warning message and setting to a default value of false
+        ROS_WARN("Error converting debug param to bool: '%s' - set to default 'false'",e.what());
+        systemDebug = false;
+    }
 
     ros::Rate rate(10);
 

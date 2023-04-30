@@ -1,3 +1,16 @@
+/*
+ * uTestUCIHandler- Class which tests UCIHandler.h
+ * <p>
+ * This class tests the functionality of UCIHandler.h
+ * 
+ * 
+ * @author Omar Ibrahim
+ * @version 0.1 ( Initial development ).
+ * @version 1.0 ( Initial release ).
+ * 
+ * @see UCIHandler.h
+*/
+
 #include <ros/ros.h>
 
 #include "ibo1_irc_api/Utility/UCIHandler.h"

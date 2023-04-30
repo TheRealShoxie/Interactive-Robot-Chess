@@ -1,5 +1,21 @@
 <?xml version="1.0"?>
 
+<!--
+ * external_camera.xacro
+ * <p>
+ * This xacro file defines the external_camera used in the System. 
+ * Sensor values are based of a IntelRealSence D435 depth camera. Link: https://www.intelrealsense.com/depth-camera-d435/
+ * 
+ * 
+ * 
+ * @author Omar Ibrahim
+ * @version 0.1 ( Initial development ).
+ * @version 1.0 ( Initial release ).
+ * 
+ * @see robotGazebo.launch
+ * @see ros kortex_description package
+-->
+
 <robot name="external_camera" xmlns:xacro="http://ros.org/wiki/xacro">
 
     <gazebo>

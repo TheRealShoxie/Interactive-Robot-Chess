@@ -126,3 +126,12 @@ Saturday:
     - Added option on the UI and the ROS system to change the state of the simulation. If you want to play in sim or not in sim.
         - As in use robot arm or not to show without it taking too long what is going on.
         - Will now start working on commenting code and writing test cases
+
+
+Sunday:
+    - Included a possibility to turn on and off debugging for printing information
+    - Changed how the ros logger prints to console. To include the name of the node that is printing
+
+    - Went through each C++ and header file that I wrote added comments where approrpiate and added Printing using the ROS logging
+        environment on each Node to do some adequate printing for debugging. This is all enabled using a debugging variable
+        which can be set and removed

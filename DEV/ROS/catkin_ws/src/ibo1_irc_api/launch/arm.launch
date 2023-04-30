@@ -1,7 +1,0 @@
-<launch>
-    <group ns="my_gen3">
-        <!-- Starting the CreateTarget_node -->
-        <node pkg="ibo1_irc_api" type="ircRobotArmStateMachine" name="ircRobotArmStateMachine" output="screen" />
-    </group>
-
-</launch>

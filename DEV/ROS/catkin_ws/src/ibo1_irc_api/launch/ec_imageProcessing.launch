@@ -1,16 +1,33 @@
+<!--
+ * ec_imageProcessing.launch
+ * <p>
+ * This launch file is used for starting the image processing of the external camera.
+ * It starts a openCV launch file for goodfeature_track which is used for chess cell detection.
+ * Link to goodfeature_track: http://wiki.ros.org/opencv_apps#goodfeature_track
+ * Further it starts the ircChessCellDetection
+ * 
+ * 
+ * @author Omar Ibrahim
+ * @version 0.1 ( Initial development ).
+ * @version 1.0 ( Initial release ).
+ * 
+ * @see ChessCellDetection
+ * @see ircSystem.launch
+-->
+
 <launch>
     <!-- Specify the image input from the camera -->
     <arg name="input_image" value="/external_camera_overhead/ec_depth/image_raw"/>
 
 	<!--Additional args to enable debug and enable max_corners to look for max corners to look for is 100-->
 	<arg name="input_max_corners" default="100"/>
-	<arg name="debug" default="true"/>
+	<arg name="systemDebug" default="false"/>
 
 	<include file="$(find opencv_apps)/launch/goodfeature_track.launch">
         <arg name="node_name" value="goodfeature_filter"/>
         <arg name="image" value="$(arg input_image)"/>
 		<arg name="max_corners" value="$(arg input_max_corners)" />
-		<arg name="debug_view" value="$(arg debug)" />
+		<arg name="debug_view" value="$(arg systemDebug)" />
     </include>
 
     <!-- Starting the ircCellDetection_node -->

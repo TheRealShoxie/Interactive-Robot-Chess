@@ -1,10 +1,32 @@
+/*
+ * ChessBoard - Class which represents a chess board
+ * <p>
+ * This file is the implementation of the class definition in ChessBoard.h
+ * Please refer to ChessBoard.h for more information.
+ * 
+ * @author Omar Ibrahim
+ * @version 0.1 ( Initial development ).
+ * @version 1.0 ( Initial release ).
+ * 
+ * @see ChessBoard.h
+*/
+
+
+    // ////////// //
+    // Includes.  //
+    // ////////// //
+
+// Including header file
 #include "ibo1_irc_api/Chess/ChessBoard.h"
-#include "iostream"
 
     // ///////////// //
     // Constructors. //
     // ///////////// //
+
+    // Default Constructor for chess board
     ChessBoard::ChessBoard(){
+
+        // Setting internal variables to default values
         castleRights[0][0] = true;
         castleRights[0][1] = true;
         castleRights[1][0] = true;
@@ -19,6 +41,7 @@
         wholeMoves = 1;
         halfMoves = 0;
 
+        // Filling the chessBoard with 64 cells to represent a chess board
         for(int i = 0; i < 64; i++){
             chessBoard.push_back(Cell(i));
         }
@@ -54,11 +77,17 @@
         }
     }
 
+
+
+    // ChessBoard constructor from fenPosition
     ChessBoard::ChessBoard(string const &FenPosition){
         
+        // Filling the chessBoard with 64 cells to represent a chess board
         for(int i = 0; i < 64; i++){
             chessBoard.push_back(Cell(i));
         }
+
+        // Setting previous move was pawn to false
         previousMoveWasPawn = false;
 
         //Convert fenString to chessBoard
@@ -69,8 +98,10 @@
     // Class methods. //
     // ////////////// //
 
+    // Creates the chessBoard state from a FEN string
     void ChessBoard::fromFENString(string const &fenPos){
 
+        // Setting up initial values
         int whiteSpaceCounter = 0;
         int chessBoardPosition = 0;
 
@@ -307,6 +338,7 @@
     }
 
 
+
     // Updates the turn and wholeMoves and halfMoves
     void ChessBoard::fenVariableUpdate(int const &startPos, int const &endPos){
         //Switch colors turn
@@ -338,8 +370,10 @@
             }
     }
 
+
     
     /*
+        Checks if a pawn move is valid
         return values meaning:
              0 move is valid or is not a pawn
             -1 Pawn collided straight move
@@ -382,7 +416,9 @@
         return 0;
     }
 
+
     /*
+        Checks if a castle move is valid
         return values meaning:
              0 move is valid or is not a king
             -6 King doesn't have castleRights King side
@@ -448,7 +484,11 @@
         return 0;
     }
 
+
     /*
+        Checks if king is in check
+
+        Currently checkMate not implemented
         return values meaning:
              0 no king in check
             -1 King in check
@@ -551,7 +591,10 @@
         return 0;
     }
 
+
+
     /*
+        Method which performes a castle move
         return values meaning:
              0 move is valid
             -1 Pawn collided straight move
@@ -589,7 +632,9 @@
     }
 
 
+
     /*
+        Checks if a move is valid.
         return values meaning:
              0 move is valid
             -1 Pawn collided straight move
@@ -720,6 +765,8 @@
     }
 
 
+
+    // Gets the vector position for the start and endCell from a ChessMove
     void ChessBoard::getVecPosFromMove(string const &move, int &startPos, int &endPos){
 
         int rowMoveFrom = (int)move[0] - 97;
@@ -731,7 +778,10 @@
         endPos = (columnMoveTo*8) + rowMoveTo;
     }
 
+
+
     /*
+        Processes a move command 
         return values meaning:
              0 move is valid
             -1 Pawn collided straight move
@@ -751,6 +801,7 @@
         int endPos = 0;
         int isMoveValidCode = 0;
 
+        // Get start and end cell of a move
         getVecPosFromMove(move, startPos, endPos);
 
         // Checking if the piece is a pawn and we move into a end position then return error because we are only allowed to move into when promoting
@@ -760,7 +811,6 @@
 
 
         // Checking if move is a castling move
-
         //White Castle King side and we have castleRights
         if(move.compare("e1g1") == 0 && castleRights[0][0]){
 
@@ -855,7 +905,10 @@
         
     }
 
+
+
     /*
+        Process a move for promotion
         return values meaning:
              0 move is valid
             -1 Pawn collided straight move
@@ -961,6 +1014,8 @@
 
 
     /*
+
+        Method used to make a chess move
         return values meaning:
              0 move is valid
             -1 Pawn collided straight move
@@ -980,16 +1035,22 @@
     */
     int ChessBoard::move(string &move){
 
+        // Converting the move to all lower case
         transform(move.begin(), move.end(), move.begin(), ::tolower);
 
+        // Checking if the move format is a correct Chess move
         if(DataChecker::isCorrectMoveFormat(move)){
-
+            
+            // Process the move and return the moveCode
             int returnedProcessMove = processMove(move);
             return returnedProcessMove;
 
         }
+
+        // Checking if the move format is a correct Chess move promotion
         else if(DataChecker::isCorrectMoveFormatPromotion(move)){
 
+            // Process a promotion move and return its moveCode
             int returnedProcessPromotionMove = processPromotionMove(move);
 
             return returnedProcessPromotionMove;
@@ -999,6 +1060,9 @@
         }
     }
 
+
+
+    // Converts the current chessboard state to a FEN string
     string ChessBoard::toFENString(){
         int counterEmpty = 0;
         char piece;
@@ -1069,11 +1133,15 @@
         return fenPos;
     }
 
+
+    // Converts the current chess board state into a 2d chessboard representation
     string ChessBoard::toString(){
         string temp = "";
 
+        // Cycle through each cell
         for(int i = 0; i < 64; i++){
 
+            // If the cell is a new column then go into next line
             if(i%8 == 0) temp += "\n";
             string chessPieceName(1, chessBoard.at(i).getChessPieceName());
 

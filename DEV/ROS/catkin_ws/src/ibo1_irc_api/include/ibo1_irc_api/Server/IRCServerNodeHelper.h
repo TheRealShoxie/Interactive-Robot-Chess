@@ -1,6 +1,34 @@
 #ifndef IRCSERVERNODEHELPER_H
 #define IRCSERVERNODEHELPER_H
 
+/*
+ * IRCServerNodeHelper
+ * <p>
+ * This class is used as a helper class for the ServerNode.cpp
+ * Used to define functions to not cluster the ServerNode.cpp file.
+ * It provides logging in for users and converting internal to external protocols.
+ * 
+ * The definitions for these can be seen in the folder data/Protocol/...
+ * 
+ * <p>
+ * 
+ * 
+ * @author Omar Ibrahim
+ * @version 0.1 ( Initial development ).
+ * @version 1.0 ( Initial release ).
+ * 
+ * @see IRCServerNode.cpp
+ * @see internalProtocol.h
+ * @see Protocol.h
+ * @see Users.h
+ * @see IRCServer.h
+*/
+
+
+    // ////////// //
+    // Includes.  //
+    // ////////// //
+
 #include <ros/ros.h>
 
 #include <ibo1_irc_api/Protocol.h>
@@ -8,6 +36,7 @@
 
 #include <ibo1_irc_api/User/Users.h>
 #include <ibo1_irc_api/Server/IRCServer.h>
+#include <ibo1_irc_api/ProtocolAPI/InternalProtocolDefinition.h>
    
     // ////////// //
     // Constants. //
@@ -24,22 +53,20 @@ class IRCServerNodeHelper{
         // //////// //
         // Methods. //
         // //////// //
-        static void cmdUserLogin(const vector<BYTE>& receivedData, IRCServer &server, Users &users, vector<BYTE>& answer){
-            cout << "-------UserLogin-------" << endl;
 
+        // Method to login a user
+        static void cmdUserLogin(const vector<BYTE>& receivedData, IRCServer &server, Users &users, vector<BYTE>& answer){
+
+            // Tries to login a users and sets the answer to true or false if the user is an admin
             try{
                 User user = User(receivedData);
                 User foundUser = users.findUser(user);
 
-                
-                cout << "User requested: " << user.toString() << endl;
-                cout << "User found: \n" << foundUser.toString() << endl;
-                cout << "User admin rights:" << foundUser.isAdmin() << endl;
-
                 if(foundUser.isAdmin()) answer.push_back(0x01);
                 else answer.push_back(0x00);
-            }catch(runtime_error er){
-                cout << "User was not found!" << endl;
+            }
+            // If it fails most likely the user doesn't exist so set cmd user does not exist
+            catch(runtime_error er){
                 server.setClientCommand(ERROR_CMD_USERDOESNTEXIST);
             }
         }

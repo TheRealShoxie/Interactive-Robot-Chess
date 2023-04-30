@@ -1,23 +1,61 @@
+<!--
+ * ircSystem.launch
+ * <p>
+ * This launch file is used for starting all Interactive Robot Chess Systems that are created by the author. 
+ * It starts the nodes in their corresponding namespaces and creates the serverparam for systemDebug and filepaths
+ * 
+ * 
+ * @author Omar Ibrahim
+ * @version 0.1 ( Initial development ).
+ * @version 1.0 ( Initial release ).
+ * 
+ * @see ServerNode.cpp
+ * @see ChessWrapperNode.cpp
+ * @see SystemStateMachineNode.cpp
+ * @see CreateTargetNode.cpp
+ * @see RobotArmStateMachineNode.cpp
+ * @see ec_imageProcessing.launch
+ * @see main.launch
+-->
+
 <launch>
-	<!-- Starting the ircServer_node -->
-	<node pkg="ibo1_irc_api" type="ircServer" name="ircServer" output="screen" />
-	
-	<!-- Starting the ircChess_node-->
-	<node pkg="ibo1_irc_api" type="ircChess" name="ircChess" output="screen" />
 
-	<!-- Starting the ircSystemStateMachine_node-->
-	<node pkg="ibo1_irc_api" type="ircSystemStateMachine" name="ircSystemStateMachine" output="screen" />
+	<!-- Arguments -->
+	<arg name="systemDebug" default="false" />
+	<arg name="imageProcessingMaxCorners" default="100" />
+	<arg name="chessEngineNameFilePath" default="/home/omar/Uni/Major_Project/Interactive-Robot-Chess/DEV/ROS/catkin_ws/src/ibo1_irc_api/data/Chess/chessEngines.txt"/>
+	<arg name="usersNameFilePath" default="/home/omar/Uni/Major_Project/Interactive-Robot-Chess/DEV/ROS/catkin_ws/src/ibo1_irc_api/data/Users/users.txt"/>
 
-	<!-- Starting the CreateTarget_node-->
-	<node pkg="ibo1_irc_api" type="ircCreateTarget" name="ircCreateTarget" output="screen" />
+
+	<!-- Params for param server -->
+	<param name="systemDebug" type="str" value="$(arg systemDebug)" />
+	<param name="chessEngineNameFilePath" type="str" value="$(arg chessEngineNameFilePath)" />
+	<param name="usersNameFilePath" type="str" value="$(arg usersNameFilePath)" />
+
+
+
+	<!-- Starting system nodes-->
+	<group ns="ircSystem">
+		<!-- Starting the ircServer_node -->
+		<node pkg="ibo1_irc_api" type="ircServer" name="ircServer" output="screen" />
+		
+		<!-- Starting the ircChess_node-->
+		<node pkg="ibo1_irc_api" type="ircChess" name="ircChess" output="screen" />
+
+		<!-- Starting the ircSystemStateMachine_node-->
+		<node pkg="ibo1_irc_api" type="ircSystemStateMachine" name="ircSystemStateMachine" output="screen" />
+
+		<!-- Starting the CreateTarget_node-->
+		<node pkg="ibo1_irc_api" type="ircCreateTarget" name="ircCreateTarget" output="screen" />
+	</group>
 
 	<!-- Group for imageProcessing-->
     <group ns="imageProcessing">
 
         <!--Including launch file for external camera imageProcessing -->
         <include file="$(find ibo1_irc_api)/launch/ec_imageProcessing.launch">
-            <arg name="input_max_corners" value="100"/>
-            <arg name="debug" value="${arg debug}"/>
+            <arg name="input_max_corners" value="$(arg imageProcessingMaxCorners)"/>
+            <arg name="systemDebug" value="$(arg systemDebug)"/>
         </include>
     </group>
 
@@ -28,7 +66,12 @@
         <node pkg="ibo1_irc_api" type="ircRobotArmStateMachine" name="ircRobotArmStateMachine" output="screen" />
     </group>
 
+
 	<!-- Static broadcaster for restPosition and graveyards-->
 	<node pkg="tf2_ros" type="static_transform_publisher" name="staticBroadcasterRestPosition" args="0.22 -0.25 0.3 0.707 0.707 0 0 base_link restposition_frame" />
     <node pkg="tf2_ros" type="static_transform_publisher" name="staticBroadcasterGraveyard" args="0.6 0.25 0 -0.000 1.000 0.000 0.000 base_link graveyard_frame" />
+	
+
+
+
 </launch>

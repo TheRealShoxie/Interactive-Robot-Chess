@@ -1,6 +1,23 @@
+/*
+ * uTestChessEngine - Class which tests ChessEngine.h
+ * <p>
+ * This class tests the functionality of ChessEngine.h
+ * 
+ * 
+ * @author Omar Ibrahim
+ * @version 0.1 ( Initial development ).
+ * @version 1.0 ( Initial release ).
+ * 
+ * @see ChessEngine.h
+*/
+
+    // ////////// //
+    // Includes.  //
+    // ////////// //
 #include <ros/ros.h>
 
 #include "ibo1_irc_api/Chess/ChessEngine.h"
+#include "ibo1_irc_api/ProtocolAPI/InternalProtocolDefinition.h"
 
 #include <gtest/gtest.h>
 
@@ -10,62 +27,32 @@
 
 
 
-
-// //Testing chessEngine Move return
-TEST(Chess, chessEngineCreation){
+//Testing if chessEngine can play against itself 64 times without an error occuring
+TEST(ChessEngine, chessEnginePlayAgainstItself){
     ChessEngine* chessEngine = new ChessEngine("/home/omar/Uni/Major_Project/Interactive-Robot-Chess/DEV/ROS/catkin_ws/src/ibo1_irc_api/data/Chess/stockfish/src/stockfish");
-    //ChessEngine* chessEngine = new ChessEngine("/home/omar/Uni/Major_Project/Interactive-Robot-Chess/DEV/ROS/catkin_ws/src/ibo1_irc_api/data/Chess/komodo/komodo-14.1-linux");
     string chessEngineMove = "";
-    string playerMove = "D2D4";
     BYTE returnedProtocol;
+    bool gotError = false;
 
-    for(int i = 0; i < 180; i++){
+    for(int i = 0; i < 64; i++){
         
         chessEngine->chessEngineMove(returnedProtocol, chessEngineMove);
-        cout << "________________________________________" << endl;
-        cout << "Move: " << chessEngineMove << endl;
-        cout << chessEngine->getChessBoardString() << endl;
-        cout << chessEngine->getChessBoardFENString() << endl;
-        cout << "Turn: " << (int)i << endl;
         cout << "Returned protocol: " << (int)returnedProtocol << endl;
+        if(!gotError){
+            if(returnedProtocol != CMD_INTERNAL_CHESSENGINEMOVE) gotError = true;
+        }
     }
     delete chessEngine;
 
+    ASSERT_EQ(gotError, false);
 }
-
-//Testing chessEngine Move return
-// TEST(Chess, chessEngineCreation){
-//     //ChessEngine* chessEngine = new ChessEngine("/home/omar/Uni/Major_Project/Interactive-Robot-Chess/DEV/ROS/catkin_ws/src/ibo1_irc_api/data/Chess/stockfish/src/stockfish");
-//     ChessEngine* chessEngine = new ChessEngine("/home/omar/Uni/Major_Project/Interactive-Robot-Chess/DEV/ROS/catkin_ws/src/ibo1_irc_api/data/Chess/komodo/komodo-14.1-linux");
-    
-//     string chessEngineMove = "";
-//     string playerMove = "D2D4";
-//     BYTE returnedProtocol;
-//     vector<EngineOption> engineOptions; 
-
-//     chessEngine->getChessEngineOptions(engineOptions);
-
-//     for(EngineOption &co : engineOptions){
-//         cout << "Name: " <<co.name << endl;
-//         cout << "Type Of: " <<co.typeOfValue << endl;
-//         cout << "Default: " <<co.defaultValue << endl;
-//         cout << "Min Value: " <<co.minValue << endl;
-//         cout << "Max Value: " <<co.maxValue << endl;
-//         cout << "Rest Value: " <<co.restValues << endl;
-//         cout << "-------------------------------------------------" << endl;
-//     }
-
-//     delete chessEngine;
-
-// }
-
 
 
 
 
 int main(int argc, char **argv){
     testing::InitGoogleTest(&argc, argv);
-    ros::init(argc, argv, "tester");
+    ros::init(argc, argv, "testChessEngine");
     ros::NodeHandle nh;
     return RUN_ALL_TESTS();
 

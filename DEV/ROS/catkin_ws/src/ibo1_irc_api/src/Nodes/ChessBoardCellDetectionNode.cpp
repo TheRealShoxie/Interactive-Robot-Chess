@@ -1,3 +1,34 @@
+/*
+ * ChessBoardCellDetectionNode - Ros node which is used for ircChessCellDetection
+ * <p>
+ * This node uses the OpenCV goodfeatures publisher, which is launched through ec_imageProcessing.launch to find the chessboard cells.
+ * These cells are used to create information for its respective chessPiece color, Chessboard position, depth of the chesspiece if it exists
+ * and if the cell is occupied. This information is published to its own publisher as described under main.
+ * 
+ * 
+ * <p>
+ * This node is launched through the ec_imageProcessing.launch file which is internally launched by ircSystem.launch
+ * 
+ * <p>
+ * It uses the paramServer to get the systemDebug value if debugging is enabled or disabled
+ * 
+ * @author Omar Ibrahim
+ * @version 0.1 ( Initial development ).
+ * @version 1.0 ( Initial release ).
+ * @see CellExtraction.h
+ * @see CMakeLists.txt
+ * @see ircSystem.launch
+ * @see ec_imageProcessing.launch
+ * @see CreateTargetNode.cpp
+ * @see RobotArmStateMachineNode.cpp
+ * @see DataCreator.h
+*/
+
+
+    // ////////// //
+    // Includes.  //
+    // ////////// //
+
 #include <ros/ros.h>
 
 
@@ -14,13 +45,15 @@
 
 // ImageCellExtraction header include
 #include <ibo1_irc_api/ImageProcessing/CellExtration.h>
+#include <ibo1_irc_api/Utility/DataCreator.h>
 
 // General c++ includes
-#include <iostream>
 #include <set>
 
 // Including publisher msg Type
 #include <ibo1_irc_api/ChessCells.h>
+
+using namespace std;
 
 
 
@@ -55,7 +88,8 @@ static const float minimumChessPieceHeight = 0.022;
 static const float emptyCellDepth = 0.95;
 static const int colorChessPieceCuttOfPoint = 8388607;
 
-
+// For debug
+bool systemDebug = false;
 
 /*
 ---------------------------------------------------------------------------------------------------------------------------------
@@ -66,7 +100,7 @@ static const int colorChessPieceCuttOfPoint = 8388607;
     // ////////// //
 
 
-//Callback for corners
+//Callback for opencv_goodfeatures subscribed on /imageProcessing/goodfeature_filter/corners
 void cornersMessageReceived(const opencv_apps::Point2DArrayStamped msg){
     // Clearing vectors and the set
     imageSquares.clear();
@@ -129,7 +163,10 @@ void cornersMessageReceived(const opencv_apps::Point2DArrayStamped msg){
 
 }
 
-// Callback for extracting Chessboard Cells
+// Callback on /external_camera_overhead/ec_depth/image_raw
+// Uses the camera information in combination with the information gathered from the callback cornersMessageReceived
+// To create the chess Cells 
+// It also uses information from the callback imageCBDepth
 void imageCb(const sensor_msgs::ImageConstPtr& msg) {
 
     //Clearing the vector for the iamgeChessPieces
@@ -208,15 +245,19 @@ void imageCb(const sensor_msgs::ImageConstPtr& msg) {
     }
 
     
-    // Displaying the image with the marked squares
-    cv::imshow(OPENCV_WINDOW_Marked_Cells, cv_ptr->image);
+    // If system debug is enabled then show image window
+    if(systemDebug){
+        // Displaying the image with the marked squares
+        cv::imshow(OPENCV_WINDOW_Marked_Cells, cv_ptr->image);
 
-    cv::waitKey(3);
+        cv::waitKey(3);
+    }
 }
 
 
 
-// Callback for getting the depth values and checking if the cell is empty or not
+// Callback on external_camera_overhead/ec_depth/depth/image_raw 
+//for getting the depth values and checking if the cell is empty or not
 void imageCbDepth(const sensor_msgs::ImageConstPtr& msg) {
 
     //Clearing the vector for the iamgeChessPiecesDepths
@@ -390,11 +431,13 @@ void imageCbDepth(const sensor_msgs::ImageConstPtr& msg) {
 */
 
 int main (int argc, char **argv){
-    ros::init(argc, argv, "cellDetectionNode");
+    ros::init(argc, argv, "chessCellDetection");
     ros::NodeHandle nh;
     ros:: AsyncSpinner spinner(1);
     spinner.start();
 
+
+    // Subscriber and publisher setup
     ros::Publisher cellDetection_pub = nh.advertise<ibo1_irc_api::ChessCells>("chessCellDetection", 10);
     ros::Subscriber corners_sub = nh.subscribe("/imageProcessing/goodfeature_filter/corners", 5, &cornersMessageReceived);
 
@@ -404,7 +447,23 @@ int main (int argc, char **argv){
     image_transport::ImageTransport itDepth(nh);
     image_transport::Subscriber depth_sub = itDepth.subscribe("/external_camera_overhead/ec_depth/depth/image_raw", 1, imageCbDepth);
 
-    cv::namedWindow(OPENCV_WINDOW_Marked_Cells);
+    // Getting System debug param
+    string systemDebugString = "";
+    ros::param::param<string>("/systemDebug", systemDebugString, "false");
+
+    // Trying to convert debug string to bool, if wrong we send a warning
+    try{
+        systemDebug = DataCreator::stringToBool(systemDebugString);
+    } catch(invalid_argument e){
+        // Printing warning message and setting to a default value of false
+        ROS_WARN("Error converting debug param to bool: '%s' - set to default 'false'",e.what());
+        systemDebug = false;
+    }
+
+    // If system debug is enabled then show image window
+    if(systemDebug){
+        cv::namedWindow(OPENCV_WINDOW_Marked_Cells);
+    }
 
     ros::Rate rate(10);
 

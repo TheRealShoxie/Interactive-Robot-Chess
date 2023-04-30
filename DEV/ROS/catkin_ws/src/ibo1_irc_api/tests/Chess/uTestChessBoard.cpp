@@ -1,3 +1,20 @@
+/*
+ * uTestChessBoard - Class which tests ChessBoard.h
+ * <p>
+ * This class tests the functionality of ChessBoard.h
+ * 
+ * 
+ * @author Omar Ibrahim
+ * @version 0.1 ( Initial development ).
+ * @version 1.0 ( Initial release ).
+ * 
+ * @see ChessBoard.h
+*/
+
+    // ////////// //
+    // Includes.  //
+    // ////////// //
+
 #include <ros/ros.h>
 
 #include "ibo1_irc_api/Chess/ChessBoard.h"
@@ -397,7 +414,7 @@ TEST(ChessBoard, PawnPromotionFromFenPositionValidIntoBishop){
 //Testing chessBoard promotion from fenpos not allowed invalid Piece
 TEST(ChessBoard, PawnPromotionFromFenPositionInValidIntoNotAllowedPiece){
     string fenPosStart = "1k2rbnr/p2Ppppp/Pp1p4/2p2b2/8/4P3/2PP1PPP/RNBQKBNR w KQ - 1 11";
-    int expectedReturn = -12;
+    int expectedReturn = -13;
     ChessBoard chessBoard = ChessBoard(fenPosStart);
 
     string movement = "d7d8k";
@@ -411,7 +428,7 @@ TEST(ChessBoard, PawnPromotionFromFenPositionInValidIntoNotAllowedPiece){
 //Testing chessBoard promotion from fenpos not allowed not end Position
 TEST(ChessBoard, PawnPromotionFromFenPositionInValidNotEndPosition){
     string fenPosStart = "1k2rbnr/p2Ppppp/Pp1p4/2p2b2/8/4P3/2PP1PPP/RNBQKBNR w KQ - 1 11";
-    int expectedReturn = -11;
+    int expectedReturn = -12;
     ChessBoard chessBoard = ChessBoard(fenPosStart);
 
     string movement = "c2c3n";
@@ -424,7 +441,7 @@ TEST(ChessBoard, PawnPromotionFromFenPositionInValidNotEndPosition){
 //Testing chessBoard promotion from fenpos not allowed not a pawn
 TEST(ChessBoard, PromotionFromFenPositionInvalidNotPawnPiece){
     string fenPosStart = "1k2rbnr/p1RPp1pp/Pp3p2/5b2/3p4/4P3/2PP1PPP/1NBQKBNR w K - 0 14";
-    int expectedReturn = -10;
+    int expectedReturn = -11;
     ChessBoard chessBoard = ChessBoard(fenPosStart);
 
     string movement = "c7c8n";
@@ -517,7 +534,7 @@ TEST(ChessBoard, BlackPawnPromotionFromFenPositionValidIntoBishop){
 //Testing chessBoard promotion from fenpos black pawn not allowed invalid Piece
 TEST(ChessBoard, BlackPawnPromotionFromFenPositionInValidIntoNotAllowedPiece){
     string fenPosStart = "1k2rbnr/p1RPp1pp/Pp3p2/8/4P1b1/B1N2P2/2pP2PP/3QKBNR b K - 3 17";
-    int expectedReturn = -12;
+    int expectedReturn = -13;
     ChessBoard chessBoard = ChessBoard(fenPosStart);
 
     string movement = "c2c1k";
@@ -531,7 +548,7 @@ TEST(ChessBoard, BlackPawnPromotionFromFenPositionInValidIntoNotAllowedPiece){
 //Testing chessBoard promotion from fenpos black pawn not allowed not end Position
 TEST(ChessBoard, BlackPawnPromotionFromFenPositionInValidNotEndPosition){
     string fenPosStart = "1k2rbnr/p1RPp1pp/Pp3p2/8/4P1b1/B1N2P2/2pP2PP/3QKBNR b K - 3 17";
-    int expectedReturn = -11;
+    int expectedReturn = -12;
     ChessBoard chessBoard = ChessBoard(fenPosStart);
 
     string movement = "b6b5n";
@@ -544,7 +561,7 @@ TEST(ChessBoard, BlackPawnPromotionFromFenPositionInValidNotEndPosition){
 //Testing chessBoard promotion from fenpos black pawn not allowed not a pawn
 TEST(ChessBoard, BlackPromotionFromFenPositionInvalidNotPawnPiece){
     string fenPosStart = "1k2rbnr/p1RPp1pp/Pp3p2/8/4P1b1/B1N2P2/2pP2PP/3QKBNR b K - 3 17";
-    int expectedReturn = -10;
+    int expectedReturn = -11;
     ChessBoard chessBoard = ChessBoard(fenPosStart);
 
     string movement = "g4h3n";
@@ -557,7 +574,7 @@ TEST(ChessBoard, BlackPromotionFromFenPositionInvalidNotPawnPiece){
 //Testing chessBoard white pawn move not allowed not a promotion move
 TEST(ChessBoard, PawnMoveFromFenPositionInvalidNotPromotionMove){
     string fenPosStart = "1k2rbnr/p1RPp2p/Pp3pp1/8/4PP2/2N4b/1BpP2PP/3QKBNR w K - 0 19";
-    int expectedReturn = -9;
+    int expectedReturn = -10;
     ChessBoard chessBoard = ChessBoard(fenPosStart);
 
     string movement = "d7d8";
@@ -567,17 +584,41 @@ TEST(ChessBoard, PawnMoveFromFenPositionInvalidNotPromotionMove){
     ASSERT_EQ(returned, expectedReturn);
 }
 
-
-//Testing chessBoard white pawn move not allowed not a promotion move
-TEST(ChessBoard, WhiteKingCheckStartPos){
-    string fenPosStart = "rnbqk1nr/pp3ppp/2p1p3/Q2p2B1/8/N1PPb1P1/PP2PP1P/R3KBNR w KQkq - 0 8";
-    int expectedReturn = 0;
+//Testing chessBoard white pawn move not allowed white king own king in check
+TEST(ChessBoard, WhitePawnMoveNotAllowedPutsOwnKingInCheck){
+    string fenPosStart = "rnb1k1nr/pp3ppp/2p1p3/q2p2B1/3P4/N1P1b1P1/PP2PP1P/R3KBNR w KQkq - 0 9";
+    int expectedReturn = -8;
     ChessBoard chessBoard = ChessBoard(fenPosStart);
 
-    int startPos = 60;
-    int endPos = 59;
+    string movement = "c3c4";
     
-    int returned = chessBoard.kingCheck(startPos, endPos, true);
+    int returned = chessBoard.move(movement);
+
+    ASSERT_EQ(returned, expectedReturn);
+}
+
+//Testing chessBoard white knight move not allowed own king in check
+TEST(ChessBoard, WhiteKnightMoveNotAllowedPutsOwnKingInCheck){
+    string fenPosStart = "rn2k1nr/pp3ppp/2p5/q2pp1b1/3P2b1/N1P1PNP1/PP3P1P/R2K1B1R w kq - 2 12";
+    int expectedReturn = -8;
+    ChessBoard chessBoard = ChessBoard(fenPosStart);
+
+    string movement = "f3e5";
+    
+    int returned = chessBoard.move(movement);
+
+    ASSERT_EQ(returned, expectedReturn);
+}
+
+//Testing chessBoard black pawn move not allowed own king in check
+TEST(ChessBoard, BlackPawnMoveNotAllowedPutsOwnKingInCheck){
+    string fenPosStart = "rn2k1nr/pp3ppp/2p5/qB1pp1b1/3P2b1/N1P1PNP1/PP3P1P/R2K3R b kq - 3 12";
+    int expectedReturn = -8;
+    ChessBoard chessBoard = ChessBoard(fenPosStart);
+
+    string movement = "c6c5";
+    
+    int returned = chessBoard.move(movement);
 
     ASSERT_EQ(returned, expectedReturn);
 }

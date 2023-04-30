@@ -1,9 +1,24 @@
+/*
+ * ChessEngine - Class which represents a chess engine
+ * <p>
+ * This file is the implementation of the class definition in ChessEngine.h
+ * Please refer to ChessEngine.h for more information.
+ * 
+ * @author Omar Ibrahim
+ * @version 0.1 ( Initial development ).
+ * @version 1.0 ( Initial release ).
+ * 
+ * @see ChessEngine.h
+*/
+
+// Include for the header file it overrides the functions of
 #include "ibo1_irc_api/Chess/ChessEngine.h"
 
     // ///////////// //
     // Constructors. //
     // ///////////// //
 
+    // Default constructor from chess engine
     ChessEngine::ChessEngine(string const &processFilePathName)
         :uciHandler(processFilePathName), searchOptions("depth 10"){
 
@@ -18,7 +33,8 @@
     // Class methods. //
     // ////////////// //
 
-    void ChessEngine::getProtocolCode(int moveCode, BYTE  const &defaultValue, BYTE &returnByte){
+    // Converts the moveCodes into its corresponding internal protocol code
+    void ChessEngine::getInternalProtocolCode(int moveCode, BYTE  const &defaultValue, BYTE &returnByte){
         switch (moveCode)
         {
         case -1:
@@ -88,14 +104,21 @@
     // Read/Write properties. //
     // ////////////////////// //
 
+    // Used for setting search options for the chess engine
     void ChessEngine::setSearchOptions(string const &setSearchOptions){
         searchOptions = setSearchOptions;
     }
 
+
+
+    // Used for getting possible search options for the chess engine
     void ChessEngine::getSearchOptions(string &getSearchOptions){
         getSearchOptions = searchOptions;
     }
 
+
+
+    // Used for getting the possible chessEngine overall options
     void ChessEngine::getChessEngineOptions(vector<EngineOption> &chessEngineOptions){
         chessEngineOptions = engineOptions;
     }
@@ -104,6 +127,7 @@
     // Read-only properties. //
     // ///////////////////// //
 
+    // Used for checking if the chessEngine is started
     bool ChessEngine::getChessEngineStarted(){
         return chessEngineStarted;
     }
@@ -111,20 +135,25 @@
     // //////// //
     // Methods. //
     // //////// //
+
+    // Used for making a player move
     void ChessEngine::playerMove(BYTE &returnedProtocolByte, string &move){
 
+        // Make a player move and convert the moveCode into a internal protocol code
         int returnedMoveCode = chessBoard.move(move);
 
         BYTE returnedCommand;
         
-        getProtocolCode(returnedMoveCode, CMD_INTERNAL_PLAYERMOVE, returnedProtocolByte);
+        getInternalProtocolCode(returnedMoveCode, CMD_INTERNAL_PLAYERMOVE, returnedProtocolByte);
     }
 
+
+
+    // Make a chess engine move and convert the moveCode into a internal protocol code
     void ChessEngine::chessEngineMove(BYTE &returnedProtocolByte, string &chessEngineMove){
 
         // Getting the current Fen representation of the board
         string currentFENPosition = chessBoard.toFENString();
-
 
         // Making the ChessEngine make the move.
         uciHandler.makeMove(currentFENPosition, searchOptions, chessEngineMove);
@@ -137,23 +166,35 @@
             int returnedMoveCode = chessBoard.move(chessEngineMove);
 
             
-            getProtocolCode(returnedMoveCode, CMD_INTERNAL_CHESSENGINEMOVE, returnedProtocolByte);
+            getInternalProtocolCode(returnedMoveCode, CMD_INTERNAL_CHESSENGINEMOVE, returnedProtocolByte);
         }
     }
 
+
+
+    //Setting a chess engine option
     void ChessEngine::setChessEngineOption(string const &optionName, string const &value){
         uciHandler.setEngineOption(optionName, value);
     }
 
+
+
+    // Starting a new game
     void ChessEngine::startNewGame(){
         if(!(uciHandler.startNewGame())) throw runtime_error("Couldn't start a fresh game!");
         chessBoard = ChessBoard();
     }
 
+
+
+    // Getting the FEN representation of the chess board
     string ChessEngine::getChessBoardFENString(){
         return chessBoard.toFENString();
     }
 
+
+
+    // Getting a 2d string representation of the chess board
     string ChessEngine::getChessBoardString(){
         return chessBoard.toString();
     }
