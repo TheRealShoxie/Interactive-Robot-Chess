@@ -483,9 +483,6 @@ public class ChessEngine {
         protocolPlayerMove.setDataSize(dataStringAsBytes.length);
         protocolPlayerMove.setData(dataStringAsBytes);
 
-        System.err.println("makePlayerMove:");
-        System.out.println(protocolPlayerMove.toString());
-
         // Sending the command
         ircClient.send(protocolPlayerMove);
 

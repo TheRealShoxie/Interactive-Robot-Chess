@@ -510,7 +510,7 @@ public class ChessBoard {
             move.append(toPromoteInto);
         }
 
-        System.out.println("Sending player move with chess move: ");
+        System.out.println("Sending player move with chess move: " +move.toString());
 
         chessEngine.makePlayerMove(ircClient, move.toString());
 
