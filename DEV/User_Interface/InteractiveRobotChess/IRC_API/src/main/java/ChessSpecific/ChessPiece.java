@@ -10,8 +10,9 @@ package ChessSpecific;
  * ChessPiece - Gives basic Structure to all chess pieces
  * <p>
  * 3rd party code is used in this class. It is an adaptions from GitHub user: Stevoisiak.
- * Link to the original code: <a href="https://github.com/Stevoisiak/JavaFX-Online-Chess">Github Link</a>
+ * Link to the original code: <a href="https://github.com/Stevoisiak/JavaFX-Online-Chess">Github Link</a>.
  * This class represents the ChessPiece.java file
+ * Accessed 30th of April 2023
  *
  *
  * @author Omar Ibrahim
@@ -41,9 +42,14 @@ public abstract class ChessPiece {
     // Class methods. //
     // ////////////// //
 
+
     // /////////////////// //
     // Instance variables. //
     // /////////////////// //
+
+    /**
+     * Protected field if the color of the chess piece is white.
+     */
     protected boolean isWhite;
 
     // ///////////// //

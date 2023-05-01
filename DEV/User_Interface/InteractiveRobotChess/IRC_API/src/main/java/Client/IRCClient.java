@@ -39,8 +39,21 @@ public class IRCClient {
     // Class variables. //
     // //////////////// //
 
+    /**
+     * Socket of the client
+     */
     private Socket clientSocket;
+
+
+    /**
+     * Output stream to write the protocols to
+     */
     private OutputStream out;
+
+
+    /**
+     * Input stream to read the protocols from
+     */
     private InputStream in;
 
     // ////////////// //
@@ -51,7 +64,15 @@ public class IRCClient {
     // Instance variables. //
     // /////////////////// //
 
+    /**
+     * IP address of the server to communicate with
+     */
     private String ipAddress;
+
+
+    /**
+     * Port of the server to communicate with
+     */
     private int port;
 
     // ///////////// //

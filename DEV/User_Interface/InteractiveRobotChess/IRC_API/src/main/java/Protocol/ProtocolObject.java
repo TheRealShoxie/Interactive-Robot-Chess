@@ -35,8 +35,21 @@ public class ProtocolObject {
     // Instance variables. //
     // /////////////////// //
 
+    /**
+     * Represents the cmd byte of the protocol
+     */
     private byte cmdByte;
+
+
+    /**
+     * Represents the size of the data in the protocol data section
+     */
     private int dataSize;
+
+
+    /**
+     * Represents the data that is being sent
+     */
     private byte[] data;
 
 

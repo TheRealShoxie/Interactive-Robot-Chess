@@ -23,9 +23,16 @@ import java.net.URL;
  *
  * <p>
  * 3rd party code is used in this class. It is an adaptions from GitHub user: Stevoisiak.
- * Link to the original code: <a href="https://github.com/Stevoisiak/JavaFX-Online-Chess">Github Link</a>
+ * Link to the original code: <a href="https://github.com/Stevoisiak/JavaFX-Online-Chess">Github Link</a>.
  * This class represents the Space.java file
+ * Accessed 30th of April 2023
  *
+ * <p>
+ * 3rd party images used in this class. The ChessPiece images under resources are taken from a GitHub repository.
+ * The GitHub user: Stevoisiak.
+ * Link to the original files: <a href="https://github.com/Stevoisiak/JavaFX-Online-Chess">Github Link</a>.
+ * These can be found under assets/pieces/...
+ * Accessed 30th of April 2023
  *
  *
  * @author Omar Ibrahim
@@ -51,9 +58,15 @@ public class Space extends Button {
     // Class methods. //
     // ////////////// //
 
+
     // /////////////////// //
     // Instance variables. //
     // /////////////////// //
+
+
+    /**
+     * The IRC_API Cell
+     */
     Cell cell;
 
     // ///////////// //

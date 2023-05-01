@@ -13,6 +13,7 @@ import Protocol.ChessEngine;
 import ibo1.Utility.PopUpMessages;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -122,8 +123,20 @@ public class UIChessBoard extends GridPane{
     // /////////////////// //
     // Instance variables. //
     // /////////////////// //
+
+    /**
+     * Observable list representation of a chess board for the UI
+     */
     ObservableList<Space> observableListSpaces = FXCollections.observableArrayList();
+
+    /**
+     * The reference to the IRC_API chess board
+     */
     ChessBoard chessBoard;
+
+    /**
+     * The current active space
+     */
     Space activeSpace;
 
     // ///////////// //
@@ -136,10 +149,8 @@ public class UIChessBoard extends GridPane{
      * @param playerIsWhite if the player is white
      * @param chessEngine supply a chess-engine for the chessboard
      * @param ircClient supply an ircClient for the chessboard
-     * @throws ProtocolException thrown by chessEngineMove()
-     * @throws IOException thrown by chessEngineMove()s
      */
-    public UIChessBoard(boolean playerIsWhite, ChessEngine chessEngine, IRCClient ircClient) throws ProtocolException, IOException {
+    public UIChessBoard(boolean playerIsWhite, ChessEngine chessEngine, IRCClient ircClient){
 
         // Initialize the super from gridpane
         super();
@@ -170,10 +181,20 @@ public class UIChessBoard extends GridPane{
                     // try on space click
                     try {
                         this.onSpaceClick(xVal, yVal);
-                    } catch (ProtocolException ex) {
-                        System.out.println(ex.getMessage());
-                    } catch (IOException ex) {
-                        System.out.println(ex.getMessage());
+                    }
+                    // Catching IOException
+                    catch (ProtocolException ex) {
+                        PopUpMessages.showAlert("Move Error", ex.getMessage().toString(),
+                                "Please refer to the above stated error for information on what went wrong.",
+                                Alert.AlertType.ERROR);
+
+                    }
+                    // Catching Protocol exception
+                    catch (IOException ex) {
+                        PopUpMessages.showAlert("IOException", "SENDING OR RECEIVING ERROR",
+                                "There was an error with sending or receiving using the client. " +
+                                        "Possibly lost connection to the server",
+                                Alert.AlertType.ERROR);
                     }
                 });
             }
@@ -182,7 +203,24 @@ public class UIChessBoard extends GridPane{
         // If the player is not white disable the graphical chessboard and make a chessEngine move
         if(!playerIsWhite){
             this.setDisable(true);
-            this.chessEngineMove();
+            // Trying to make a chessEngine move
+            try{
+                this.chessEngineMove();
+            }
+            // Catching IOException
+            catch (ProtocolException ex) {
+                PopUpMessages.showAlert("Move Error", ex.getMessage().toString(),
+                        "Please refer to the above stated error for information on what went wrong.",
+                        Alert.AlertType.ERROR);
+
+            }
+            // Catching Protocol exception
+            catch (IOException ex) {
+                PopUpMessages.showAlert("IOException", "SENDING OR RECEIVING ERROR",
+                        "There was an error with sending or receiving using the client. " +
+                                "Possibly lost connection to the server",
+                        Alert.AlertType.ERROR);
+            }
         }
 
     }
@@ -198,7 +236,7 @@ public class UIChessBoard extends GridPane{
     /**
      * Called when a UI space in the UI Chess board is clicked.
      * It makes a player move to the system if an active space was already set.
-     * Otherwise it sets an active space
+     * Otherwise, it sets an active space
      *
      * @param x the X position of the space
      * @param y the Y position of the space
@@ -210,7 +248,7 @@ public class UIChessBoard extends GridPane{
     // //////// //
     public void onSpaceClick(int x, int y) throws ProtocolException, IOException {
 
-        // Getting the position in the observable list of spaces
+        // Getting the position from the observable list of spaces
         int position = y + (x*8);
 
         // Getting the clicked space

@@ -22,12 +22,16 @@ import java.io.IOException;
  *
  * <p>
  * 3rd party code is used in this class. It is an adaptions from GitHub user: Stevoisiak.
- * Link to the original code: <a href="https://github.com/Stevoisiak/JavaFX-Online-Chess">Github Link</a>
+ * Link to the original code: <a href="https://github.com/Stevoisiak/JavaFX-Online-Chess">Github Link</a>.
  * This class represents the ChessBoard.java file
+ * Accessed 30th of April 2023
  *
+ * <p>
  * Following methods are adaptation and reworked functionality from the original work:
- *  - setStartPosition()
- *  - ChessBoard()
+ * <ul>
+ *     <li>setStartPosition()</li>
+ *     <li>ChessBoard()</li>
+ * </ul>
  *
  *
  * @author Omar Ibrahim
@@ -394,10 +398,30 @@ public class ChessBoard {
     // /////////////////// //
     // Instance variables. //
     // /////////////////// //
+
+    /**
+     * Cells that represent a chessBoard
+     */
     Cell[][] cells;
+
+    /**
+     * If the player is white
+     */
     boolean playerIsWhite;
+
+    /**
+     * Array that keeps track of the castle Rights
+     */
     boolean[] castleRights;
+
+    /**
+     * The chess engine instance to be used for networking
+     */
     ChessEngine chessEngine;
+
+    /**
+     * The IRCClient instance for networking
+     */
     IRCClient ircClient;
 
     /**

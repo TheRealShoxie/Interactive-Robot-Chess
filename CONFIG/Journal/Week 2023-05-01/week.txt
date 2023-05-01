@@ -1,0 +1,3 @@
+Monday:
+    - Finished writing all Java documentation.
+    - Start looking into testing/writing the report

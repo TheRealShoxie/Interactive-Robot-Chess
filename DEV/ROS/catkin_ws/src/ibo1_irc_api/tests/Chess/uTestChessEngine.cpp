@@ -37,7 +37,6 @@ TEST(ChessEngine, chessEnginePlayAgainstItself){
     for(int i = 0; i < 64; i++){
         
         chessEngine->chessEngineMove(returnedProtocol, chessEngineMove);
-        cout << "Returned protocol: " << (int)returnedProtocol << endl;
         if(!gotError){
             if(returnedProtocol != CMD_INTERNAL_CHESSENGINEMOVE) gotError = true;
         }

@@ -45,13 +45,30 @@ public class Cell {
     // Class methods. //
     // ////////////// //
 
+
     // /////////////////// //
     // Instance variables. //
     // /////////////////// //
+
+    /**
+     * Variable to hold a chess piece of type ChessPiece
+     */
     private ChessPiece chessPiece;
-    private int xPos;
-    private int yPos;
-    private boolean lightCell;
+
+    /**
+     * Variable to hold the x position of the cell in the chess board
+     */
+    private final int xPos;
+
+    /**
+     * Variable to hold the y position of the cell in the chess board
+     */
+    private final int yPos;
+
+    /**
+     * Variable to tell if the cell is a light cell or not
+     */
+    private final boolean lightCell;
 
 
     // ///////////// //

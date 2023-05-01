@@ -136,5 +136,9 @@ Sunday:
         environment on each Node to do some adequate printing for debugging. This is all enabled using a debugging variable
         which can be set and removed
         - Finished writing documents in the ros package
+    
+    - Started writing documentation in java
+        - Got most done need to do the Controllers tomorrow and I amd one.
+        - Realized need to add prompting of errors for illegal moves and need to refer the the usage of the images where they come from.
 
     

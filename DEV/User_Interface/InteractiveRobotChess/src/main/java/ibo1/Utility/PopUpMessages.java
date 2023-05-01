@@ -91,7 +91,7 @@ public abstract class PopUpMessages {
      * @param titleString Title text of the choice dialog
      * @param headerString Header text of the choice dialog
      * @param contentString Content text of the choice dialog
-     * @param choices Choices of the ChoiceDialog of type List<String>
+     * @param choices Choices of the ChoiceDialog of type List of String
      * @return returns the selected choice as String
      */
     private static String createAndShowChoiceDialog(String titleString, String headerString, String contentString, List<String> choices){

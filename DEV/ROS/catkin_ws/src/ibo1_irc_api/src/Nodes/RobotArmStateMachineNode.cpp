@@ -748,6 +748,7 @@ void chessCellDetectionMessageReceived(const ibo1_irc_api::ChessCells& msg){
 
         // Waiting for move Command
         if(robotArmState == 0 && gotCmd == CMD_INTERNAL_ROBOTARMMOVE){
+
             ROS_INFO_COND(systemDebug, "We got the command to move");
             
             // Getting the chessCells which we are trying to pickUp from and drop into

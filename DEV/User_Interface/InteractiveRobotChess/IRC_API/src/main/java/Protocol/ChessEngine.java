@@ -32,45 +32,180 @@ import java.util.List;
  *
  */
 public class ChessEngine {
+
     // ////////// //
     // Constants. //
     // ////////// //
+    /**
+     * CMD byte from the protocol
+     */
     final static byte cmdByteGetChessEngines = (byte)0x04;
+
+    /**
+     * CMD byte from the protocol
+     */
     final static byte cmdByteStartChessEngine = (byte)0x05;
+
+    /**
+     * CMD byte from the protocol
+     */
     final static byte cmdByteStopChessEngine = (byte)0x06;
+
+    /**
+     * CMD byte from the protocol
+     */
     final static byte cmdByteGetChessEngineOptions = (byte)0x07;
+
+    /**
+     * CMD byte from the protocol
+     */
     final static byte cmdByteSetChessEngineOption = (byte)0x08;
+
+    /**
+     * CMD byte from the protocol
+     */
     final static byte cmdByteSetSearchEngineOption = (byte)0x09;
+
+    /**
+     * CMD byte from the protocol
+     */
     final static byte cmdBytePlayerMove = (byte)0x0A;
+
+    /**
+     * CMD byte from the protocol
+     */
     final static byte cmdByteChessEngineMove = (byte)0x0B;
+
+    /**
+     * CMD byte from the protocol
+     */
     final static byte cmdByteSetSystemWithoutRoboter = (byte)0x0C;
+
+    /**
+     * CMD byte from the protocol
+     */
     final static byte cmdByteSetSystemFullSim = (byte)0x0D;
 
 
 
+    /**
+     * Error byte from the protocol
+     */
     final static byte chessEngineNotFound = (byte)0xF9;
+
+    /**
+     * Error byte from the protocol
+     */
     final static byte chessEngineNotStarted = (byte)0xF8;
+
+    /**
+     * Error byte from the protocol
+     */
     final static byte chessEngineNotRunning = (byte)0xF7;
+
+    /**
+     * Error byte from the protocol
+     */
     final static byte chessEngineOptionDoesntExist = (byte)0xF6;
+
+    /**
+     * Error byte from the protocol
+     */
     final static byte chessEngineNoSuchSearchOption = (byte)0xF5;
+
+    /**
+     * Error byte from the protocol
+     */
     final static byte chessEnginePawnCollidedStraight = (byte)0xF4;
+
+    /**
+     * Error byte from the protocol
+     */
     final static byte chessEnginePawnCollidedDiagonalOrEmptySpace = (byte)0xF3;
+
+    /**
+     * Error byte from the protocol
+     */
     final static byte chessEngineEmptyStartingCell = (byte)0xF2;
+
+    /**
+     * Error byte from the protocol
+     */
     final static byte chessEngineNotThatColorsTurn = (byte)0xF1;
+
+    /**
+     * Error byte from the protocol
+     */
     final static byte chessEngineMoveInvalidOrBlockedBySameColor = (byte)0xF0;
+
+    /**
+     * Error byte from the protocol
+     */
     final static byte chessEngineCannotCastleKingSide = (byte)0xEF;
+
+    /**
+     * Error byte from the protocol
+     */
     final static byte chessEngineCannotCastleQueenSide = (byte)0xEE;
+
+    /**
+     * Error byte from the protocol
+     */
     final static byte chessEngineOwnKingInCheck = (byte)0xED;
+
+    /**
+     * Error byte from the protocol
+     */
     final static byte chessEngineOtherKingInCheckMate = (byte)0xEC;
+
+    /**
+     * Error byte from the protocol
+     */
     final static byte chessEnginePawnNotAllowedIntoPositionNoPromotionMove = (byte)0xEB;
+
+    /**
+     * Error byte from the protocol
+     */
     final static byte chessEnginePieceToPromoteNotPawn = (byte)0xEA;
+
+    /**
+     * Error byte from the protocol
+     */
     final static byte chessEnginePawnNotMovingIntoEndPos = (byte)0xE9;
+
+    /**
+     * Error byte from the protocol
+     */
     final static byte chessEngineInvalidNameForPieceToPromoteInto = (byte)0xE8;
+
+    /**
+     * Error byte from the protocol
+     */
     final static byte chessEngineCreatedNoMove = (byte)0xE7;
+
+    /**
+     * Error byte from the protocol
+     */
     final static byte chessEngineMoveFormatInvalid = (byte)0xE6;
+
+    /**
+     * Error byte from the protocol
+     */
     final static byte noChessBoardInformationFromCameraPublished = (byte)0xE5;
+
+    /**
+     * Error byte from the protocol
+     */
     final static byte pickUpCellEmptyInternalAndRealWorldChessBoardMismatch = (byte)0xE4;
+
+    /**
+     * Error byte from the protocol
+     */
     final static byte systemInPlayingChessStateMachine = (byte)0xE3;
+
+    /**
+     * Error byte from the protocol
+     */
     final static byte unrecognizableCmd = (byte)0xFE;
 
     // //////////////// //
@@ -164,7 +299,19 @@ public class ChessEngine {
     // /////////////////// //
     // Instance variables. //
     // /////////////////// //
+
+
+    /**
+     * Holds the possible choices of chess engines to start.
+     * Starts empty but is populated after the first getChessEngines request to the server
+     */
     List<String> chessEngineChoices;
+
+
+    /**
+     * Possible systems states to choose from.
+     * Current version only allows full simulation or no robot arm.
+     */
     List<String> systemStateChoices;
 
     // ///////////// //
@@ -187,7 +334,7 @@ public class ChessEngine {
     // ///////////////////// //
 
     /**
-     * @return The possible chess engines to choose from of type List<String>
+     * @return The possible chess engines to choose from of type List Of String
      */
     public List<String> getChessEngineChoices() {
         return chessEngineChoices;

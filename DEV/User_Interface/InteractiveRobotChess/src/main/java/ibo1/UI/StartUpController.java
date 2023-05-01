@@ -1,5 +1,5 @@
 /*
- *@(#) Utility.DataChecker.java 0.1 2023/03/17
+ *@(#) UI.StartUpController.java 0.1 2023/03/17
  *
  * Copyright (c) Omar Ibrahim
  * All rights reserved.
@@ -31,9 +31,13 @@ import java.io.IOException;
  * It is used to call methods depending on which buttons are pressed on the home page.
  * @author Omar Ibrahim
  * @version 0.1 ( Initial development ).
+ * @version 1.0 ( Initial release ).
  *
  * @see PopUpMessages
  * @see Main
+ * @see IRCClient
+ * @see IOException
+ * @see InvalidDataException
  */
 public class StartUpController {
 
@@ -45,8 +49,15 @@ public class StartUpController {
     // Class variables. //
     // //////////////// //
 
+
+    /**
+     * Welcome text to display on the labelWelcome javaFX Label
+     */
     private static final String labelWelcomeText = "Welcome to the Interactive Robot Chess User Interface!";
-    private static Main mainApp;
+
+    /**
+     * Reference to the ircClient created in main to use for networking
+     */
     private static IRCClient ircClient;
 
     // ////////////// //
@@ -98,8 +109,15 @@ public class StartUpController {
     // Instance variables. //
     // /////////////////// //
 
+    /**
+     * Reference to the JavaFX Label: labelWelcome
+     */
     @FXML
     private Label labelWelcome;
+
+    /**
+     * Reference to the JavaFX Text field for the to connect to ip address.
+     */
     @FXML
     private TextField textFieldIPAddress;
 
@@ -114,7 +132,7 @@ public class StartUpController {
      */
     @FXML
     public void initialize(){
-        mainApp = new Main();
+        Main mainApp = new Main();
         ircClient = mainApp.getIrcClient();
         labelWelcome.setText(labelWelcomeText);
     }

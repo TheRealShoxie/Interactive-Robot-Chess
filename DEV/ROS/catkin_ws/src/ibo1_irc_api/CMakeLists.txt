@@ -245,33 +245,23 @@ target_link_libraries(ircRobotArmStateMachine  ${catkin_LIBRARIES})
 #############
 
 ## Add gtest based cpp test target and link libraries
-#catkin_add_gtest(${PROJECT_NAME}-uTestDataChecker tests/Utility/uTestDataChecker.cpp)
-#catkin_add_gtest(${PROJECT_NAME}-testUCIHandler tests/Utility/uTestUCIHandler.cpp)
-#catkin_add_gtest(${PROJECT_NAME}-uTestChessBoard tests/Chess/uTestChessBoard.cpp)
-catkin_add_gtest(${PROJECT_NAME}-uTestChessEngine tests/Chess/uTestChessEngine.cpp)
+catkin_add_gtest(${PROJECT_NAME}-testDataChecker tests/Utility/uTestDataChecker.cpp)
+catkin_add_gtest(${PROJECT_NAME}-testUCIHandler tests/Utility/uTestUCIHandler.cpp)
+catkin_add_gtest(${PROJECT_NAME}-testChessBoard tests/Chess/uTestChessBoard.cpp)
+catkin_add_gtest(${PROJECT_NAME}-testChessEngine tests/Chess/uTestChessEngine.cpp)
 
-#if(TARGET ${PROJECT_NAME}-test)
-  #target_link_libraries(${PROJECT_NAME}-uTestDataChecker ${catkin_LIBRARIES} ibo1_nodeLibrary)
-  #target_link_libraries(${PROJECT_NAME}-testUCIHandler ${catkin_LIBRARIES} ibo1_nodeLibrary)
-  #target_link_libraries(${PROJECT_NAME}-uTestChessBoard ${catkin_LIBRARIES} ibo1_nodeLibrary)
-  target_link_libraries(${PROJECT_NAME}-uTestChessEngine ${catkin_LIBRARIES} ibo1_nodeLibrary)
+target_link_libraries(${PROJECT_NAME}-testDataChecker ${catkin_LIBRARIES} ibo1_nodeLibrary)
+target_link_libraries(${PROJECT_NAME}-testUCIHandler ${catkin_LIBRARIES} ibo1_nodeLibrary)
+target_link_libraries(${PROJECT_NAME}-testChessBoard ${catkin_LIBRARIES} ibo1_nodeLibrary)
+target_link_libraries(${PROJECT_NAME}-testChessEngine ${catkin_LIBRARIES} ibo1_nodeLibrary)
+
+
+
+# if(TARGET ${PROJECT_NAME}-test)
   
-#endif()
-
-
-# if(CATKIN_ENABLE_TESTING)
-# 	find_package(rostest REQUIRED)
-
-# 	catkin_add_gtest(UnitTest_ChessEngine tests/Chess/uTestChessEngine.cpp)
-#   catkin_add_gtest(UnitTest_ChessBoard tests/Chess/uTestChessBoard.cpp)
-
-#   target_link_libraries(UnitTest_ChessEngine ${catkin_LIBRARIES} ibo1_nodeLibrary)
-#   target_link_libraries(UnitTest_ChessBoard ${catkin_LIBRARIES} ibo1_nodeLibrary)
-
-#   #All tests as one
-#   # catkin_add_gtest(UnitTest_all tests/Chess/uTestChessEngine.cpp)
-#   # target_link_libraries(UnitTest_all ${catkin_LIBRARIES} ibo1_nodeLibrary)
+  
 # endif()
+
 
 
 ## Add folders to be run by python nosetests

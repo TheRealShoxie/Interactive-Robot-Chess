@@ -22,7 +22,6 @@
 
 //Testing option extraction with null default value
 TEST(UCIHandler, engineOptionExtractNoDefaultValue1){
-    UCIHandler uciHandler;
     EngineOption engineOption;
 
     EngineOption returnedEngineOption;
@@ -41,7 +40,6 @@ TEST(UCIHandler, engineOptionExtractNoDefaultValue1){
 
 //Test option with no default value
 TEST(UCIHandler, engineOptionExtractNoDefaultValue2){
-    UCIHandler uciHandler;
     EngineOption engineOption;
 
     EngineOption returnedEngineOption;
@@ -61,7 +59,6 @@ TEST(UCIHandler, engineOptionExtractNoDefaultValue2){
 
 // Test option default, min and max value
 TEST(UCIHandler, engineOptionExtractDefaultMinMax1){
-    UCIHandler uciHandler;
     EngineOption engineOption;
 
     EngineOption returnedEngineOption;
@@ -83,7 +80,6 @@ TEST(UCIHandler, engineOptionExtractDefaultMinMax1){
 
 //Test option with default, mind and max value 2
 TEST(UCIHandler, engineOptionExtractDefaultMindMax2){
-    UCIHandler uciHandler;
     EngineOption engineOption;
 
     EngineOption returnedEngineOption;
@@ -103,7 +99,6 @@ TEST(UCIHandler, engineOptionExtractDefaultMindMax2){
 
 //Test option with only default value
 TEST(UCIHandler, engineOptionExtractOnlyDefaultValue1){
-    UCIHandler uciHandler;
     EngineOption engineOption;
 
     EngineOption returnedEngineOption;
@@ -123,7 +118,6 @@ TEST(UCIHandler, engineOptionExtractOnlyDefaultValue1){
 
 //Test option with default value <empty>
 TEST(UCIHandler, engineOptionExtractOnlyDefaultValue2){
-    UCIHandler uciHandler;
     EngineOption engineOption;
 
     EngineOption returnedEngineOption;
@@ -143,7 +137,6 @@ TEST(UCIHandler, engineOptionExtractOnlyDefaultValue2){
 
 //Test option with default value a filepath
 TEST(UCIHandler, engineOptionExtractOnlyDefaultValue3){
-    UCIHandler uciHandler;
     EngineOption engineOption;
 
     EngineOption returnedEngineOption;
@@ -163,7 +156,6 @@ TEST(UCIHandler, engineOptionExtractOnlyDefaultValue3){
 
 //Test option with default value whitespace
 TEST(UCIHandler, engineOptionDefaultValueWhiteSpace){
-    UCIHandler uciHandler;
     EngineOption engineOption;
 
     EngineOption returnedEngineOption;

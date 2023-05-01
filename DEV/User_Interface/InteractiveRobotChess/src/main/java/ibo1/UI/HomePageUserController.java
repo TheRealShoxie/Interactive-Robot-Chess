@@ -35,19 +35,41 @@ public class HomePageUserController {
     // Class variables. //
     // //////////////// //
 
-    private static Main mainApp;
+    /**
+     * Reference to the ircClient created in main to use for networking
+     */
     private static IRCClient ircClient;
+
+
+    /**
+     * Reference to the chessEngine created in main to use for networking
+     */
     private static ChessEngine chessEngine;
 
     // ////////////// //
     // Class methods. //
     // ////////////// //
 
+    /**
+     * Method called by the start button in menu item chess to start a game of chess
+     *
+     * @param event On Click javaFX event
+     */
     @FXML
-    private void startChessGame( javafx.event.ActionEvent event ) throws ProtocolException, IOException {
+    private void startChessGame( javafx.event.ActionEvent event ){
+
+        String selectedSimState = "";
 
         // Start selection of the chess Engine
-        String selectedSimState = PopUpMessages.showChoiceDialogChessEngine(chessEngine.getSystemStateChoices());
+        try{
+            selectedSimState = PopUpMessages.showChoiceDialogChessEngine(chessEngine.getSystemStateChoices());
+        } catch(Exception e){
+            // A problem occurred. This most likely comes from the user not selecting an item.
+            return;
+        }
+
+        // Checking if a sim state was not selected then return;
+        if(selectedSimState.isEmpty()) return;
 
         boolean setSimulation = false;
 
@@ -106,9 +128,22 @@ public class HomePageUserController {
             }
         }
 
-        // Start selection of the chess Engine
-        String selectedChessEngine = PopUpMessages.showChoiceDialogChessEngine(chessEngine.getChessEngineChoices());
 
+
+        String selectedChessEngine = "";
+
+        // Start selection of the chess Engine
+        try{
+
+            selectedChessEngine = PopUpMessages.showChoiceDialogChessEngine(chessEngine.getChessEngineChoices());
+        }catch (Exception e){
+            // This most likely occurred because the user did not select an item.
+            return;
+        }
+
+
+        // Checking if a chess engine was not selected then return
+        if(selectedChessEngine.isEmpty()) return;
 
         try{
             chessEngine.startChessEngine(ircClient, selectedChessEngine);
@@ -146,12 +181,17 @@ public class HomePageUserController {
         }
 
         // From here on out get the chess engine options and let the user select
-        System.err.println("Chess engine started!");
+        System.out.println("Chess engine started!");
 
         //GridPane chessBoardGUI = new UIChessBoard(true);
         contentAnchor.getChildren().add(new UIChessBoard(true, chessEngine, ircClient));
     }
 
+    /**
+     * Method called by the stop button in menu item chess to stop a game of chess
+     *
+     * @param event On Click javaFX event
+     */
     @FXML
     private void stopChessGame( javafx.event.ActionEvent event ){
 
@@ -198,6 +238,9 @@ public class HomePageUserController {
     // Instance variables. //
     // /////////////////// //
 
+    /**
+     * Anchor which can be used to fill content on to the screen.
+     */
     @FXML
     private AnchorPane contentAnchor;
 
@@ -210,7 +253,7 @@ public class HomePageUserController {
      */
     @FXML
     public void initialize(){
-        mainApp = new Main();
+        Main mainApp = new Main();
         ircClient = mainApp.getIrcClient();
         chessEngine = mainApp.getChessEngine();
     }

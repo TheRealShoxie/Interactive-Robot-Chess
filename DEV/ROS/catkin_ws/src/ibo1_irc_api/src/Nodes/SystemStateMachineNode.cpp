@@ -213,7 +213,10 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
     void inSimulationRobotMove(int &inSimulationRobotMoveState){
 
         // Waiting till ChessWrapper send back is castle move
-        if(inSimulationRobotMoveState == 5 && returnedProtocol.cmd != (BYTE)0x00){
+        if(inSimulationRobotMoveState == 5){
+
+            // Checking if the cmd is 0x00, which represents empty
+            if(returnedProtocol.cmd == (BYTE)0x00) return;
 
             //Checking if the sender is not ChessWrapper, then return
             if(returnedProtocol.sender != SENDER_CHESSWRAPPER) return;
@@ -248,7 +251,10 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
         }
 
         // Waiting till we cleared the target then we go into next stage
-        if(inSimulationRobotMoveState == 4 && returnedProtocol.cmd != (BYTE)0x00){
+        if(inSimulationRobotMoveState == 4){
+
+            // Checking if the cmd is 0x00, which represents empty
+            if(returnedProtocol.cmd == (BYTE)0x00) return;
 
             // Checking if the sender is not CreateTarget, then return
             if(returnedProtocol.sender != SENDER_CREATETARGET) return;
@@ -303,8 +309,10 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
         }
 
         //Waiting till robot arm finished moving
-        else if(inSimulationRobotMoveState == 3 && returnedProtocol.cmd != (BYTE)0x00){
+        else if(inSimulationRobotMoveState == 3){
 
+            // Checking if the cmd is 0x00, which represents empty
+            if(returnedProtocol.cmd == (BYTE)0x00) return;
 
             // Checking if the sender is not RobotArmStateMachine, then return
             if(returnedProtocol.sender != SENDER_ROBOTARMSTATEMACHINE) return;
@@ -339,9 +347,10 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
         }
 
         //ChessEngineMove state 2, waiting for CreateTargetNode to reply
-        else if(inSimulationRobotMoveState == 2 && returnedProtocol.cmd != (BYTE)0x00){
+        else if(inSimulationRobotMoveState == 2){
 
-
+            // Checking if the cmd is 0x00, which represents empty
+            if(returnedProtocol.cmd == (BYTE)0x00) return;
 
             // Checking if the sender is not CreateTarget, then return
             if(returnedProtocol.sender != SENDER_CREATETARGET) return;
@@ -418,7 +427,10 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
         }
 
         // Waiting till we received return from ChessWrapper
-        else if(inSimulationPlayerMoveState == 0 && returnedProtocol.cmd != (BYTE)0x00){
+        else if(inSimulationPlayerMoveState == 0){
+
+            // Checking if the cmd is 0x00, which represents empty
+            if(returnedProtocol.cmd == (BYTE)0x00) return;
             
             // Checking if the sender is not Chesswrapper, then return
             if(returnedProtocol.sender != SENDER_CHESSWRAPPER) return;
@@ -465,7 +477,10 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
         }
 
         // Waiting till we received return from ChessWrapper
-        else if(inSimulationChessEngineMoveState == 0 && returnedProtocol.cmd != (BYTE)0x00){
+        else if(inSimulationChessEngineMoveState == 0){
+
+            // Checking if the cmd is 0x00, which represents empty
+            if(returnedProtocol.cmd == (BYTE)0x00) return;
             
             // Checking if the sender is not Chesswrapper, then return
             if(returnedProtocol.sender != SENDER_CHESSWRAPPER) return;

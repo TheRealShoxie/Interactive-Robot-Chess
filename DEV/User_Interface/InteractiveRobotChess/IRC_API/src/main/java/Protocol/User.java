@@ -31,8 +31,19 @@ public class User{
     // Constants. //
     // ////////// //
 
+    /**
+     * Cmd byte from the protocol
+     */
     final static byte cmdByteLogin = (byte)0x02;
+
+    /**
+     * Error byte from the protocol
+     */
     final static byte userDoesNotExist = (byte)0xFC;
+
+    /**
+     * Error byte from the protocol
+     */
     final static byte unrecognizableCmd = (byte)0xFE;
 
     // //////////////// //
@@ -70,16 +81,28 @@ public class User{
      * @return boolean value of the byte
      */
     private boolean byteToBoolean(byte inputByte){
-        if(inputByte == 0x00) return false;
-        return true;
+        return inputByte != 0x00;
     }
 
     // /////////////////// //
     // Instance variables. //
     // /////////////////// //
 
+    /**
+     * Username of the user
+     */
     private String username;
+
+
+    /**
+     * Password of the user
+     */
     private String password;
+
+
+    /**
+     * Is the user an admin
+     */
     private boolean isAdmin;
 
     // ///////////// //

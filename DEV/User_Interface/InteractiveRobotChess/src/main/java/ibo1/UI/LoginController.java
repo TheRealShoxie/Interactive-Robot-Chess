@@ -1,5 +1,5 @@
 /*
- *@(#) Utility.DataChecker.java 0.1 2023/03/17
+ *@(#) UI.LoginController.java 0.1 2023/03/17
  *
  * Copyright (c) Omar Ibrahim
  * All rights reserved.
@@ -29,8 +29,19 @@ import java.io.IOException;
  * methods the buttons can refer to. This is used after successfully connected to the server.
  * <p>
  * The login function logs in the general user. He will then be referred to the admin or the user panel.
+ * The current version only supports a user panel thus an admin will currently also be referred to the
+ * user panel.
+ *
  * @author Omar Ibrahim
  * @version 0.1 ( Initial development ).
+ * @version 1.0 ( Initial release ).
+ *
+ *
+ * @see Main
+ * @see IRCClient
+ * @see User
+ * @see IOException
+ * @see ProtocolException
  */
 public class LoginController {
 
@@ -42,7 +53,15 @@ public class LoginController {
     // Class variables. //
     // //////////////// //
 
+    /**
+     * Reference to the main application to access and set global variables.
+     */
     private static Main mainApp;
+
+
+    /**
+     * Reference to the ircClient created in main to use for networking
+     */
     private static IRCClient ircClient;
 
     // ////////////// //
@@ -54,6 +73,7 @@ public class LoginController {
      * with the server and deals with errors.
      *
      * @param event ButtonEvent from JavaFX
+     * @throws IOException Thrown by FXMLLoader.load()
      */
     @FXML
     private void login( javafx.event.ActionEvent event ) throws IOException {
@@ -68,9 +88,11 @@ public class LoginController {
             return;
         }
 
+        // Creating a user object with the username and password
         User user = new User(userName, password);
 
         try {
+            // Try to log in to the system
             user.login(ircClient);
         } catch (IOException e) {
             PopUpMessages.showAlert("IOException", "SENDING OR RECEIVING ERROR",
@@ -105,17 +127,23 @@ public class LoginController {
 
         Parent homePageLayout;
 
-        //TODO: move to correct screen.
+        //Checking if the user is an admin
         if(user.isAdmin()){
+            // If yes move to admin panel
+            // Currently only user panel supported
             System.out.println("Move to Admin panel.");
             homePageLayout = FXMLLoader.load(getClass().getResource("HomePageUser.fxml"));
-        } else{
+        }
+        // Otherwise the general user is a user, and we move to the user panel
+        else{
             System.out.println("Move to User panel.");
             homePageLayout = FXMLLoader.load(getClass().getResource("HomePageUser.fxml"));
         }
 
+        // Setting up the scene switch
         Scene homePageScene = new Scene(homePageLayout);
 
+        // Switching to the defined scene
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(homePageScene);
         stage.show();
@@ -125,8 +153,15 @@ public class LoginController {
     // Instance variables. //
     // /////////////////// //
 
+    /**
+     * Text field for the username
+     */
     @FXML
     private TextField textFieldUsername;
+
+    /**
+     * Text field for the password
+     */
     @FXML
     private TextField textFieldPassword;
 

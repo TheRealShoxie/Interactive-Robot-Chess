@@ -13,3 +13,7 @@
 #labelWelcome{
     -fx-font-size: 2em;
 }
+
+#labelMenuBtn{
+    -fx-text-fill: "black";
+}

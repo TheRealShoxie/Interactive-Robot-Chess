@@ -1,5 +1,5 @@
 /*
- *@(#) Application.ibo1.java 0.1 2023/03/17
+ *@(#) Application.Main.java 0.1 2023/03/17
  *
  * Copyright (c) Omar Ibrahim
  * All rights reserved.
@@ -87,8 +87,19 @@ public class Main extends Application {
     // Instance variables. //
     // /////////////////// //
 
+    /**
+     * The IRC_API IRCClient to be used throughout the UI
+     */
     private static IRCClient ircClient;
+
+    /**
+     * The currently logged-in user
+     */
     private static User currentUser;
+
+    /**
+     * The IRC_API ChessEngine instance to be used throughout the UI
+     */
     private static ChessEngine chessEngine;
 
     // ////////////////////// //

@@ -252,7 +252,7 @@ void communicationLogic(int bufferSizeData, IRCServer &server, Users &users){
                 // If debug then create the string from the data received and print it
                 if(systemDebug){
                     string chessEngineMove = "";
-                    DataCreator::convertBytesToString(receivedData, chessEngineMove);
+                    DataCreator::convertBytesToString(answer, chessEngineMove);
                     ROS_INFO_COND(systemDebug, "Chess Engine Move to send back to external device: %s", chessEngineMove.c_str());
                     ROS_INFO_COND(systemDebug, "Command to send back to external device: %d", returnedCommand);
                 }
