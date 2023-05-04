@@ -144,6 +144,8 @@ This can be done in two ways:<br>
 
  > Please supply the filepaths from root example "/.../.../...txt"
 
+ Furhter it is important to change the file pahts to the chess engines within the chessengines.txt the same way as the filepaths to the txt's have been changed.
+
 For information on how to add arguments to a roslaunch please refer to: [Roslaunch Explanation](http://wiki.ros.org/roslaunch/Commandline%20Tools). Refer specifically to 1.2 Passing in args.
 
 Possible arguments to set when launching the file:
