@@ -245,12 +245,12 @@ target_link_libraries(ircRobotArmStateMachine  ${catkin_LIBRARIES})
 #############
 
 ## Add gtest based cpp test target and link libraries
-catkin_add_gtest(${PROJECT_NAME}-testDataChecker tests/Utility/uTestDataChecker.cpp)
+catkin_add_gtest(${PROJECT_NAME}-testUDataChecker tests/Utility/uTestDataChecker.cpp)
 catkin_add_gtest(${PROJECT_NAME}-testUCIHandler tests/Utility/uTestUCIHandler.cpp)
 catkin_add_gtest(${PROJECT_NAME}-testChessBoard tests/Chess/uTestChessBoard.cpp)
 catkin_add_gtest(${PROJECT_NAME}-testChessEngine tests/Chess/uTestChessEngine.cpp)
 
-target_link_libraries(${PROJECT_NAME}-testDataChecker ${catkin_LIBRARIES} ibo1_nodeLibrary)
+target_link_libraries(${PROJECT_NAME}-testUDataChecker ${catkin_LIBRARIES} ibo1_nodeLibrary)
 target_link_libraries(${PROJECT_NAME}-testUCIHandler ${catkin_LIBRARIES} ibo1_nodeLibrary)
 target_link_libraries(${PROJECT_NAME}-testChessBoard ${catkin_LIBRARIES} ibo1_nodeLibrary)
 target_link_libraries(${PROJECT_NAME}-testChessEngine ${catkin_LIBRARIES} ibo1_nodeLibrary)
