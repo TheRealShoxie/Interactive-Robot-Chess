@@ -19,7 +19,7 @@ The protocol consists of following contents:
 - command
     - is the command which defines what should happen
     - Size: 1byte
-    - Special: Please be aware that 0x00 is reserver and should not be used.
+    - Special: Please be aware that 0x00 is reserved and should not be used.
 - sizeData
     - defines how big the data that is followed is. Thus only the needed bytes will be read and can be checked for accurate receiving of byteSize
     - Size: 4bytes
