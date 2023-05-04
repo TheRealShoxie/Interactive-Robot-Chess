@@ -67,7 +67,7 @@ TEST(ChessBoard, creationWithFenString4){
 }
 
 //Testing chessBoard move from standard Position valid pawn move
-TEST(ChessBoard, MoveValidFromStartPosValidPawnMove){
+TEST(ChessBoard, MoveFromStartPosValidPawnMove){
     ChessBoard chessBoard = ChessBoard();
     string movement = "A2A4";
     int expectedReturn = 0;
@@ -78,7 +78,7 @@ TEST(ChessBoard, MoveValidFromStartPosValidPawnMove){
 }
 
 //Testing chessBoard move from standard Position invalid pawn move diagonal
-TEST(ChessBoard, MoveValidFromStartPosInValidPawnMoveDiagonal){
+TEST(ChessBoard, MoveFromStartPosInValidPawnMoveDiagonal){
     ChessBoard chessBoard = ChessBoard();
     string movement = "A2B3";
     int expectedReturn = -2;
@@ -89,7 +89,7 @@ TEST(ChessBoard, MoveValidFromStartPosInValidPawnMoveDiagonal){
 }
 
 //Testing chessBoard move from standard Position invalid queen move piece in the way
-TEST(ChessBoard, MoveValidFromStartPosInValidQueenMove){
+TEST(ChessBoard, MoveFromStartPosInValidQueenMove){
     ChessBoard chessBoard = ChessBoard();
     string movement = "D1D2";
     int expectedReturn = -5;
@@ -100,7 +100,7 @@ TEST(ChessBoard, MoveValidFromStartPosInValidQueenMove){
 }
 
 //Testing chessBoard move from standard Position invalid knight move
-TEST(ChessBoard, MoveValidFromStartPosInValidKnightMove){
+TEST(ChessBoard, MoveFromStartPosInValidKnightMove){
     ChessBoard chessBoard = ChessBoard();
     string movement = "B1B2";
     int expectedReturn = -5;
@@ -111,7 +111,7 @@ TEST(ChessBoard, MoveValidFromStartPosInValidKnightMove){
 }
 
 //Testing chessBoard move from standard Position valid knight move
-TEST(ChessBoard, MoveValidFromStartPosValidKnightMove){
+TEST(ChessBoard, MoveFromStartPosValidKnightMove){
     ChessBoard chessBoard = ChessBoard();
     string movement = "B1C3";
     int expectedReturn = 0;
@@ -122,7 +122,7 @@ TEST(ChessBoard, MoveValidFromStartPosValidKnightMove){
 
 
 //Testing chessBoard move from FenPosition invalid pawn move double black in the way
-TEST(ChessBoard, MoveValidFromFenPosInValidPawnMoveDouble){
+TEST(ChessBoard, MoveFromFenPosInValidPawnMoveDouble){
     string fenPos = "rnbqkbnr/p1pppppp/8/P7/8/1p6/1PPPPPPP/RNBQKBNR w KQkq - 0 4";
     ChessBoard chessBoard = ChessBoard(fenPos);
 
@@ -134,8 +134,8 @@ TEST(ChessBoard, MoveValidFromFenPosInValidPawnMoveDouble){
     ASSERT_EQ(returned, expectedReturn);
 }
 
-//Testing chessBoard move from FenPosition invalid pawn move double black in the way
-TEST(ChessBoard, MoveValidFromStartPosInValidPawnMoveQuadruple){
+//Testing chessBoard move from FenPosition invalid pawn move quadrople
+TEST(ChessBoard, MoveFromStartPosInValidPawnMoveQuadruple){
     ChessBoard chessBoard = ChessBoard();
 
     string movement = "A2A6";
@@ -147,7 +147,7 @@ TEST(ChessBoard, MoveValidFromStartPosInValidPawnMoveQuadruple){
 }
 
 //Testing chessBoard move from FenPosition invalid pawn move single black in the way
-TEST(ChessBoard, MoveValidFromFenPosInValidPawnMoveSingle){
+TEST(ChessBoard, MoveFromFenPosInValidPawnMoveSingle){
     string fenPos = "rnbqkbnr/p1pppppp/8/P7/8/1p6/1PPPPPPP/RNBQKBNR w KQkq - 0 4";
     ChessBoard chessBoard = ChessBoard(fenPos);
 
@@ -160,7 +160,7 @@ TEST(ChessBoard, MoveValidFromFenPosInValidPawnMoveSingle){
 }
 
 //Testing chessBoard move from FenPosition valid pawn move diagonal
-TEST(ChessBoard, MoveValidFromFenPosValidPawnMoveDiagonal){
+TEST(ChessBoard, MoveFromFenPosValidPawnMoveDiagonal){
     string fenPos = "rnbqkbnr/p1pppppp/8/P7/8/1p6/1PPPPPPP/RNBQKBNR w KQkq - 0 4";
     ChessBoard chessBoard = ChessBoard(fenPos);
 
@@ -173,7 +173,7 @@ TEST(ChessBoard, MoveValidFromFenPosValidPawnMoveDiagonal){
 }
 
 //Testing chessBoard move from FenPosition invalid pawn move diagonal empty cell
-TEST(ChessBoard, MoveValidFromFenPosInValidPawnMoveDiagonalEmpty){
+TEST(ChessBoard, MoveFromFenPosInValidPawnMoveDiagonalEmpty){
     string fenPos = "rnbqkbnr/p1pppppp/8/P7/8/1p6/1PPPPPPP/RNBQKBNR w KQkq - 0 4";
     ChessBoard chessBoard = ChessBoard(fenPos);
 
@@ -186,7 +186,7 @@ TEST(ChessBoard, MoveValidFromFenPosInValidPawnMoveDiagonalEmpty){
 }
 
 //Testing chessBoard move from FenPosition invalid pawn move diagonal same piece there
-TEST(ChessBoard, MoveValidFromFenPosInValidPawnMoveDiagonalSameColorPiece){
+TEST(ChessBoard, MoveFromFenPosInValidPawnMoveDiagonalSameColorPiece){
     string fenPos = "rnbqkbnr/p1pp1ppp/4p3/P7/8/1p1P4/1PP1PPPP/RNBQKBNR w KQkq - 0 5";
     ChessBoard chessBoard = ChessBoard(fenPos);
 
@@ -199,7 +199,7 @@ TEST(ChessBoard, MoveValidFromFenPosInValidPawnMoveDiagonalSameColorPiece){
 }
 
 //Testing chessBoard move from FenPosition invalid bishop move diagonal same piece there
-TEST(ChessBoard, MoveValidFromFenPosInValidBishopMoveDiagonalSameColorPiece){
+TEST(ChessBoard, MoveFromFenPosInValidBishopMoveDiagonalSameColorPiece){
     string fenPos = "rnbqkbnr/p1pp1ppp/4p3/P7/8/1p1P4/1PP1PPPP/RNBQKBNR w KQkq - 0 5";
     ChessBoard chessBoard = ChessBoard(fenPos);
 
@@ -211,8 +211,8 @@ TEST(ChessBoard, MoveValidFromFenPosInValidBishopMoveDiagonalSameColorPiece){
     ASSERT_EQ(returned, expectedReturn);
 }
 
-//Testing chessBoard move from FenPosition valid bishop move diagonal same piece there
-TEST(ChessBoard, MoveValidFromFenPosValidBishopMoveDiagonal){
+//Testing chessBoard move from FenPosition valid bishop move diagonal
+TEST(ChessBoard, MoveFromFenPosValidBishopMoveDiagonal){
     string fenPos = "rnbqkbnr/p1pp1ppp/4p3/P7/8/1p1P4/1PP1PPPP/RNBQKBNR w KQkq - 0 5";
     ChessBoard chessBoard = ChessBoard(fenPos);
 
@@ -225,7 +225,7 @@ TEST(ChessBoard, MoveValidFromFenPosValidBishopMoveDiagonal){
 }
 
 //Testing chessBoard move from FenPosition valid bishop diagonal taking knight
-TEST(ChessBoard, MoveValidFromFenPosValidBishopMoveDiagonalTakeKnight){
+TEST(ChessBoard, MoveFromFenPosValidBishopMoveDiagonalTakeKnight){
     string fenPos = "rn1qkbnr/p1pp1pp1/2P1p1b1/P6p/3P4/1p4P1/1P2PP1P/RNBQKBNR b KQkq - 0 10";
     ChessBoard chessBoard = ChessBoard(fenPos);
 
@@ -238,7 +238,7 @@ TEST(ChessBoard, MoveValidFromFenPosValidBishopMoveDiagonalTakeKnight){
 }
 
 //Testing chessBoard move from FenPosition invalid rook move up
-TEST(ChessBoard, MoveValidFromFenPosInValidRookMoveUp){
+TEST(ChessBoard, MoveFromFenPosInValidRookMoveUp){
     string fenPos = "rnbqkbnr/p1pp1ppp/4p3/P7/8/1p1P4/1PP1PPPP/RNBQKBNR w KQkq - 0 5";
     ChessBoard chessBoard = ChessBoard(fenPos);
 
@@ -251,7 +251,7 @@ TEST(ChessBoard, MoveValidFromFenPosInValidRookMoveUp){
 }
 
 //Testing chessBoard move from FenPosition invalid rook2 move up
-TEST(ChessBoard, MoveValidFromFenPosInValidRookMoveUp2){
+TEST(ChessBoard, MoveFromFenPosInValidRookMoveUp2){
     string fenPos = "rnbqkbnr/p1pp1ppp/4p3/P7/8/1p1P4/1PP1PPPP/RNBQKBNR w KQkq - 0 5";
     ChessBoard chessBoard = ChessBoard(fenPos);
 
@@ -264,7 +264,7 @@ TEST(ChessBoard, MoveValidFromFenPosInValidRookMoveUp2){
 }
 
 //Testing chessBoard move from FenPosition valid rook move up
-TEST(ChessBoard, MoveValidFromFenPosValidRookMoveUp){
+TEST(ChessBoard, MoveFromFenPosValidRookMoveUp){
     string fenPos = "rnbqkbnr/p2ppppp/2p5/P7/8/1p1P4/1PP1PPPP/RNBQKBNR w KQkq - 0 5";
     ChessBoard chessBoard = ChessBoard(fenPos);
 
