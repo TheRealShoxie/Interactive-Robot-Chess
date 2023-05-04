@@ -1,5 +1,5 @@
 /*
- * CreateTargetNode - Ros node which is used for ircCreateTarget
+ * TargetSelectorNode - Ros node which is used for ircTargetSelector
  * <p>
  * This file describes the internal communication and execution of its respective commands.
  * It communicates with the ircSystemState machine to receive and respond with commands.
@@ -100,7 +100,7 @@ bool systemDebug = false;
     // ////////// //
 
 // Callback function for subscriber on /ircSystem/ircCreateTarget
-void createTargetMessageReceived(const ibo1_irc_api::Protocol& msg){
+void targetSelectorMessageReceived(const ibo1_irc_api::Protocol& msg){
     returnedProtocol = msg;
     //Only prints if systemDebug true
     ROS_INFO_COND(systemDebug, "I received from: %d", returnedProtocol.sender);
@@ -252,7 +252,7 @@ void chessCellDetectionMessageReceived(const ibo1_irc_api::ChessCells& msg){
 
 
                 // Attaching the sender
-                response.sender = SENDER_CREATETARGET;
+                response.sender = SENDER_TargetSelector;
 
                 //Sending the response back to where the request came from
                 sendToSender(returnedProtocol.sender, response);
@@ -272,7 +272,7 @@ void chessCellDetectionMessageReceived(const ibo1_irc_api::ChessCells& msg){
                 targetCellDrop = -1;
 
                 response.cmd = CMD_INTERNAL_CLEARTARGET;
-                response.sender = SENDER_CREATETARGET;
+                response.sender = SENDER_TargetSelector;
                 
                 //Sending the response back to where the request came from
                 sendToSender(returnedProtocol.sender, response);
@@ -303,7 +303,7 @@ int main (int argc, char **argv){
     spinner.start();
 
     // Subscriber and publisher setup
-    ros::Subscriber createTarget_sub = nh.subscribe("/ircSystem/ircCreateTarget", 1, &createTargetMessageReceived);
+    ros::Subscriber selectTarget_sub = nh.subscribe("/ircSystem/ircTargetSelector", 1, &targetSelectorMessageReceived);
     ros::Subscriber chessCellDetection_sub = nh.subscribe("/imageProcessing/chessCellDetection", 1, &chessCellDetectionMessageReceived);
 
     ros::Publisher systemStateMachine_pub = nh.advertise<ibo1_irc_api::Protocol>("ircSystemStateMachine", 10);

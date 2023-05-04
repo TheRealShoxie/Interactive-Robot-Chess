@@ -41,7 +41,7 @@ typedef uint8_t BYTE;
 #define SENDER_SYSTEMSTATEMACHINE                                   (BYTE)0x00
 #define SENDER_SERVER                                               (BYTE)0x01
 #define SENDER_CHESSWRAPPER                                         (BYTE)0x02
-#define SENDER_CREATETARGET                                         (BYTE)0x03
+#define SENDER_TargetSelector                                       (BYTE)0x03
 #define SENDER_ROBOTARMSTATEMACHINE                                 (BYTE)0x04
 
 

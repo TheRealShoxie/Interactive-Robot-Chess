@@ -46,7 +46,7 @@
 		<node pkg="ibo1_irc_api" type="ircSystemStateMachine" name="ircSystemStateMachine" output="screen" />
 
 		<!-- Starting the CreateTarget_node-->
-		<node pkg="ibo1_irc_api" type="ircCreateTarget" name="ircCreateTarget" output="screen" />
+		<node pkg="ibo1_irc_api" type="ircTargetSelector" name="ircTargetSelector" output="screen" />
 	</group>
 
 	<!-- Group for imageProcessing-->

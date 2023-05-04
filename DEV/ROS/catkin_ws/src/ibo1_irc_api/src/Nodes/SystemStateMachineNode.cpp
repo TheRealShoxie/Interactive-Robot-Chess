@@ -49,7 +49,7 @@
  * @see CMakeLists.txt
  * @see ircSystem.launch
  * @see ChessWrapperNode.cpp
- * @see CreateTargetNode.cpp
+ * @see TargetSelectorNode.cpp
  * @see RobotArmStateMachineNode.cpp
  * @see SystemStateMachineHelper.h
  * @see ServerNode.cpp
@@ -80,7 +80,7 @@ using namespace std;
 ibo1_irc_api::Protocol returnedProtocol;
 ros::Publisher* server_pub_ptr;
 ros::Publisher* chessWrapper_pub_ptr;
-ros::Publisher* createTarget_pub_ptr;
+ros::Publisher* targetSelector_pub_ptr;
 ros::Publisher* robotArmStateMachine_pub_ptr;
 
 // Command Executer variables
@@ -157,8 +157,8 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
                 chessWrapper_pub_ptr->publish(sendProtocol);
                 break;
             }
-            case SENDER_CREATETARGET:{
-                createTarget_pub_ptr->publish(sendProtocol);
+            case SENDER_TargetSelector:{
+                targetSelector_pub_ptr->publish(sendProtocol);
                 break;
             }
 
@@ -252,8 +252,8 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
             // Checking if the cmd is 0x00, which represents empty
             if(returnedProtocol.cmd == (BYTE)0x00) return;
 
-            // Checking if the sender is not CreateTarget, then return
-            if(returnedProtocol.sender != SENDER_CREATETARGET) return;
+            // Checking if the sender is not Target Selector, then return
+            if(returnedProtocol.sender != SENDER_TargetSelector) return;
 
             // Checking if we got a incorrect Command back
             if(returnedProtocol.cmd != CMD_INTERNAL_CLEARTARGET){
@@ -274,7 +274,7 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
             sendChessWrapperProtocol.cmd = CMD_INTERNAL_LASTMOVECASTLEMOVE;
             sendChessWrapperProtocol.sender = SENDER_SYSTEMSTATEMACHINE;
 
-            //Sending setTarget command to Create target
+            //Sending setTarget command to ChessWrapper
             sendToSender(SENDER_CHESSWRAPPER, sendChessWrapperProtocol);
 
             ROS_INFO_COND(systemDebug, "inSimulationRobotMoveState: 5");
@@ -342,22 +342,22 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
             sendResetTargetProtocol.cmd = CMD_INTERNAL_CLEARTARGET;
             sendResetTargetProtocol.sender = SENDER_SYSTEMSTATEMACHINE;
 
-            //Sending setTarget command to Create target
-            sendToSender(SENDER_CREATETARGET, sendResetTargetProtocol);
+            //Sending setTarget command to Target selector
+            sendToSender(SENDER_TargetSelector, sendResetTargetProtocol);
 
             //Increase to next state for chessEngineMove
             inSimulationRobotMoveState++;
 
         }
 
-        //ChessEngineMove state 2, waiting for CreateTargetNode to reply
+        //ChessEngineMove state 2, waiting for Target selector to reply
         else if(inSimulationRobotMoveState == 2){
 
             // Checking if the cmd is 0x00, which represents empty
             if(returnedProtocol.cmd == (BYTE)0x00) return;
 
-            // Checking if the sender is not CreateTarget, then return
-            if(returnedProtocol.sender != SENDER_CREATETARGET) return;
+            // Checking if the sender is not Target Selector, then return
+            if(returnedProtocol.sender != SENDER_TargetSelector) return;
 
             // Checking if we got a incorrect Command back
             if(returnedProtocol.cmd != CMD_INTERNAL_SETTARGET){
@@ -389,7 +389,7 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
             inSimulationRobotMoveState++;
         }
 
-        //ChessEngineMove state 1, sending set target with ChessMove to CreateTargetNode
+        //ChessEngineMove state 1, sending set target with ChessMove to Target Selector
         else if(inSimulationRobotMoveState == 1){
             
             ROS_INFO_COND(systemDebug, "inSimulationRobotMoveState: 1");
@@ -403,7 +403,7 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
             sendCreateTargetProtocol.data = inSimulationDataStorage;
 
             //Sending setTarget command to Create target
-            sendToSender(SENDER_CREATETARGET, sendCreateTargetProtocol);
+            sendToSender(SENDER_TargetSelector, sendCreateTargetProtocol);
 
             ROS_INFO_COND(systemDebug, "inSimulationRobotMoveState: 2");
             //Increase to next state for chessEngineMove
@@ -838,12 +838,12 @@ int main (int argc, char **argv){
 
     ros::Publisher server_pub = nh.advertise<ibo1_irc_api::Protocol>("ircServer", 10);
     ros::Publisher chessWrapper_pub = nh.advertise<ibo1_irc_api::Protocol>("ircChessWrapper", 10);
-    ros::Publisher createTarget_pub = nh.advertise<ibo1_irc_api::Protocol>("ircCreateTarget", 10);
+    ros::Publisher targetSelector_pub = nh.advertise<ibo1_irc_api::Protocol>("ircTargetSelector", 10);
     ros::Publisher robotArmStateMachine_pub = nh.advertise<ibo1_irc_api::Protocol>("/my_gen3/ircRobotArmStateMachine", 10);
 
     server_pub_ptr = &server_pub;
     chessWrapper_pub_ptr = &chessWrapper_pub;
-    createTarget_pub_ptr = &createTarget_pub;
+    targetSelector_pub_ptr = &targetSelector_pub;
     robotArmStateMachine_pub_ptr = &robotArmStateMachine_pub;
 
     // Getting System debug param

@@ -164,7 +164,7 @@ add_executable(ircServer src/Nodes/ServerNode.cpp)
 add_executable(ircChess src/Nodes/ChessWrapperNode.cpp)
 add_executable(ircChessCellDetection src/Nodes/ChessBoardCellDetectionNode.cpp)
 add_executable(ircSystemStateMachine src/Nodes/SystemStateMachineNode.cpp)
-add_executable(ircCreateTarget src/Nodes/CreateTargetNode.cpp)
+add_executable(ircTargetSelector src/Nodes/TargetSelectorNode.cpp)
 add_executable(ircRobotArmStateMachine src/Nodes/RobotArmStateMachineNode.cpp)
 
 ## Rename C++ executable without prefix
@@ -185,7 +185,7 @@ target_link_libraries(ircServer ibo1_nodeLibrary ${catkin_LIBRARIES})
 target_link_libraries(ircChess  ibo1_nodeLibrary ${catkin_LIBRARIES})
 target_link_libraries(ircChessCellDetection  ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 target_link_libraries(ircSystemStateMachine  ${catkin_LIBRARIES})
-target_link_libraries(ircCreateTarget  ${catkin_LIBRARIES})
+target_link_libraries(ircTargetSelector  ${catkin_LIBRARIES})
 target_link_libraries(ircRobotArmStateMachine  ${catkin_LIBRARIES})
 
 

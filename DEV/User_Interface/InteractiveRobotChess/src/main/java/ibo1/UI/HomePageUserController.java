@@ -1,5 +1,5 @@
 /*
- *@(#) Utility.DataChecker.java 0.1 2023/03/17
+ *@(#) UI.HomePageUserController.java 0.1 2023/03/17
  *
  * Copyright (c) Omar Ibrahim
  * All rights reserved.
@@ -9,6 +9,7 @@ package ibo1.UI;
 import Client.IRCClient;
 import CustomException.ProtocolException;
 import Protocol.ChessEngine;
+import Protocol.ROSSystem;
 import ibo1.Application.Main;
 import ibo1.UIElements.UIChessBoard;
 import ibo1.Utility.PopUpMessages;
@@ -25,6 +26,15 @@ import java.io.IOException;
  * It is used to call methods depending on which buttons are pressed on the home page for the user.
  * @author Omar Ibrahim
  * @version 0.1 ( Initial development ).
+ * @version 1.0 ( Initial release ).
+ *
+ * @see IRCClient
+ * @see ROSSystem
+ * @see ChessEngine
+ * @see ProtocolException
+ * @see ProtocolErrors
+ * @see UIChessBoard
+ * @see Main
  */
 public class HomePageUserController {
     // //////////////// //
@@ -46,6 +56,11 @@ public class HomePageUserController {
      */
     private static ChessEngine chessEngine;
 
+    /**
+     * Reference to the ros system created in main to use for networking
+     */
+    private static ROSSystem rosSystem;
+
     // ////////////// //
     // Class methods. //
     // ////////////// //
@@ -62,7 +77,7 @@ public class HomePageUserController {
 
         // Start selection of the chess Engine
         try{
-            selectedSimState = PopUpMessages.showChoiceDialogChessEngine(chessEngine.getSystemStateChoices());
+            selectedSimState = PopUpMessages.showChoiceDialogChessEngine(rosSystem.getSystemStateChoices());
         } catch(Exception e){
             // A problem occurred. This most likely comes from the user not selecting an item.
             return;
@@ -74,7 +89,7 @@ public class HomePageUserController {
         boolean setSimulation = false;
 
         try{
-            setSimulation = chessEngine.setSystemState(ircClient, selectedSimState);
+            setSimulation = rosSystem.setSystemState(ircClient, selectedSimState);
         } catch (IOException e){
             PopUpMessages.showAlert("IOException", "SENDING OR RECEIVING ERROR",
                     "There was an error with sending or receiving using the client. " +
@@ -256,6 +271,7 @@ public class HomePageUserController {
         Main mainApp = new Main();
         ircClient = mainApp.getIrcClient();
         chessEngine = mainApp.getChessEngine();
+        rosSystem = mainApp.getRosSystem();
     }
 
 }

@@ -76,16 +76,6 @@ public class ChessEngine {
      */
     final static byte cmdByteChessEngineMove = (byte)0x0B;
 
-    /**
-     * CMD byte from the protocol
-     */
-    final static byte cmdByteSetSystemWithoutRoboter = (byte)0x0C;
-
-    /**
-     * CMD byte from the protocol
-     */
-    final static byte cmdByteSetSystemFullSim = (byte)0x0D;
-
 
 
     /**
@@ -230,71 +220,7 @@ public class ChessEngine {
         chessEngineChoices = Arrays.asList(possibleChessEngines);
     }
 
-    /**
-     * Sets the ROS system into no roboter arm state
-     *
-     * @param ircClient ircClient to be used
-     * @throws IOException thrown by sending and receiving the buffer
-     * @throws ProtocolException thrown if returned cmd does not match expected or if chess engine doesn't exist.
-     */
-    private void setSystemNoRoboter(IRCClient ircClient) throws IOException, ProtocolException {
 
-        // Creating the Protocol object for the possible chess Engine command
-        ProtocolObject protocolSetNoRoboter = new ProtocolObject();
-        protocolSetNoRoboter.setCmdByte(cmdByteSetSystemWithoutRoboter);
-
-        // Sending the command
-        ircClient.send(protocolSetNoRoboter);
-
-        // Retrieving the answer
-        ProtocolObject receivedProtocol = ircClient.receive();
-
-        byte receivedCommandByte = receivedProtocol.getCmdByte();
-
-        // Returning that we successfully set it;
-        if(receivedCommandByte == cmdByteSetSystemWithoutRoboter){
-            // Setting chessEngineChoices
-            return;
-        }
-        else if(receivedCommandByte == systemInPlayingChessStateMachine) throw new ProtocolException(ProtocolErrors.SYSTEM_ALREADY_IN_CHESS_STATE.toString());
-            // Command was not recognizable
-        else if(receivedCommandByte == unrecognizableCmd) throw new ProtocolException(ProtocolErrors.UNRECOGNIZABLE_CMD.toString());
-            // Does not match expected return
-        else throw new ProtocolException(ProtocolErrors.UNEXPECTED_RETURN_CMD.toString());
-    }
-
-    /**
-     * Sets the ROS system into Full simulation
-     *
-     * @param ircClient ircClient to be used
-     * @throws IOException thrown by sending and receiving the buffer
-     * @throws ProtocolException thrown if returned cmd does not match expected or if chess engine doesn't exist.
-     */
-    private void setSystemInFullSimulationState(IRCClient ircClient) throws IOException, ProtocolException {
-
-        // Creating the Protocol object for the possible chess Engine command
-        ProtocolObject protocolSetFullSim = new ProtocolObject();
-        protocolSetFullSim.setCmdByte(cmdByteSetSystemFullSim);
-
-        // Sending the command
-        ircClient.send(protocolSetFullSim);
-
-        // Retrieving the answer
-        ProtocolObject receivedProtocol = ircClient.receive();
-
-        byte receivedCommandByte = receivedProtocol.getCmdByte();
-
-        // Returning that we successfully set it;
-        if(receivedCommandByte == cmdByteSetSystemFullSim){
-            // Setting chessEngineChoices
-            return;
-        }
-        else if(receivedCommandByte == systemInPlayingChessStateMachine) throw new ProtocolException(ProtocolErrors.SYSTEM_ALREADY_IN_CHESS_STATE.toString());
-            // Command was not recognizable
-        else if(receivedCommandByte == unrecognizableCmd) throw new ProtocolException(ProtocolErrors.UNRECOGNIZABLE_CMD.toString());
-            // Does not match expected return
-        else throw new ProtocolException(ProtocolErrors.UNEXPECTED_RETURN_CMD.toString());
-    }
 
     // /////////////////// //
     // Instance variables. //
@@ -308,22 +234,9 @@ public class ChessEngine {
     List<String> chessEngineChoices;
 
 
-    /**
-     * Possible systems states to choose from.
-     * Current version only allows full simulation or no robot arm.
-     */
-    List<String> systemStateChoices;
-
     // ///////////// //
     // Constructors. //
     // ///////////// //
-
-    /**
-     * Constructor for ChessEngine
-     */
-    public ChessEngine(){
-        systemStateChoices = Arrays.asList("Full sim", "No Roboter arm");
-    }
 
     // ////////////////////// //
     // Read/Write properties. //
@@ -341,54 +254,10 @@ public class ChessEngine {
     }
 
 
-    /**
-     * @return the possible System states to choose from
-     */
-    public List<String> getSystemStateChoices() {return systemStateChoices;}
-
 
     // //////// //
     // Methods. //
     // //////// //
-
-    /**
-     * Method that communicates with the ROS system to set the system state to the supplied one.
-     * If the system state choice doesn't exist this function returns false.
-     * Please use getSystemStateChoices for possible system states.
-     *
-     * @param ircClient the IRCCLient
-     * @param systemState the system state to set the ROS system into
-     * @return true if the system got set into the supplied system state
-     * @throws ProtocolException thrown by sending and receiving the buffer
-     * @throws IOException thrown if returned cmd does not match expected
-     */
-    public boolean setSystemState(IRCClient ircClient, String systemState) throws ProtocolException, IOException {
-
-        // Checking if systemState is equal to first element in system state Choices
-        if(systemState.equals(systemStateChoices.get(0))){
-
-            // If yes set system into full simulation state
-            setSystemInFullSimulationState(ircClient);
-
-            // Return true if nothing went wrong
-            return true;
-        }
-
-        // Otherwise check if system state is equal to second element in system state Choices
-        else if(systemState.equals(systemStateChoices.get(1))){
-
-            // If yes no roboter arm was selected thus set system into no roboter arm state
-            setSystemNoRoboter(ircClient);
-
-            // Return true if nothing went wrong
-            return true;
-        }
-        else{
-
-            // Return false if system state choice doesn't exist
-            return false;
-        }
-    }
 
     /**
      * Gets the possible chess engines to play against from the ROS system-

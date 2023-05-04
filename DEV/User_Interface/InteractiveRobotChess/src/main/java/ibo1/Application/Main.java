@@ -8,6 +8,7 @@ package ibo1.Application;
 
 import Client.IRCClient;
 import Protocol.ChessEngine;
+import Protocol.ROSSystem;
 import Protocol.User;
 import ibo1.UI.StartUpController;
 import javafx.application.Application;
@@ -27,9 +28,14 @@ import java.io.IOException;
  * Interactive Robot Chess Server, which is run within a ROS system on a Linux machine.
  * @author Omar Ibrahim
  * @version 0.1 ( Initial development ).
+ *  @version 1.0 ( Initial release ).
  * @see StartUpController
  * @see ibo1.UI.LoginController
  * @see ibo1.UI.HomePageUserController
+ * @see IRCClient
+ * @see ChessEngine
+ * @see ROSSystem
+ * @see User
  */
 public class Main extends Application {
     // //////////////// //
@@ -60,6 +66,7 @@ public class Main extends Application {
         try {
             ircClient = new IRCClient();
             chessEngine = new ChessEngine();
+            rosSystem =  new ROSSystem();
 
             FXMLLoader loader = new FXMLLoader( getClass( ).getResource("../UI/StartUp.fxml") );
             //FXMLLoader loader = new FXMLLoader( getClass( ).getResource("../UI/HomePageUser.fxml") );
@@ -102,6 +109,11 @@ public class Main extends Application {
      */
     private static ChessEngine chessEngine;
 
+    /**
+     * The IRC_API ROSSystem instance to be used throughout the UI
+     */
+    private static ROSSystem rosSystem;
+
     // ////////////////////// //
     // Read/Write properties. //
     // ////////////////////// //
@@ -120,6 +132,11 @@ public class Main extends Application {
     public static void setChessEngine(ChessEngine chessEngine) {
         Main.chessEngine = chessEngine;
     }
+
+    /**
+     * @param rosSystem The global ros system instance
+     */
+    public static void setRosSystem(ROSSystem rosSystem) { Main.rosSystem = rosSystem; }
 
     /**
      * @return returns the IRCClient
@@ -143,6 +160,11 @@ public class Main extends Application {
     public static ChessEngine getChessEngine() {
         return chessEngine;
     }
+
+    /**
+     * @return The global ros system instance
+     */
+    public static ROSSystem getRosSystem() {return rosSystem;}
 
     // ///////////////////// //
     // Read-only properties. //
