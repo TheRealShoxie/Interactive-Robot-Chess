@@ -154,18 +154,30 @@ Possible arguments to set when launching the file:
  - imageProcessingMaxCorners [int] - Used for telling the image Processing how many corners to look for. For expected usage keep at a 100
 
 
+### Running the ROS Tests
+Open a terminal inside your catkin_ws folder. Execute following command:
+<code> $ catkin_make run_tests_ibo1_irc_api </code>
 
- ## JAVA
+Ensure that you are running roscore when executing this command.
 
- Navigate to the InteractiveRobotChess folder.<br> 
+
+## JAVA
+
+Navigate to the InteractiveRobotChess folder.<br> 
  
- Inside of that run following command through a terminal:<br>
+Inside of that run following command through a terminal:<br>
 
 Windows:<br>
 <code> $ gradlew run</code></br>
 
 Linux:<br>
 <code> $ ./gradlew run</code></br>
+
+### Logging in
+For logging in please use Username: Tester and password: tester. There is no difference between admin and user in the current iteration.
+
+### Other
+Please ensure that the ROS system is running and that the socket couldn't be opened. Further please ensure that the gazebo environment started before logging in.
 
 
 # Problems
