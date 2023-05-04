@@ -47,6 +47,7 @@ typedef uint8_t BYTE;
 
 // Protocol Commands
 //CreateTarget Cmds
+#define CMD_INTERNAL_RESERVED                                       (BYTE)0x00
 #define CMD_INTERNAL_SETTARGET                                      (BYTE)0x01
 #define CMD_INTERNAL_CLEARTARGET                                    (BYTE)0x02
 #define CMD_INTERNAL_ROBOTARMMOVE                                   (BYTE)0x03

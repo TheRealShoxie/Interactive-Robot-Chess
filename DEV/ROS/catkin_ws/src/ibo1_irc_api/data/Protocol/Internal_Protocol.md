@@ -12,7 +12,6 @@ This document consists of the definition for the internal ros protocol and the t
 ## Definition
 The protocol communicates between different nodes.
 This protocol has some consistency with the actual communication protocol.
-Possibly needs to be expanded and if it does a converter needs to be created from internal to external protocol.
 
 
 
@@ -20,6 +19,7 @@ The protocol consists of following contents:
 - command
     - is the command which defines what should happen
     - Size: 1byte
+    - Special: Please be aware that 0x00 is reserver and should not be used.
 - sizeData
     - defines how big the data that is followed is. Thus only the needed bytes will be read and can be checked for accurate receiving of byteSize
     - Size: 4bytes

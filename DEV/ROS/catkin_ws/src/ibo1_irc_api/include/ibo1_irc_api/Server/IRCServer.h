@@ -10,7 +10,7 @@
  * 
  * <p>
  * 3rd party code is used in this class. The socketing was written with the help of:
- * https://lenngro.github.io/how-to/2021/01/05/Simple-TCPIP-Server-Cpp/
+ * https://gist.github.com/codehoose/020c6213f481aee76ea9b096acaddfaf
  * 
  * This includes following methods with slight adaption:
  *  - initiateServerSocket()
