@@ -10,6 +10,7 @@
  * Link to the github repository: https://github.com/Kinovarobotics/ros_kortex. Accesses 30th of April 2023
  * It uses the ros kortex package. This file is an adaption from the original kortex_robot.xacro.
  * The original can be found under: kortex_description/robots/kortex_robot.xacro
+ * License: License: https://github.com/Kinovarobotics/ros_kortex/blob/noetic-devel/LICENSE
  * 
  * <p>
  * Sensor values for the inbuilt camera are based of the real world kortex model with uses a intel RealSense D435 adaption.

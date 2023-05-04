@@ -15,7 +15,7 @@ This is based on a Ubuntu 20.04 system.
 
 Please follow the steps below
 
-1. ***Ros Noeti***<br>
+1. ***Ros Noetic***<br>
 
 For the installation of ros noetic please follow the installation instructions on
 the following website up till point 1.5 excluded: [ROS Noetic Installation](http://wiki.ros.org/noetic/Installation)

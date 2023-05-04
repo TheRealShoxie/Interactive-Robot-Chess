@@ -8,6 +8,7 @@
  * Link to the github repository: https://github.com/Kinovarobotics/ros_kortex. Accesses 30th of April 2023
  * It uses the ros kortex package. This file is an adaption from the original spawn_kortex_robot.launch found under the kortex_gazebo
  * folder and then inside the launch folder.
+ * License: https://github.com/Kinovarobotics/ros_kortex/blob/noetic-devel/LICENSE
  * 
  * <p>
  * Adaptions made are the removal of chaning to different robot arms.
