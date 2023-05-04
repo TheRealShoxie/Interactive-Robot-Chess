@@ -130,6 +130,98 @@ class IRCServerNodeHelper{
                 case CMD_INTERNAL_SYSTEMFULLSIM:
                     return CMD_SYSTEMFULLSIM;
                     break;
+
+                case ERROR_INTERNAL_CMD_CHESSENGINEDOESNTEXIST:
+                    return ERROR_CMD_CHESSENGINEDOESNTEXIST;
+                    break;
+                
+                case ERROR_INTERNAL_CMD_CHESSENGINENOTSTARTED:
+                    return ERROR_CMD_CHESSENGINENOTSTARTED;
+                    break;
+                
+                case ERROR_INTERNAL_CMD_NOCHESSENGINERUNNING:
+                    return ERROR_CMD_NOCHESSENGINERUNNING;
+                    break;
+                
+                case ERROR_INTERNAL_CMD_CHESSENGINEOPTIONDOESNTEXIST:
+                    return ERROR_CMD_CHESSENGINEOPTIONDOESNTEXIST;
+                    break;
+                
+                case ERROR_INTERNAL_CMD_SEARCH_OPTION_DOESNT_EXIST:
+                    return ERROR_CMD_SEARCH_OPTION_DOESNT_EXIST;
+                    break;
+
+                case ERROR_INTERNAL_CMD_PAWNCOLLIDEDSTRAIGHT:
+                    return ERROR_CMD_PAWNCOLLIDEDSTRAIGHT;
+                    break;
+                
+                case ERROR_INTERNAL_CMD_PAWNCOLLIDEDDIAGONALOREMPTYCELL:
+                    return ERROR_CMD_PAWNCOLLIDEDDIAGONALOREMPTYCELL;
+                    break;
+                
+                case ERROR_INTERNAL_CMD_STARTINGCELLEMPTY:
+                    return ERROR_CMD_STARTINGCELLEMPTY;
+                    break;
+
+                case ERROR_INTERNAL_CMD_NOTTHATCOLORSTURN:
+                    return ERROR_CMD_NOTTHATCOLORSTURN;
+                    break;
+
+                case ERROR_INTERNAL_CMD_MOVEINVALIDORBLOCKEDBYSAMECOLOR:
+                    return ERROR_CMD_MOVEINVALIDORBLOCKEDBYSAMECOLOR;
+                    break;
+
+                case ERROR_INTERNAL_CMD_CANNOTCASTLEKINGSIDE:
+                    return ERROR_CMD_CANNOTCASTLEKINGSIDE;
+                    break;
+
+                case ERROR_INTERNAL_CMD_CANNOTCASTLEQUEENSIDE:
+                    return ERROR_CMD_CANNOTCASTLEQUEENSIDE;
+                    break;
+
+                case ERROR_INTERNAL_CMD_OWNKINGINCHECK:
+                    return ERROR_CMD_OWNKINGINCHECK;
+                    break;
+                
+                case ERROR_INTERNAL_CMD_OTHERKINGINCHECKMATE:
+                    return ERROR_CMD_OTHERKINGINCHECKMATE;
+                    break;
+
+                case ERROR_INTERNAL_CMD_PAWNNOTALLOWEDNOTPROMOTIONMOVE:
+                    return ERROR_CMD_PAWNNOTALLOWEDNOTPROMOTIONMOVE;
+                    break;
+
+                case ERROR_INTERNAL_CMD_PIECETOPROMOTEISNOTPAWN:
+                    return ERROR_CMD_PIECETOPROMOTEISNOTPAWN;
+                    break;
+
+                case ERROR_INTERNAL_CMD_PAWNNOTMOVINGTOENDOFBOARD:
+                    return ERROR_CMD_PAWNNOTMOVINGTOENDOFBOARD;
+                    break;
+
+                case ERROR_INTERNAL_CMD_INVALIDPIECENAMETOPROMOTEINTO:
+                    return ERROR_CMD_INVALIDPIECENAMETOPROMOTEINTO;
+                    break;
+
+                case ERROR_INTERNAL_CMD_CHESSENGINECREATEDNOMOVE:
+                    return ERROR_CMD_CHESSENGINECREATEDNOMOVE;
+                    break;
+
+                case ERROR_INTERNAL_CMD_INVALIDMOVEFORMAT:
+                    return ERROR_CMD_INVALIDMOVEFORMAT;
+                    break;
+
+                case ERROR_INTERNAL_CMD_NOCHESSBOARDINFORMATION:
+                    return ERROR_CMD_NOCHESSBOARDINFORMATION;
+                    break;
+
+                case ERROR_INTERNAL_CMD_PICKUPCELLEMPTY:
+                    return ERROR_CMD_PICKUPCELLEMPTY;
+                    break;
+
+                case ERROR_INTERNAL_CMD_SYSTEMINPLAYCHESSSTATEMACHINE:
+                    return ERROR_CMD_SYSTEMINPLAYCHESSSTATEMACHINE;
+                    break;
                 
                 default:
                     return ERROR_CMD_UNRECOGNIZABLE;
@@ -138,8 +230,8 @@ class IRCServerNodeHelper{
         }
 
         // Converts external cmd to internal cmd
-        static BYTE externalToInternalCmdConverter(const BYTE& externalCmdToConver){
-            switch (externalCmdToConver)
+        static BYTE externalToInternalCmdConverter(const BYTE& externalCmdToConvert){
+            switch (externalCmdToConvert)
             {
                 
                 case CMD_DISCONNECT:

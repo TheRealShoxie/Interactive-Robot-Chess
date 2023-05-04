@@ -118,15 +118,15 @@ static const tf2::Quaternion quaternionRestPosition(0.716, 0.698, 0.000, 0.000);
 
 
 // Height offsets for removing a piece from the board
-double chessPieceRemoveIntermediateStandardOffsetHeigh = 0.18;
+double chessPieceRemoveIntermediateStandardOffsetHeigh = 0.1;
 double chessPieceRemovePickUpStandardOffsetHeigh = 0.012;
-double chessPieceRemoveGraveYardIntermediateStandardOffsetHeigh = 0.18;
+double chessPieceRemoveGraveYardIntermediateStandardOffsetHeigh = 0.15;
 double chessPieceRemoveGraveYardDropStandardOffsetHeigh = 0.1;
 
 // Height offsets for making a move forward
-double chessPieceMoveIntermediateStandardOffsetHeight = 0.18;
+double chessPieceMoveIntermediateStandardOffsetHeight = 0.1;
 double chessPieceMovePickUpStandardOffsetHeight = 0.012;
-double chessPieceMoveDropIntermediateStandardOffsetHeight = 0.18;
+double chessPieceMoveDropIntermediateStandardOffsetHeight = 0.15;
 double chessPieceMoveDropStandardOffsetHeigh = 0.09;
 
 // Removing a piece offsets

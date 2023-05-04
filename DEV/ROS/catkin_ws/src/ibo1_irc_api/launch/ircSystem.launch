@@ -68,7 +68,7 @@
 
 
 	<!-- Static broadcaster for restPosition and graveyards-->
-	<node pkg="tf2_ros" type="static_transform_publisher" name="staticBroadcasterRestPosition" args="0.22 -0.25 0.3 0.707 0.707 0 0 base_link restposition_frame" />
+	<node pkg="tf2_ros" type="static_transform_publisher" name="staticBroadcasterRestPosition" args="0.22 -0.25 0.4 0.707 0.707 0 0 base_link restposition_frame" />
     <node pkg="tf2_ros" type="static_transform_publisher" name="staticBroadcasterGraveyard" args="0.6 0.25 0 -0.000 1.000 0.000 0.000 base_link graveyard_frame" />
 	
 

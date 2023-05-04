@@ -177,7 +177,7 @@ public class IRCClient {
      */
     public void send(ProtocolObject sendData) throws IOException {
 
-        System.out.println("----------\nI am sending following to the server: " +sendData.toString() +"----------\n");
+        System.out.println("----------\nI am sending following to the server: " +sendData.toString() +"\n----------\n");
 
         // Sends supplied  ProtocolObject.toByteArray()
         out.write(sendData.toByteArray());
@@ -206,7 +206,7 @@ public class IRCClient {
         protocolObject.setData(in.readNBytes(protocolObject.getDataSize()));
 
         // Printing what I received on the socked
-        System.out.println("----------\nI received following on the socket: \n" +protocolObject.toString() +"----------\n");
+        System.out.println("----------\nI received following on the socket: \n" +protocolObject.toString() +"\n----------\n");
 
         // Return the protocol
         return protocolObject;

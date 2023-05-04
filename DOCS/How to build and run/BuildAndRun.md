@@ -57,7 +57,6 @@ package list:
 Please go into your catkin_ws into the src folder
 
 Open a terminal and do following: 
-E-mail
 
 <code> $ sudo apt install python3 python3-pip<br></code>
 <code> $ sudo python3 -m pip install conan==1.59<br></code>

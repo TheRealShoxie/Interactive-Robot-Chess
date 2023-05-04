@@ -228,7 +228,7 @@ public class ChessBoard {
                 int cellPosKing[] = convertFromMoveFormat("e1g1");
 
                 // Checking if the king is not there
-                if(!(this.cells[cellPosKing[0]][cellPosKing[0]].getChessPiece().getName().toLowerCase().equals("k"))){
+                if(!(this.cells[cellPosKing[0]][cellPosKing[1]].getChessPiece().getName().toLowerCase().equals("king"))){
                     // Then we do not perform a castle move and should remove the castle rights
                     castleRights[0] = false;
                     return;
@@ -251,10 +251,10 @@ public class ChessBoard {
             else if(moveFormat.equals("e1c1")){
 
                 // Checking if the piece in the e1g1 cell is a king
-                int cellPosKing[] = convertFromMoveFormat("e1g1");
+                int cellPosKing[] = convertFromMoveFormat("e1c1");
 
                 // Checking if the king is not there
-                if(!(this.cells[cellPosKing[0]][cellPosKing[0]].getChessPiece().getName().toLowerCase().equals("k"))){
+                if(!(this.cells[cellPosKing[0]][cellPosKing[0]].getChessPiece().getName().toLowerCase().equals("king"))){
                     // Then we do not perform a castle move and should remove the castle rights
                     castleRights[0] = false;
                     return;
@@ -277,10 +277,10 @@ public class ChessBoard {
             if(moveFormat.equals("e8g8")){
 
                 // Checking if the piece in the e1g1 cell is a king
-                int cellPosKing[] = convertFromMoveFormat("e1g1");
+                int cellPosKing[] = convertFromMoveFormat("e8g8");
 
                 // Checking if the king is not there
-                if(!(this.cells[cellPosKing[0]][cellPosKing[0]].getChessPiece().getName().toLowerCase().equals("k"))){
+                if(!(this.cells[cellPosKing[0]][cellPosKing[0]].getChessPiece().getName().toLowerCase().equals("king"))){
                     // Then we do not perform a castle move and should remove the castle rights
                     castleRights[1] = false;
                     return;
@@ -299,10 +299,10 @@ public class ChessBoard {
             else if(moveFormat.equals("e8c8")){
 
                 // Checking if the piece in the e1g1 cell is a king
-                int cellPosKing[] = convertFromMoveFormat("e1g1");
+                int cellPosKing[] = convertFromMoveFormat("e8c8");
 
                 // Checking if the king is not there
-                if(!(this.cells[cellPosKing[0]][cellPosKing[0]].getChessPiece().getName().toLowerCase().equals("k"))){
+                if(!(this.cells[cellPosKing[0]][cellPosKing[0]].getChessPiece().getName().toLowerCase().equals("king"))){
                     // Then we do not perform a castle move and should remove the castle rights
                     castleRights[1] = false;
                     return;

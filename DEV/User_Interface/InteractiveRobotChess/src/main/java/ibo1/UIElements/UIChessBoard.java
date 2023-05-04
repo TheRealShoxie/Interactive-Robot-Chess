@@ -184,6 +184,8 @@ public class UIChessBoard extends GridPane{
                     }
                     // Catching IOException
                     catch (ProtocolException ex) {
+                        System.out.println(ex.toString());
+                        System.out.println(ex.getMessage());
                         PopUpMessages.showAlert("Move Error", ex.getMessage().toString(),
                                 "Please refer to the above stated error for information on what went wrong.",
                                 Alert.AlertType.ERROR);
@@ -317,7 +319,7 @@ public class UIChessBoard extends GridPane{
             }
 
 
-            // Checking if move was not successfull then return
+            // Checking if move was not successfully then return
             if(!madeMove) return;
 
 

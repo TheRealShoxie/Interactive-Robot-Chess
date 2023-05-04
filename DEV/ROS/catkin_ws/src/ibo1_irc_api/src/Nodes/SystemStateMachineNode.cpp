@@ -174,11 +174,9 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
 
     // Get the second move of castle move
     bool secondMoveOfCastleMove(){
-        
         string moveCmd = "";
         string newMoveCmd = "";
         DataCreator::convertBytesToString(inSimulationDataStorage, moveCmd);
-
 
         //White Castle King side
         if(moveCmd.compare("e1g1") == 0){
@@ -200,9 +198,7 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
             return false;
         }
 
-        
         didCastle = true;
-        inSimulationDataStorageForCastling = inSimulationDataStorage;
         inSimulationDataStorage.clear();
         copy(newMoveCmd.begin(), newMoveCmd.end(), std::back_inserter(inSimulationDataStorage));
         return true;
@@ -282,7 +278,14 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
             sendToSender(SENDER_CHESSWRAPPER, sendChessWrapperProtocol);
 
             ROS_INFO_COND(systemDebug, "inSimulationRobotMoveState: 5");
-            ROS_INFO_COND(systemDebug, "inSimulationRobotMoveState: 5 - Did we already castle: %s", didCastle);
+
+            // If debug is enabled
+            if(systemDebug){
+
+                // If didCastle true
+                if(didCastle) ROS_INFO_COND(systemDebug, "inSimulationRobotMoveState: 5 - Did we already castle: %s");
+                else ROS_INFO_COND(systemDebug, "inSimulationRobotMoveState: 5 - Did we already castle: %s");
+            }
 
             // Checking if we just did a castle move
             // If reset didCastle and skip check for castling move and set internalSimulationDataStorage back to original
@@ -294,6 +297,7 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
 
                 // Increase to next state twice as we already did castle check
                 inSimulationRobotMoveState = inSimulationRobotMoveState + 2;
+
 
                 //Setting original data back into inSimulation and clearing temp castling data to free up memory
                 inSimulationDataStorage = inSimulationDataStorageForCastling;
@@ -413,13 +417,13 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
     void inSimulationPlayerMove(){
 
         if(inSimulationPlayerMoveState == 6){
+            ROS_INFO_COND(systemDebug, "inSimulationPlayerMoveState: 6");
+
             //Create the protocol for sending back to the initial sender
             ibo1_irc_api::Protocol sendProtocolToInitialSender;
             sendProtocolToInitialSender.cmd = initialSenderMoveCmd;
             sendProtocolToInitialSender.sender = SENDER_SYSTEMSTATEMACHINE;
             sendProtocolToInitialSender.data = inSimulationDataStorage;
-
-            ROS_INFO_COND(systemDebug, "inSimulationPlayerMoveState: 6");
 
 
             sendToSender(initialSenderMove, sendProtocolToInitialSender);
@@ -464,15 +468,17 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
     void inSimulationStateMachineChessEngineMove(){
 
         if(inSimulationChessEngineMoveState == 6){
+
+            ROS_INFO_COND(systemDebug, "inSimulationChessEngineMoveState: 6");
+
             //Create the protocol for sending back to the initial sender
             ibo1_irc_api::Protocol sendProtocolToInitialSender;
             sendProtocolToInitialSender.cmd = initialSenderMoveCmd;
             sendProtocolToInitialSender.sender = SENDER_SYSTEMSTATEMACHINE;
             sendProtocolToInitialSender.data = inSimulationDataStorage;
 
-
             sendToSender(initialSenderMove, sendProtocolToInitialSender);
-            ROS_INFO_COND(systemDebug, "inSimulationChessEngineMoveState: 6");
+            
             inSimulationState = 0;
         }
 
