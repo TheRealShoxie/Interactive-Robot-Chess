@@ -90,5 +90,5 @@ Further the reply will always consist of the command sent to check for the corre
 |   0x00    |   Command Executer
 |   0x01    |   Server
 |   0x02    |   Chess Wrapper
-|   0x03    |   CreateTarget
+|   0x03    |   Target Selector
 |   0x04    |   RobotArmStateMachine
