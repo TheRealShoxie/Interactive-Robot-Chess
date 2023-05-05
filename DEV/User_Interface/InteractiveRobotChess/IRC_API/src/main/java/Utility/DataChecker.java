@@ -1,8 +1,6 @@
 /*
  *@(#) Utility.DataChecker.java 0.1 2023/02/28
  *
- * Copyright (c) Omar Ibrahim
- * All rights reserved.
  */
 package Utility;
 

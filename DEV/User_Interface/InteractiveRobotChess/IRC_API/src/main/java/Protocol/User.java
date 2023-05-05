@@ -1,8 +1,6 @@
 /*
  *@(#) Protocol.User.java 0.1 2023/03/17
  *
- * Copyright (c) Omar Ibrahim
- * All rights reserved.
  */
 package Protocol;
 

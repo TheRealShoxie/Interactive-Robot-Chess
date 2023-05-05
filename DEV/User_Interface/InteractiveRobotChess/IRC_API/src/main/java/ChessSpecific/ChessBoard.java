@@ -1,8 +1,6 @@
 /*
  *@(#) ChessSpecific.ChessBoard.java 0.1 2023/04/30
  *
- * Copyright (c) Omar Ibrahim
- * All rights reserved.
  */
 package ChessSpecific;
 
