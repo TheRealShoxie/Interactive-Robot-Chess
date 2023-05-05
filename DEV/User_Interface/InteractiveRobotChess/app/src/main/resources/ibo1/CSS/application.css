@@ -10,6 +10,10 @@
     -fx-text-fill: "white";
 }
 
+.menu-item .label{
+    -fx-text-fill: #4f5b66;
+}
+
 #labelWelcome{
     -fx-font-size: 2em;
 }
