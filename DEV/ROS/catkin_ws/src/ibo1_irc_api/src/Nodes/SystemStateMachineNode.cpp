@@ -283,8 +283,8 @@ void systemStateMachineMessageReceived(const ibo1_irc_api::Protocol& msg){
             if(systemDebug){
 
                 // If didCastle true
-                if(didCastle) ROS_INFO_COND(systemDebug, "inSimulationRobotMoveState: 5 - Did we already castle: %s");
-                else ROS_INFO_COND(systemDebug, "inSimulationRobotMoveState: 5 - Did we already castle: %s");
+                if(didCastle) ROS_INFO_COND(systemDebug, "inSimulationRobotMoveState: 5 - Did we already castle: true");
+                else ROS_INFO_COND(systemDebug, "inSimulationRobotMoveState: 5 - Did we already castle: false");
             }
 
             // Checking if we just did a castle move
