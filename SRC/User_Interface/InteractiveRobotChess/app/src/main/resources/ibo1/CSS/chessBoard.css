@@ -1,0 +1,45 @@
+/*
+ This is a 3rd party file. Taken from the GitHub user: Stevoisiak and the link to the
+ repository this was taken from: https://github.com/Stevoisiak/JavaFX-Online-Chess/tree/master/assets/pieces
+ It represents the file stylesheet.css in the folder assets.
+ Accessed 30th of April 2023
+*/
+
+.chess-space {
+    /* stage size (400)/8 spaces */
+    -fx-min-height:  50px;
+    -fx-min-width:   50px;
+    -fx-pref-height: 50px;
+    -fx-pref-width:  50px;
+    -fx-max-height:  50px;
+    -fx-max-width:   50px;
+
+    /* prevent rounded buttons */
+    -fx-background-radius: 0em;
+}
+
+.chess-space-light {
+    -fx-background-color: #FFCE9E;
+}
+
+.chess-space-dark {
+    -fx-background-color: #D18B47;
+}
+
+.chess-space-active {
+    -fx-background-color: red;
+}
+
+.chat-box {
+    -fx-padding: 10px;
+    -fx-pref-width: 200px;
+    -fx-max-width: 300px;
+}
+
+.chat-area {
+    -fx-pref-height: 150px;
+}
+
+.chat-field {
+
+}

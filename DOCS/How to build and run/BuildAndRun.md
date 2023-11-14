@@ -71,7 +71,7 @@ Open a terminal and do following:
 
 5. ***Getting my project***<br>
 
-Please take the ibo1_irc_api folder from DEV/ROS/catkin_ws/src
+Please take the ibo1_irc_api folder from Technical Work/ROS
 and place it into your catkin_ws src folder
 
 6. ***Go inside the ibo1_irc_api folder***
@@ -106,7 +106,7 @@ Running it is described further below.
 
 
 ### JAVA
-To Build my java project navigate to DEV/InteractiveRobotChess.<br>
+To Build my java project navigate to Technical Work/User Interface/InteractiveRobotChess.<br>
 
 <em>Prerequisite</em> this was only tested on Java 17.0.6<br>
 If you do not have JAVA installed please follow a tutorial for doing so on your environment.
@@ -145,6 +145,7 @@ This can be done in two ways:<br>
  > Please supply the filepaths from root example "/.../.../...txt"
 
  Furhter it is important to change the file pahts to the chess engines within the chessengines.txt the same way as the filepaths to the txt's have been changed.
+ The chess engines are inside the data/Chess folder. Please refer to the existing filepath of the chess engines and only change the affected filepath. This means everything before data/Chess/...
 
 For information on how to add arguments to a roslaunch please refer to: [Roslaunch Explanation](http://wiki.ros.org/roslaunch/Commandline%20Tools). Refer specifically to 1.2 Passing in args.
 
@@ -165,7 +166,7 @@ Ensure that you are running roscore when executing this command.
 
 ## JAVA
 
-Navigate to the InteractiveRobotChess folder.<br> 
+Navigate to the Technical Work/User Interface/InteractiveRobotChess folder.<br> 
  
 Inside of that run following command through a terminal:<br>
 

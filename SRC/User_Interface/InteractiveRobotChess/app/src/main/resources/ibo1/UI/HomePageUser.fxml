@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1244.0" stylesheets="@../CSS/application.css" xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ibo1.UI.HomePageUserController">
+   <children>
+      <MenuBar maxHeight="50.0" prefHeight="50.0" prefWidth="1244.0" styleClass="root">
+         <menus>
+            <Menu mnemonicParsing="false" text="Chess">
+               <items>
+                  <MenuItem fx:id="startGameMenuItem" mnemonicParsing="false" onAction="#startChessGame" text="Start a game" />
+                  <MenuItem fx:id="stopGameMenuItem" mnemonicParsing="false" onAction="#stopChessGame" text="Stop Game" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Settings">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="Account Settings" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Help">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="About" />
+               </items>
+            </Menu>
+         </menus>
+      </MenuBar>
+      <AnchorPane fx:id="contentAnchor" prefHeight="650.0" prefWidth="1244.0" stylesheets="@../CSS/chessBoard.css" />
+   </children>
+</VBox>

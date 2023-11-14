@@ -1,0 +1,275 @@
+<!--
+ * chesRoom.world
+ * <p>
+ * This file defines the world used for the system. This mainly defines the chessboard and the chessPieces and their positions.
+ * 
+ * <p>
+ * 3rd party model used for chessBoards. In the folder models chessboard and chessboard2 are taken from link:
+ * https://gitioc.upc.edu/rostutorials/gazebo_sensors_tutorial/-/tree/ab3ed9f585e19d5899b1a1fd356a4746b57ff68f/models 
+ * Accessed 30th of April 2023.
+ *
+ * 
+ * @author Omar Ibrahim
+ * @version 0.1 ( Initial development ).
+ * @version 1.0 ( Initial release ).
+ * 
+ * @see robotGazebo.launch
+ * @see models/chessboard
+ * @see models/chessboard2
+ * @see models/bishopBlack
+ * @see models/bishopWhite
+ * @see models/kingBlack
+ * @see models/kingWhite
+ * @see models/knightBlack
+ * @see models/knightWhite
+ * @see models/pawnBlack
+ * @see models/pawnWhite
+ * @see models/queenBlack
+ * @see models/queenWhite
+ * @see models/rookBlack
+ * @see models/rookWhite
+-->
+
+<sdf version='1.7'>
+  <world name='chessRoom'>
+
+    <!-- Environment -->
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+    <!-- ChessBoard -->
+    <include>
+      <static>true</static>
+      <uri>model://chessboard2</uri>
+      <name>chessboard</name>
+      <!--<pose>0 0.5 0.018 0 0 0</pose>-->
+      <pose>0 0.35 0.018 0 0 0</pose>
+    </include>
+
+    <!-- Black Pieces -->
+    <!-- ________________________________________________________________________________ -->
+    <!-- Black Pawns -->
+    <!-- _____________________________________________ -->
+    <include>
+      <uri>model://pawnBlack</uri>
+      <name>blackPawn1</name>
+      <pose>0.175 0.225 0.0515 0 0 0</pose> 
+    </include>
+
+    <include>
+      <uri>model://pawnBlack</uri>
+      <name>blackPawn2</name>
+      <pose>0.125 0.225 0.0515 0 0 0</pose> 
+    </include>
+
+    <include>
+      <uri>model://pawnBlack</uri>
+      <name>blackPawn3</name>
+      <pose>0.075 0.225 0.0515 0 0 0</pose> 
+    </include>
+
+    <include>
+      <uri>model://pawnBlack</uri>
+      <name>blackPawn4</name>
+      <pose>0.025 0.225 0.0515 0 0 0</pose> 
+    </include>
+
+    <include>
+      <uri>model://pawnBlack</uri>
+      <name>blackPawn5</name>
+      <pose>-0.025 0.225 0.0515 0 0 0</pose> 
+    </include>
+
+    <include>
+      <uri>model://pawnBlack</uri>
+      <name>blackPawn6</name>
+      <pose>-0.075 0.225 0.0515 0 0 0</pose> 
+    </include>
+
+    <include>
+      <uri>model://pawnBlack</uri>
+      <name>blackPawn7</name>
+      <pose>-0.125 0.225 0.0515 0 0 0</pose> 
+    </include>
+
+    <include>
+      <uri>model://pawnBlack</uri>
+      <name>blackPawn8</name>
+      <pose>-0.175 0.225 0.0515 0 0 0</pose> 
+    </include>
+
+    <!-- Black Rooks -->
+    <!-- _____________________________________________ -->
+    <include>
+      <uri>model://rookBlack</uri>
+      <name>blackRook1</name>
+      <pose>0.175 0.175 0.05275 0 0 0</pose> 
+    </include>
+
+    <include>
+      <uri>model://rookBlack</uri>
+      <name>blackRook2</name>
+      <pose>-0.175 0.175 0.05275 0 0 0</pose> 
+    </include>
+
+    <!-- Black Knights -->
+    <!-- _____________________________________________ -->
+    <include>
+      <uri>model://knightBlack</uri>
+      <name>blackKnight1</name>
+      <pose>0.125 0.175 0.054 0 0 0</pose> 
+    </include>
+
+    <include>
+      <uri>model://knightBlack</uri>
+      <name>blackKnight2</name>
+      <pose>-0.125 0.175 0.054 0 0 0</pose> 
+    </include>
+
+    <!-- Black Bishop -->
+    <!-- _____________________________________________ -->
+    <include>
+      <uri>model://bishopBlack</uri>
+      <name>blackBishop1</name>
+      <pose>0.075 0.175 0.0565 0 0 0</pose> 
+    </include>
+
+    <include>
+      <uri>model://bishopBlack</uri>
+      <name>blackBishop2</name>
+      <pose>-0.075 0.175 0.0565 0 0 0</pose> 
+    </include>
+
+    <!-- Black Queen and King -->
+    <!-- _____________________________________________ -->
+    <include>
+      <uri>model://queenBlack</uri>
+      <name>blackQueen</name>
+      <pose>0.025 0.175 0.06109 0 0 0</pose> 
+    </include>
+
+    <include>
+      <uri>model://kingBlack</uri>
+      <name>blackKing</name>
+      <pose>-0.025 0.175 0.0628 0 0 0</pose> 
+    </include>
+
+
+
+
+
+    <!-- White Pieces -->
+    <!-- ________________________________________________________________________________ -->
+    <!-- White Pawns -->
+    <!-- _____________________________________________ -->
+    <include>
+      <uri>model://pawnWhite</uri>
+      <name>whitePawn1</name>
+      <pose>0.175 0.475 0.0515 0 0 0</pose> 
+    </include>
+
+    <include>
+      <uri>model://pawnWhite</uri>
+      <name>whitePawn2</name>
+      <pose>0.125 0.475 0.0515 0 0 0</pose> 
+    </include>
+
+    <include>
+      <uri>model://pawnWhite</uri>
+      <name>whitePawn3</name>
+      <pose>0.075 0.475 0.0515 0 0 0</pose> 
+    </include>
+
+    <include>
+      <uri>model://pawnWhite</uri>
+      <name>whitePawn4</name>
+      <pose>0.025 0.475 0.0515 0 0 0</pose> 
+    </include>
+
+    <include>
+      <uri>model://pawnWhite</uri>
+      <name>whitePawn5</name>
+      <pose>-0.025 0.475 0.0515 0 0 0</pose>  
+    </include>
+
+    <include>
+      <uri>model://pawnWhite</uri>
+      <name>whitePawn6</name>
+      <pose>-0.075 0.475 0.0515 0 0 0</pose> 
+    </include>
+
+    <include>
+      <uri>model://pawnWhite</uri>
+      <name>whitePawn7</name>
+      <pose>-0.125 0.475 0.0515 0 0 0</pose> 
+    </include>
+
+    <include>
+      <uri>model://pawnWhite</uri>
+      <name>whitePawn8</name>
+      <pose>-0.175 0.475 0.0515 0 0 0</pose> 
+    </include>
+
+    <!-- White Rooks -->
+    <!-- _____________________________________________ -->
+    <include>
+      <uri>model://rookWhite</uri>
+      <name>whiteRook1</name>
+      <pose>0.175 0.525 0.05275 0 0 0</pose> 
+    </include>
+
+    <include>
+      <uri>model://rookWhite</uri>
+      <name>whiteRook2</name>
+      <pose>-0.175 0.525 0.05275 0 0 0</pose> 
+    </include>
+
+    <!-- White Knights -->
+    <!-- _____________________________________________ -->
+    <include>
+      <uri>model://knightWhite</uri>
+      <name>whiteKnight1</name>
+      <pose>0.125 0.525 0.054 0 0 0</pose> 
+    </include>
+
+    <include>
+      <uri>model://knightWhite</uri>
+      <name>whiteKnight2</name>
+      <pose>-0.125 0.525 0.054 0 0 0</pose> 
+    </include>
+
+    <!-- White Bishop -->
+    <!-- _____________________________________________ -->
+    <include>
+      <uri>model://bishopWhite</uri>
+      <name>whiteBishop1</name>
+      <pose>0.075 0.525 0.0565 0 0 0</pose> 
+    </include>
+
+    <include>
+      <uri>model://bishopWhite</uri>
+      <name>whiteBishop2</name>
+      <pose>-0.075 0.525 0.0565 0 0 0</pose> 
+    </include>
+
+    <!-- White Queen and King -->
+    <!-- _____________________________________________ -->
+    <include>
+      <uri>model://queenWhite</uri>
+      <name>whiteQueen</name>
+      <pose>0.025 0.525 0.06109 0 0 0</pose> 
+    </include>
+
+    <include>
+      <uri>model://kingWhite</uri>
+      <name>whiteKing</name>
+      <pose>-0.025 0.525 0.0628 0 0 0</pose> 
+    </include>
+
+  </world>
+</sdf>

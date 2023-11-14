@@ -1,0 +1,10 @@
+unnamed package
+ibo1.Application
+ibo1.ChessSpecific
+ibo1.Client
+ibo1.CustomException
+ibo1.Enum
+ibo1.Protocol
+ibo1.UI
+ibo1.UIElements
+ibo1.Utility

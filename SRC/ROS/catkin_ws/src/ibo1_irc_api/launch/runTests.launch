@@ -1,0 +1,19 @@
+<!--
+ * runTests.launch
+ * <p>
+ * This launch file starts everything needed for the Interactive Robot Chess system. Including the robot used.
+ * Further it changes the ROS console formatting for displaying the node for easier debugging.
+ * Enables the passsing of certain arguments used in other launch files.
+ * 
+ * @author Omar Ibrahim
+ * @version 0.1 ( Initial development ).
+ * @version 1.0 ( Initial release ).
+ * 
+ * @see ircSystem.launch
+ * @see robotGazebo.launch
+-->
+
+
+<launch>
+    <!-- <test --> 
+</launch>

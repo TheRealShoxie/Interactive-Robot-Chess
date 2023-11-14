@@ -1,0 +1,42 @@
+<!--
+ * main.launch
+ * <p>
+ * This launch file starts everything needed for the Interactive Robot Chess system. Including the robot used.
+ * Further it changes the ROS console formatting for displaying the node for easier debugging.
+ * Enables the passsing of certain arguments used in other launch files.
+ * 
+ * @author Omar Ibrahim
+ * @version 0.1 ( Initial development ).
+ * @version 1.0 ( Initial release ).
+ * 
+ * @see ircSystem.launch
+ * @see robotGazebo.launch
+-->
+
+
+<launch>
+    <!-- Changing ROSCONSOLE_FORMAT-->
+    <env name="ROSCONSOLE_FORMAT" value="[${severity}] [${time}] [${node}]: ${message}"/>
+
+    <!-- Arguments -->
+    <arg name="start_rviz" default="true"/>
+    <arg name="systemDebug" default="false"/>
+    <arg name="chessEngineNameFilePath" default="/home/omar/Uni/Major_Project/Interactive-Robot-Chess/DEV/ROS/catkin_ws/src/ibo1_irc_api/data/Chess/chessEngines.txt"/>
+    <arg name="usersNameFilePath" default="/home/omar/Uni/Major_Project/Interactive-Robot-Chess/DEV/ROS/catkin_ws/src/ibo1_irc_api/data/Users/users.txt"/>
+    <arg name="imageProcessingMaxCorners" default="100" />
+
+
+    <!--Including launch file for robotic arm and its  simulation environment-->
+    <include file="$(find ibo1_irc_api)/launch/robotGazebo.launch">
+        <arg name="start_rviz" value="$(arg start_rviz)"/>
+    </include>
+
+    <!--Including System launch file-->
+    <include file="$(find ibo1_irc_api)/launch/ircSystem.launch">
+        <arg name="systemDebug" value="$(arg systemDebug)"/>
+        <arg name="chessEngineNameFilePath" value="$(arg chessEngineNameFilePath)" />
+        <arg name="imageProcessingMaxCorners" value="$(arg imageProcessingMaxCorners)"/>
+        <arg name="usersNameFilePath" value="$(arg usersNameFilePath)" />
+    </include>
+
+</launch>
