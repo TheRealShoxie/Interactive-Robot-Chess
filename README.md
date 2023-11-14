@@ -23,8 +23,12 @@ Down below you can find the folder hierarchy.
     * User Interface            - Holds all development software for the User Interface
     * ROS                       - Holds all development software for ROS
 * DOCS                          - Holds all documents
-    * Development_Process	- Holds all relevant files for the Development Process Document
-    * Important_Links		- Holds all important links for the project
+    * How to build and run      - Holds a .md file which explains how to build and run the project
+    * Important_Links		    - Holds all important links for the project
     * Manipulator_Documents     - Holds all documents for the manipulators
-    * Project_Outline		- Holds all relevant files for the Project Outline
+    * Project_Outline		    - Holds all relevant files for the Project Outline
+    * Protocols                 - Holds documentation on how internal and external protocols are defined
+    * Report                    - Holds the report for the major project
 * SRC                           - Holds source code that is approved
+    * ROS                       - Holds all approved software for ROS
+    * User Interface            - Holds all approved software for the User Interface
